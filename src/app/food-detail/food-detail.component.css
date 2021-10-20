@@ -1,0 +1,8 @@
+.food-card {
+	margin-bottom: 10px;
+}
+
+.food-image {
+	max-height: 100px;
+	object-fit: none;
+}

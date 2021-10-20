@@ -1,0 +1,7 @@
+<mat-card *ngIf="food" class="food-card">
+	<mat-card-title>{{food.name}}</mat-card-title>
+	<img alt="Photo of {{food.name}}" class="food-image" mat-card-image src="{{food.image}}">
+	<mat-card-content>
+		{{food.description}}
+	</mat-card-content>
+</mat-card>
