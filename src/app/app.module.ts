@@ -15,6 +15,9 @@ import { DayPlanComponent } from './day-plan/day-plan.component';
 import { MatCardModule } from "@angular/material/card";
 import { FoodsComponent } from './foods/foods.component';
 import { FoodDetailComponent } from './food-detail/food-detail.component';
+import { MatSidenavModule } from "@angular/material/sidenav";
+import { MatButtonModule } from "@angular/material/button";
+import { MatListModule } from "@angular/material/list";
 
 @NgModule({
 	declarations: [
@@ -33,7 +36,10 @@ import { FoodDetailComponent } from './food-detail/food-detail.component';
 		provideFirestore(() => getFirestore()),
 		MatToolbarModule,
 		MatIconModule,
-		MatCardModule
+		MatCardModule,
+		MatSidenavModule,
+		MatButtonModule,
+		MatListModule
 	],
 	providers: [],
 	bootstrap: [AppComponent]

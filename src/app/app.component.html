@@ -1,7 +1,30 @@
-<mat-toolbar color="primary">
-	<mat-icon>restaurant_menu</mat-icon>
-	<span>Food Planner</span>
-</mat-toolbar>
-<div class="container">
-	<router-outlet></router-outlet>
+<div class="main-container">
+	<mat-toolbar color="primary">
+		<button (click)="sidenav.toggle()" mat-icon-button>
+			<mat-icon style="padding: 0 5px;">menu</mat-icon>
+		</button>
+		<mat-icon>restaurant_menu</mat-icon>
+		<span>Food Planner</span>
+	</mat-toolbar>
+	<mat-sidenav-container class="sidenav-container">
+		<mat-sidenav #sidenav (click)="sidenav.toggle()">
+			<mat-nav-list>
+				<a [routerLinkActiveOptions]="{ exact: true }"
+				   [routerLinkActive]="['mat-sidenav-item-is-active']"
+				   mat-list-item
+				   routerLink="/">
+					<mat-icon>menu_book</mat-icon>
+					Planner</a>
+				<a [routerLinkActive]="['mat-sidenav-item-is-active']" mat-list-item routerLink="/foods">
+					<mat-icon>restaurant</mat-icon>
+					Foods</a>
+			</mat-nav-list>
+		</mat-sidenav>
+		<mat-sidenav-content>
+			<div class="container">
+				<router-outlet></router-outlet>
+			</div>
+		</mat-sidenav-content>
+	</mat-sidenav-container>
 </div>
+
