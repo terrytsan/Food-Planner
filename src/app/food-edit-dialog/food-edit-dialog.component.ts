@@ -3,6 +3,7 @@ import { getDownloadURL, ref, Storage, uploadBytesResumable } from '@angular/fir
 import { MatDialogRef } from "@angular/material/dialog";
 import { AngularFirestore } from "@angular/fire/compat/firestore";
 import { Food } from "../food-detail/food";
+import { FormBuilder, Validators } from "@angular/forms";
 
 @Component({
 	selector: 'app-food-edit-dialog',
@@ -10,6 +11,11 @@ import { Food } from "../food-detail/food";
 	styleUrls: ['./food-edit-dialog.component.css']
 })
 export class FoodEditDialogComponent implements OnInit {
+	foodForm = this.fb.group({
+		name: ['', Validators.required],
+		description: ['', Validators.required],
+		file: ['', Validators.required]
+	});
 	fileName: string = '';
 	fileUpload: any;
 	food: Food = {
@@ -20,6 +26,7 @@ export class FoodEditDialogComponent implements OnInit {
 	};
 
 	constructor(
+		private fb: FormBuilder,
 		public dialogRef: MatDialogRef<FoodEditDialogComponent>,
 		private storage: Storage,
 		public firestore: AngularFirestore
@@ -54,7 +61,11 @@ export class FoodEditDialogComponent implements OnInit {
 
 	onSaveClick() {
 		this.firestore.collection('foods')
-			.add(this.food)
+			.add({
+				name: this.foodForm.value.name,
+				description: this.foodForm.value.description,
+				image: this.food.image
+			})
 			.then(() => this.dialogRef.close());
 	}
 }
