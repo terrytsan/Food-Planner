@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { collection, collectionData, CollectionReference, Firestore, query } from "@angular/fire/firestore";
 import { Observable } from "rxjs";
 import { Food } from "../food-detail/food";
+import { MatDialog } from "@angular/material/dialog";
+import { FoodEditDialogComponent } from "../food-edit-dialog/food-edit-dialog.component";
 
 @Component({
 	selector: 'app-foods',
@@ -12,7 +14,7 @@ export class FoodsComponent implements OnInit {
 
 	foods$: Observable<Food[]>;
 
-	constructor(firestore: Firestore) {
+	constructor(firestore: Firestore, public dialog: MatDialog) {
 		this.foods$ = collectionData<Food>(query<Food>(
 				collection(firestore, 'foods') as CollectionReference<Food>
 			), {idField: 'id'}
@@ -22,4 +24,9 @@ export class FoodsComponent implements OnInit {
 	ngOnInit(): void {
 	}
 
+	openAddFoodDialog() {
+		this.dialog.open(FoodEditDialogComponent, {
+			width: '500px'
+		});
+	}
 }

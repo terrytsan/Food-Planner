@@ -1,2 +1,5 @@
 <h1>Foods</h1>
 <app-food-detail *ngFor="let food of foods$ | async" [food]="food"></app-food-detail>
+<button (click)="openAddFoodDialog()" class="btn-add-foods" mat-fab>
+	<mat-icon>add</mat-icon>
+</button>

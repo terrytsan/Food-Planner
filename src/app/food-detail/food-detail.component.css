@@ -4,5 +4,5 @@
 
 .food-image {
 	max-height: 100px;
-	object-fit: none;
+	object-fit: cover;
 }

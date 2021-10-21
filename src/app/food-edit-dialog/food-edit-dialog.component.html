@@ -1,0 +1,17 @@
+<h2>Add Food</h2>
+<div class="dialog-content" mat-dialog-content>
+	<mat-form-field appearance="fill" class="food-details-input">
+		<mat-label>Name</mat-label>
+		<input autocomplete="off" id="name" matInput required>
+	</mat-form-field>
+	<mat-form-field appearance="fill">
+		<mat-label>Description</mat-label>
+		<input id="description" matInput required>
+	</mat-form-field>
+	<input (change)="onFileSelected($event)" accept="image/*" class="file-input" type="file">
+</div>
+
+<div mat-dialog-actions>
+	<button (click)="onSaveClick()" mat-button>Save</button>
+	<button (click)="onCancelClick()" mat-button>Cancel</button>
+</div>
