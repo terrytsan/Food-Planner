@@ -1,5 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Food } from "./food";
+import { AngularFirestore } from "@angular/fire/compat/firestore";
+import { MatSnackBar } from "@angular/material/snack-bar";
 
 @Component({
 	selector: 'app-food-detail',
@@ -11,10 +13,27 @@ export class FoodDetailComponent implements OnInit {
 	@Input() food: Food | null = null;
 	defaultImage: string = "https://firebasestorage.googleapis.com/v0/b/food-planner-52896.appspot.com/o/placeholder.jpg?alt=media&token=c34989f3-08b0-45e0-aac3-2513e948e8e6";
 
-	constructor() {
+	constructor(public firestore: AngularFirestore, private _snackBar: MatSnackBar) {
 	}
 
 	ngOnInit(): void {
 	}
 
+	deleteFood() {
+		let foodToDelete = this.food;
+		if (!foodToDelete) return;
+		this.firestore.collection("foods").doc(foodToDelete.id).delete().then(() => {
+			if (!foodToDelete) return;
+			let snackBarRef = this._snackBar.open(`Deleted ${foodToDelete.name}.`, 'Undo');
+
+			snackBarRef.onAction().subscribe(() => {
+				if (!foodToDelete) return;
+				this.firestore.collection('foods').doc(foodToDelete.id).set({
+					name: foodToDelete.name,
+					description: foodToDelete.description,
+					image: foodToDelete.image
+				});
+			});
+		});
+	}
 }

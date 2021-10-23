@@ -26,6 +26,8 @@ import { MatInputModule } from "@angular/material/input";
 import { MatProgressBarModule } from "@angular/material/progress-bar";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { AngularFireModule } from "@angular/fire/compat";
+import { MatMenuModule } from "@angular/material/menu";
+import { MatSnackBarModule } from "@angular/material/snack-bar";
 
 @NgModule({
 	declarations: [
@@ -56,7 +58,9 @@ import { AngularFireModule } from "@angular/fire/compat";
 		MatProgressBarModule,
 		FormsModule,
 		AngularFireModule.initializeApp(environment.firebase),
-		ReactiveFormsModule
+		ReactiveFormsModule,
+		MatMenuModule,
+		MatSnackBarModule
 	],
 	providers: [],
 	bootstrap: [AppComponent]

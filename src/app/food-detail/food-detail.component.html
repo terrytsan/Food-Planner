@@ -1,5 +1,16 @@
 <mat-card *ngIf="food" class="food-card">
-	<mat-card-title>{{food.name}}</mat-card-title>
+	<div class="food-card-header">
+		<mat-card-title>{{food.name}}</mat-card-title>
+		<button [matMenuTriggerFor]="menu" mat-icon-button>
+			<mat-icon>more_vert</mat-icon>
+		</button>
+		<mat-menu #menu>
+			<button (click)="deleteFood()" mat-menu-item>
+				<mat-icon>delete</mat-icon>
+				<span>Delete</span>
+			</button>
+		</mat-menu>
+	</div>
 	<img alt="Photo of {{food.name}}" class="food-image" mat-card-image src="{{food.image || defaultImage}}">
 	<mat-card-content>
 		{{food.description}}
