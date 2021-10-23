@@ -7,5 +7,13 @@
 }
 
 .food-details-input {
-	max-width: 400px;
+	width: 250px;
+}
+
+.file-input {
+	display: none;
+}
+
+.mat-dialog-actions {
+	justify-content: flex-end;
 }

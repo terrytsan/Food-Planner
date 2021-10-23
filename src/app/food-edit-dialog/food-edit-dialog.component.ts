@@ -13,7 +13,7 @@ import { FormBuilder, Validators } from "@angular/forms";
 export class FoodEditDialogComponent implements OnInit {
 	foodForm = this.fb.group({
 		name: ['', Validators.required],
-		description: ['', Validators.required],
+		description: [''],
 		file: ['', Validators.required]
 	});
 	fileName: string = '';
@@ -42,6 +42,7 @@ export class FoodEditDialogComponent implements OnInit {
 
 		const file: File = target.files[0];
 		const fileName = file.name.split('.')[0];
+		this.fileName = file.name;
 		const ext = file.name.split('.').pop();
 		const path = `foodImages/${fileName}-${new Date().toISOString().slice(0, 19)}.${ext}`;
 

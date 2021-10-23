@@ -1,24 +1,31 @@
 <h2>Add Food</h2>
 <form (ngSubmit)="onSaveClick()" [formGroup]="foodForm" autocomplete="off">
-	<div class="dialog-content" mat-dialog-content>
+	<div class="dialog-content">
 		<mat-form-field appearance="fill" class="food-details-input">
 			<mat-label>Name</mat-label>
 			<input formControlName="name" id="name" matInput required>
 		</mat-form-field>
-		<mat-form-field appearance="fill">
+		<mat-form-field appearance="fill" class="food-details-input">
 			<mat-label>Description</mat-label>
-			<input formControlName="description" id="description" matInput required>
+			<textarea formControlName="description" id="description" matInput rows="2"></textarea>
 		</mat-form-field>
-		<input (change)="onFileSelected($event)"
+		<input #fileUpload
+			   (change)="onFileSelected($event)"
 			   accept="image/*"
 			   class="file-input"
 			   formControlName="file"
 			   required
 			   type="file">
+		<div class="file-upload">
+			{{fileName || "Upload an image."}}
+			<button (click)="fileUpload.click()" class="mat-elevation-z0" color="primary" mat-mini-fab type="button">
+				<mat-icon>add_photo_alternate</mat-icon>
+			</button>
+		</div>
 	</div>
 
 	<div mat-dialog-actions>
-		<button [disabled]="!foodForm.valid" mat-button type="submit">Save</button>
 		<button (click)="onCancelClick()" mat-button type="button">Cancel</button>
+		<button [disabled]="!foodForm.valid" color="primary" mat-button mat-raised-button type="submit">Save</button>
 	</div>
 </form>
