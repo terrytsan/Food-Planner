@@ -1,4 +1,4 @@
-<h2>Add Food</h2>
+<h2>{{foodData ? 'Edit' : 'Add'}} Food</h2>
 <form (ngSubmit)="onSaveClick()" [formGroup]="foodForm" autocomplete="off">
 	<div class="dialog-content">
 		<mat-form-field appearance="fill" class="food-details-input">
@@ -13,8 +13,6 @@
 			   (change)="onFileSelected($event)"
 			   accept="image/*"
 			   class="file-input"
-			   formControlName="file"
-			   required
 			   type="file">
 		<div class="file-upload">
 			{{fileName || "Upload an image."}}
