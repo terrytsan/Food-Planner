@@ -3,8 +3,12 @@
 }
 
 .food-image {
-	max-height: 100px;
+	max-height: 150px;
+	max-width: 300px;
 	object-fit: cover;
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
 }
 
 .food-card-header {
