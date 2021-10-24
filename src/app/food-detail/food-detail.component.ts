@@ -34,7 +34,7 @@ export class FoodDetailComponent implements OnInit {
 		if (!foodToDelete) return;
 		this.firestore.collection("foods").doc(foodToDelete.id).delete().then(() => {
 			if (!foodToDelete) return;
-			let snackBarRef = this._snackBar.open(`Deleted ${foodToDelete.name}.`, 'Undo');
+			let snackBarRef = this._snackBar.open(`Deleted ${foodToDelete.name}.`, 'Undo', {duration: 3000});
 
 			snackBarRef.onAction().subscribe(() => {
 				if (!foodToDelete) return;
