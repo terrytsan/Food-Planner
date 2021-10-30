@@ -1,0 +1,9 @@
+<mat-card *ngFor="let food of foods$ | async" class="food-card">
+	<mat-card-title-group>
+		<img alt="Photo of {{food.name}}" mat-card-sm-image src="{{food.image || defaultImage}}">
+		<mat-card-title>{{food.name}}</mat-card-title>
+		<button (click)="chooseFood(food)" mat-button>
+			<mat-icon style="color: green">add_circle</mat-icon>
+		</button>
+	</mat-card-title-group>
+</mat-card>

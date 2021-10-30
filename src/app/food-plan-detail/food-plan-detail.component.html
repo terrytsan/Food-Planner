@@ -4,5 +4,10 @@
 		<div *ngIf="food$ | async">
 			<app-food-detail [food]="food$ | async" [simpleMode]="true"></app-food-detail>
 		</div>
+		<mat-card (click)="addFood()" *ngIf="!(food$ | async)" class="add-food-card">
+			<button mat-button>
+				<mat-icon style="color: green">add_circle</mat-icon>
+			</button>
+		</mat-card>
 	</mat-card-content>
 </mat-card>

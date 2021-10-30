@@ -29,6 +29,7 @@ import { AngularFireModule } from "@angular/fire/compat";
 import { MatMenuModule } from "@angular/material/menu";
 import { MatSnackBarModule } from "@angular/material/snack-bar";
 import { FoodPlanDetailComponent } from './food-plan-detail/food-plan-detail.component';
+import { ChooseFoodDialogComponent } from './choose-food-dialog/choose-food-dialog.component';
 
 @NgModule({
 	declarations: [
@@ -38,7 +39,8 @@ import { FoodPlanDetailComponent } from './food-plan-detail/food-plan-detail.com
 		FoodsComponent,
 		FoodDetailComponent,
 		FoodEditDialogComponent,
-		FoodPlanDetailComponent
+		FoodPlanDetailComponent,
+		ChooseFoodDialogComponent
 	],
 	imports: [
 		BrowserModule,
