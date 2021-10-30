@@ -68,6 +68,10 @@ export class WeekPlanComponent implements OnInit {
 			endDate: Timestamp.fromDate(sundayDate)
 		};
 	}
+
+	trackById(index: number, item: any) {
+		return JSON.stringify(item);
+	}
 }
 
 interface Week {
