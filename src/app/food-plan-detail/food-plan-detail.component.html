@@ -1,0 +1,8 @@
+<mat-card class="food-plan-card">
+	<h2>{{foodPlan.date.toMillis() | date: 'dd/MM/yyyy'}}</h2>
+	<mat-card-content>
+		<div *ngIf="food$ | async">
+			<app-food-detail [food]="food$ | async" [simpleMode]="true"></app-food-detail>
+		</div>
+	</mat-card-content>
+</mat-card>

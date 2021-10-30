@@ -28,6 +28,7 @@ import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { AngularFireModule } from "@angular/fire/compat";
 import { MatMenuModule } from "@angular/material/menu";
 import { MatSnackBarModule } from "@angular/material/snack-bar";
+import { FoodPlanDetailComponent } from './food-plan-detail/food-plan-detail.component';
 
 @NgModule({
 	declarations: [
@@ -36,7 +37,8 @@ import { MatSnackBarModule } from "@angular/material/snack-bar";
 		DayPlanComponent,
 		FoodsComponent,
 		FoodDetailComponent,
-		FoodEditDialogComponent
+		FoodEditDialogComponent,
+		FoodPlanDetailComponent
 	],
 	imports: [
 		BrowserModule,

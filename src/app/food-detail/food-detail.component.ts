@@ -13,7 +13,8 @@ import { FoodEditDialogComponent } from "../food-edit-dialog/food-edit-dialog.co
 export class FoodDetailComponent implements OnInit {
 
 	@Input() food: Food | null = null;
-	defaultImage: string = "https://firebasestorage.googleapis.com/v0/b/food-planner-52896.appspot.com/o/placeholder.jpg?alt=media&token=c34989f3-08b0-45e0-aac3-2513e948e8e6";
+	@Input() simpleMode: boolean = false;
+	defaultImage: string = "assets/images/placeholder.jpg";
 
 	constructor(public firestore: AngularFirestore, private _snackBar: MatSnackBar, public dialog: MatDialog) {
 	}
@@ -46,5 +47,10 @@ export class FoodDetailComponent implements OnInit {
 				});
 			});
 		});
+	}
+
+	removeFood() {
+		// Remove food from foodPlan
+
 	}
 }
