@@ -30,6 +30,7 @@ import { MatMenuModule } from "@angular/material/menu";
 import { MatSnackBarModule } from "@angular/material/snack-bar";
 import { FoodPlanDetailComponent } from './food-plan-detail/food-plan-detail.component';
 import { ChooseFoodDialogComponent } from './choose-food-dialog/choose-food-dialog.component';
+import { ServiceWorkerModule } from '@angular/service-worker';
 
 @NgModule({
 	declarations: [
@@ -64,7 +65,13 @@ import { ChooseFoodDialogComponent } from './choose-food-dialog/choose-food-dial
 		AngularFireModule.initializeApp(environment.firebase),
 		ReactiveFormsModule,
 		MatMenuModule,
-		MatSnackBarModule
+		MatSnackBarModule,
+		ServiceWorkerModule.register('ngsw-worker.js', {
+			enabled: environment.production,
+			// Register the ServiceWorker as soon as the app is stable
+			// or after 30 seconds (whichever comes first).
+			registrationStrategy: 'registerWhenStable:30000'
+		})
 	],
 	providers: [],
 	bootstrap: [AppComponent]
