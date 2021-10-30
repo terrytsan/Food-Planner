@@ -5,22 +5,22 @@
 			<mat-icon>more_vert</mat-icon>
 		</button>
 		<mat-menu #menu>
-			<button (click)="editFood()" *ngIf="!simpleMode" mat-menu-item>
+			<button (click)="editFood()" *ngIf="!foodPlan" mat-menu-item>
 				<mat-icon>edit</mat-icon>
 				<span>Edit</span>
 			</button>
-			<button (click)="deleteFood()" *ngIf="!simpleMode" mat-menu-item>
+			<button (click)="deleteFood()" *ngIf="!foodPlan" mat-menu-item>
 				<mat-icon>delete</mat-icon>
 				<span>Delete</span>
 			</button>
-			<button (click)="removeFood()" *ngIf="simpleMode" mat-menu-item>
+			<button (click)="removeFood()" *ngIf="foodPlan" mat-menu-item>
 				<mat-icon>delete</mat-icon>
 				<span>Remove</span>
 			</button>
 		</mat-menu>
 	</div>
 	<img alt="Photo of {{food.name}}" class="food-image" mat-card-image src="{{food.image || defaultImage}}">
-	<mat-card-content *ngIf="!simpleMode">
+	<mat-card-content *ngIf="!foodPlan">
 		{{food.description}}
 	</mat-card-content>
 </mat-card>

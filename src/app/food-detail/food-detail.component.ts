@@ -4,6 +4,8 @@ import { AngularFirestore } from "@angular/fire/compat/firestore";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { MatDialog } from "@angular/material/dialog";
 import { FoodEditDialogComponent } from "../food-edit-dialog/food-edit-dialog.component";
+import { FoodPlan } from "../food-plan-detail/foodPlan";
+import { deleteField, doc, Firestore, updateDoc } from "@angular/fire/firestore";
 
 @Component({
 	selector: 'app-food-detail',
@@ -13,10 +15,15 @@ import { FoodEditDialogComponent } from "../food-edit-dialog/food-edit-dialog.co
 export class FoodDetailComponent implements OnInit {
 
 	@Input() food: Food | null = null;
-	@Input() simpleMode: boolean = false;
+	@Input() foodPlan: FoodPlan | null = null;
 	defaultImage: string = "assets/images/placeholder.jpg";
 
-	constructor(public firestore: AngularFirestore, private _snackBar: MatSnackBar, public dialog: MatDialog) {
+	constructor(
+		public firestore: AngularFirestore,
+		private _snackBar: MatSnackBar,
+		public dialog: MatDialog,
+		public afs: Firestore
+	) {
 	}
 
 	ngOnInit(): void {
@@ -49,8 +56,12 @@ export class FoodDetailComponent implements OnInit {
 		});
 	}
 
-	removeFood() {
-		// Remove food from foodPlan
-
+	async removeFood() {
+		if (this.foodPlan) {
+			const foodPlanRef = doc(this.afs, 'foodPlans', this.foodPlan.id);
+			await updateDoc(foodPlanRef, {
+				foodId: deleteField()
+			});
+		}
 	}
 }

@@ -2,7 +2,7 @@
 	<h2>{{foodPlan.date.toMillis() | date: 'dd/MM/yyyy'}}</h2>
 	<mat-card-content>
 		<div *ngIf="food$ | async">
-			<app-food-detail [food]="food$ | async" [simpleMode]="true"></app-food-detail>
+			<app-food-detail [foodPlan]="foodPlan" [food]="food$ | async"></app-food-detail>
 		</div>
 		<mat-card (click)="addFood()" *ngIf="!(food$ | async)" class="add-food-card">
 			<button mat-button>
