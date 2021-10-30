@@ -3,6 +3,7 @@ import { collection, collectionData, CollectionReference, Firestore, query, wher
 import { Observable } from "rxjs";
 import { FoodPlan } from "../food-plan-detail/foodPlan";
 import { Timestamp } from "firebase/firestore";
+import { AngularFirestore } from "@angular/fire/compat/firestore";
 
 @Component({
 	selector: 'app-week-plan',
@@ -13,15 +14,40 @@ export class WeekPlanComponent implements OnInit {
 
 	foodPlans$: Observable<FoodPlan[]>;
 
-	constructor(firestore: Firestore) {
+	constructor(afs: Firestore, public firestore: AngularFirestore) {
 		let week = this.getCurrentWeek();
 		this.foodPlans$ = collectionData<FoodPlan>(
 			query<FoodPlan>(
-				collection(firestore, 'foodPlans') as CollectionReference<FoodPlan>,
+				collection(afs, 'foodPlans') as CollectionReference<FoodPlan>,
 				where('date', '>=', week.startDate),
 				where('date', '<=', week.endDate)
 			), {idField: 'id'}
 		);
+
+		this.foodPlans$.subscribe(foodPlans => {
+			if (foodPlans.length === 7) {
+				return;
+			}
+
+			let existingDates = foodPlans.map(f => f.date.toDate().getTime());		// Store as time so it can be compared
+			let datesToAdd: Timestamp[] = [];
+			let i = week.startDate.toDate();
+			for (; i <= week.endDate.toDate();) {
+				if (!existingDates.includes(i.getTime())) {
+					datesToAdd.push(Timestamp.fromDate(i));
+				}
+				i.setDate(i.getDate() + 1);
+			}
+
+			// Batch add the missing days
+			const batch = this.firestore.firestore.batch();
+			datesToAdd.forEach(date => {
+				const newPlanRef = this.firestore.firestore.collection('foodPlans').doc();
+				batch.set(newPlanRef, {date: date});
+			});
+			batch.commit();
+		});
+
 	}
 
 	ngOnInit(): void {
