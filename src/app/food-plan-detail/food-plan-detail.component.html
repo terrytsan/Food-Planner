@@ -1,5 +1,5 @@
 <mat-card class="food-plan-card">
-	<h2>{{foodPlan.date.toMillis() | date: 'dd/MM/yyyy'}}</h2>
+	<h2>{{foodPlan.date.toMillis() | date: 'EEEE dd/MM/yyyy'}}</h2>
 	<mat-card-content>
 		<div *ngIf="food$ | async">
 			<app-food-detail [foodPlan]="foodPlan" [food]="food$ | async"></app-food-detail>
