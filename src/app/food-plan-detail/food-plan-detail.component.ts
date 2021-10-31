@@ -26,11 +26,14 @@ export class FoodPlanDetailComponent implements OnInit {
 
 	addFood() {
 		const dialogRef = this.dialog.open(ChooseFoodDialogComponent, {
-			width: '500px'
+			width: '500px',
+			autoFocus: false
 		});
 
 		dialogRef.afterClosed().subscribe(result => {
-			this.firestore.collection('foodPlans').doc(this.foodPlan.id).update({foodId: result.id});
+			if (result) {
+				this.firestore.collection('foodPlans').doc(this.foodPlan.id).update({foodId: result.id});
+			}
 		});
 	}
 }

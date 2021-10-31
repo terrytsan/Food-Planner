@@ -1,3 +1,9 @@
+.dialog-header {
+	display: flex;
+	align-items: baseline;
+	justify-content: space-between;
+}
+
 .food-card {
 	margin-bottom: 5px;
 }
