@@ -4,6 +4,7 @@ import { Food } from "../food-detail/food";
 import { collection, collectionData, CollectionReference, Firestore, query } from "@angular/fire/firestore";
 import { MatDialogRef } from "@angular/material/dialog";
 import { FoodEditDialogComponent } from "../food-edit-dialog/food-edit-dialog.component";
+import { take } from "rxjs/operators";
 
 @Component({
 	selector: 'app-choose-food-dialog',
@@ -14,6 +15,8 @@ export class ChooseFoodDialogComponent implements OnInit {
 
 	defaultImage: string = "assets/images/placeholder.jpg";
 	foods$: Observable<Food[]>;
+	foods: Food[] = [];
+	filteredFoods: Food[] = [];
 	randomFood: Food;
 	foodSubscription: Subscription;
 
@@ -23,8 +26,10 @@ export class ChooseFoodDialogComponent implements OnInit {
 			), {idField: 'id'}
 		);
 
-		this.foodSubscription = this.foods$.subscribe(foods => {
+		this.foodSubscription = this.foods$.pipe(take(2)).subscribe(foods => {
 			this.randomFood = foods[Math.floor(Math.random() * foods.length)];
+			this.foods = foods;
+			this.filteredFoods = foods;
 		});
 	}
 
@@ -41,5 +46,13 @@ export class ChooseFoodDialogComponent implements OnInit {
 
 	chooseRandomFood() {
 		this.dialogRef.close(this.randomFood);
+	}
+
+	search($event: KeyboardEvent) {
+		if (!$event) return;
+		let searchTerm = (<HTMLInputElement>$event.target).value;
+		this.filteredFoods = this.foods.filter(food => {
+			return food.name.toLowerCase().includes(searchTerm.toLowerCase());
+		});
 	}
 }

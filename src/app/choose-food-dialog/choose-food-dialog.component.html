@@ -4,8 +4,12 @@
 		<mat-icon>casino</mat-icon>
 	</button>
 </div>
+<mat-form-field style="width: 100%">
+	<mat-label>Search Foods...</mat-label>
+	<input (keyup)="search($event)" autocomplete="off" matInput type="text">
+</mat-form-field>
 
-<mat-card *ngFor="let food of foods$ | async" class="food-card">
+<mat-card *ngFor="let food of filteredFoods" class="food-card">
 	<mat-card-title-group>
 		<img alt="Photo of {{food.name}}" mat-card-sm-image src="{{food.image || defaultImage}}">
 		<mat-card-title>{{food.name}}</mat-card-title>
@@ -14,3 +18,6 @@
 		</button>
 	</mat-card-title-group>
 </mat-card>
+<div *ngIf="foods.length < 1">
+	<h3 style="text-align: center">No foods found. 😔</h3>
+</div>

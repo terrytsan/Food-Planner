@@ -7,7 +7,7 @@
 		</mat-form-field>
 		<mat-form-field appearance="fill" class="food-details-input">
 			<mat-label>Description</mat-label>
-			<textarea formControlName="description" id="description" matInput rows="2"></textarea>
+			<textarea cdkTextareaAutosize formControlName="description" id="description" matInput></textarea>
 		</mat-form-field>
 		<input #fileUpload
 			   (change)="onFileSelected($event)"
