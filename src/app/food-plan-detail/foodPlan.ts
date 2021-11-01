@@ -3,6 +3,6 @@ import Timestamp = firebase.firestore.Timestamp;
 
 export interface FoodPlan {
 	id: string,
-	foodId?: string,
+	foods?: string[],
 	date: Timestamp
 }

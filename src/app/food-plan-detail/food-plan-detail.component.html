@@ -1,13 +1,17 @@
 <mat-card class="food-plan-card">
 	<h2>{{foodPlan.date.toMillis() | date: 'EEEE dd/MM/yyyy'}}</h2>
 	<mat-card-content>
-		<div *ngIf="food$ | async">
-			<app-food-detail [foodPlan]="foodPlan" [food]="food$ | async"></app-food-detail>
+		<div *ngIf="foods$ | async as foodsList">
+			<app-food-detail *ngFor="let food of foodsList"
+							 [foodPlan]="foodPlan"
+							 [food]="food">{{food}}</app-food-detail>
 		</div>
-		<mat-card (click)="addFood()" *ngIf="!(food$ | async)" class="add-food-card">
-			<button mat-button>
-				<mat-icon style="color: green">add_circle</mat-icon>
-			</button>
-		</mat-card>
+		<div *ngIf="showAddFoodsBtn">
+			<mat-card (click)="addFood()" class="add-food-card">
+				<button mat-button>
+					<mat-icon style="color: green">add_circle</mat-icon>
+				</button>
+			</mat-card>
+		</div>
 	</mat-card-content>
 </mat-card>

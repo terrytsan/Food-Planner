@@ -15,13 +15,19 @@ export class FoodPlanDetailComponent implements OnInit {
 
 	@Input() foodPlan: FoodPlan = {} as FoodPlan;
 
-	food$: Observable<Food>;
+	foods$: Observable<Food[]>;
+	showAddFoodsBtn: boolean = true;
 
 	constructor(public firestore: AngularFirestore, public dialog: MatDialog) {
 	}
 
 	ngOnInit(): void {
-		this.food$ = this.firestore.collection('foods').doc(this.foodPlan.foodId).valueChanges() as Observable<Food>;
+		if (this.foodPlan.foods) {
+			// __name__ is document id
+			this.foods$ = this.firestore.collection('foods', food => food.where("__name__", "in", this.foodPlan.foods)).valueChanges({idField: 'id'}) as Observable<Food[]>;
+
+			this.showAddFoodsBtn = this.foodPlan.foods.length <= 10;		// "in" query limited to max 10
+		}
 	}
 
 	addFood() {
@@ -32,7 +38,8 @@ export class FoodPlanDetailComponent implements OnInit {
 
 		dialogRef.afterClosed().subscribe(result => {
 			if (result) {
-				this.firestore.collection('foodPlans').doc(this.foodPlan.id).update({foodId: result.id});
+				let foods = this.foodPlan.foods ? this.foodPlan.foods.concat([result.id]) : [result.id];
+				this.firestore.collection('foodPlans').doc(this.foodPlan.id).update({foods: foods});
 			}
 		});
 	}

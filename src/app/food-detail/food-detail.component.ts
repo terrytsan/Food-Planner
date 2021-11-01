@@ -57,11 +57,18 @@ export class FoodDetailComponent implements OnInit {
 	}
 
 	async removeFood() {
-		if (this.foodPlan) {
+		if (this.foodPlan && this.foodPlan.foods) {
 			const foodPlanRef = doc(this.afs, 'foodPlans', this.foodPlan.id);
-			await updateDoc(foodPlanRef, {
-				foodId: deleteField()
-			});
+			if (this.foodPlan.foods.length <= 1) {
+				await updateDoc(foodPlanRef, {
+					foods: deleteField()
+				});
+			} else {
+				let updatedFoods = this.foodPlan.foods.filter(food => food != this.food?.id);
+				await updateDoc(foodPlanRef, {
+					foods: updatedFoods
+				});
+			}
 		}
 	}
 }
