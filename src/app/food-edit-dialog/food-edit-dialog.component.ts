@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { getDownloadURL, ref, Storage, uploadBytesResumable } from '@angular/fire/storage';
+import { getDownloadURL, ref, Storage, uploadBytesResumable, UploadTask } from '@angular/fire/storage';
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 import { AngularFirestore } from "@angular/fire/compat/firestore";
 import { Food } from "../food-detail/food";
@@ -16,6 +16,9 @@ export class FoodEditDialogComponent implements OnInit {
 		description: ['']
 	});
 	fileName: string = '';
+	uploadTask: UploadTask;
+	uploadingFile: boolean = false;
+	fileUploadProgress: number;
 	food: Food = {
 		id: "",
 		name: "",
@@ -52,7 +55,12 @@ export class FoodEditDialogComponent implements OnInit {
 		}
 	}
 
+	ngOnDestroy() {
+		this.uploadTask.cancel();
+	}
+
 	async onFileSelected($event: Event) {
+		this.uploadingFile = true;
 		const target = $event.target as HTMLInputElement;
 		if (!target.files) return;
 
@@ -65,8 +73,19 @@ export class FoodEditDialogComponent implements OnInit {
 
 		try {
 			const storageRef = ref(this.storage, path);
-			const task = uploadBytesResumable(storageRef, file);
-			await task;
+			this.uploadTask = uploadBytesResumable(storageRef, file);
+			this.uploadTask.on('state_changed',
+				(snapshot) => {
+					this.fileUploadProgress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+				},
+				(error) => {
+					console.error("Error uploading image. ", +error);
+				},
+				() => {
+					this.uploadingFile = false;
+				}
+			);
+			await this.uploadTask;
 			this.food.image = await getDownloadURL(storageRef);
 		} catch (e) {
 			console.error(e);
@@ -78,6 +97,10 @@ export class FoodEditDialogComponent implements OnInit {
 	}
 
 	onSaveClick() {
+		if (this.uploadingFile) {
+			return;
+		}
+
 		if (this.foodData) {
 			this.firestore.collection('foods').doc(this.food.id).update({
 				name: this.foodForm.value.name,

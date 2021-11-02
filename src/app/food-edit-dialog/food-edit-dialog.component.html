@@ -20,10 +20,18 @@
 				<mat-icon>add_photo_alternate</mat-icon>
 			</button>
 		</div>
+		<mat-progress-bar [hidden]="!fileUploadProgress"
+						  mode="determinate"
+						  value="{{fileUploadProgress}}"></mat-progress-bar>
 	</div>
 
 	<div mat-dialog-actions>
 		<button (click)="onCancelClick()" mat-button type="button">Cancel</button>
-		<button [disabled]="!foodForm.valid" color="primary" mat-button mat-raised-button type="submit">Save</button>
+		<button [disabled]="!foodForm.valid || uploadingFile"
+				color="primary"
+				mat-button
+				mat-raised-button
+				type="submit">Save
+		</button>
 	</div>
 </form>
