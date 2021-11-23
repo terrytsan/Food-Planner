@@ -31,6 +31,7 @@ import { MatSnackBarModule } from "@angular/material/snack-bar";
 import { FoodPlanDetailComponent } from './food-plan-detail/food-plan-detail.component';
 import { ChooseFoodDialogComponent } from './choose-food-dialog/choose-food-dialog.component';
 import { ServiceWorkerModule } from '@angular/service-worker';
+import { MatGridListModule } from "@angular/material/grid-list";
 
 @NgModule({
 	declarations: [
@@ -71,7 +72,8 @@ import { ServiceWorkerModule } from '@angular/service-worker';
 			// Register the ServiceWorker as soon as the app is stable
 			// or after 30 seconds (whichever comes first).
 			registrationStrategy: 'registerWhenStable:30000'
-		})
+		}),
+		MatGridListModule
 	],
 	providers: [],
 	bootstrap: [AppComponent]

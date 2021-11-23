@@ -1,6 +1,6 @@
 <mat-card *ngIf="food" class="food-card">
 	<div class="food-card-header">
-		<mat-card-title>{{food.name}}</mat-card-title>
+		<mat-card-title [class.food-card-title-small]="!foodPlan">{{food.name}}</mat-card-title>
 		<button [matMenuTriggerFor]="menu" mat-icon-button>
 			<mat-icon>more_vert</mat-icon>
 		</button>
@@ -20,7 +20,7 @@
 		</mat-menu>
 	</div>
 	<img alt="Photo of {{food.name}}" class="food-image" mat-card-image src="{{food.image || defaultImage}}">
-	<mat-card-content *ngIf="!foodPlan">
+	<mat-card-content *ngIf="!foodPlan" class="food-card-description">
 		{{food.description}}
 	</mat-card-content>
 </mat-card>
