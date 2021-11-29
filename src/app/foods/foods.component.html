@@ -1,9 +1,9 @@
 <h1>Foods</h1>
-<mat-grid-list cols="2" gutterSize="10" rowHeight="300px">
-	<mat-grid-tile *ngFor="let food of foods$ | async">
-		<app-food-detail [food]="food" style="width: 100%; height: 100%;"></app-food-detail>
-	</mat-grid-tile>
-</mat-grid-list>
+<div fxLayout="row wrap" fxLayoutGap="10px grid">
+	<div *ngFor="let food of foods$ | async" fxFlex="25%" fxFlex.sm="33%" fxFlex.xs="50%">
+		<app-food-detail [food]="food"></app-food-detail>
+	</div>
+</div>
 <button (click)="openAddFoodDialog()" class="btn-add-foods" mat-fab>
 	<mat-icon>add</mat-icon>
 </button>

@@ -32,6 +32,7 @@ import { FoodPlanDetailComponent } from './food-plan-detail/food-plan-detail.com
 import { ChooseFoodDialogComponent } from './choose-food-dialog/choose-food-dialog.component';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { MatGridListModule } from "@angular/material/grid-list";
+import { FlexLayoutModule } from "@angular/flex-layout";
 
 @NgModule({
 	declarations: [
@@ -73,7 +74,8 @@ import { MatGridListModule } from "@angular/material/grid-list";
 			// or after 30 seconds (whichever comes first).
 			registrationStrategy: 'registerWhenStable:30000'
 		}),
-		MatGridListModule
+		MatGridListModule,
+		FlexLayoutModule
 	],
 	providers: [],
 	bootstrap: [AppComponent]
