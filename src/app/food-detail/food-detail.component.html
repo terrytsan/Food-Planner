@@ -1,26 +1,37 @@
-<mat-card *ngIf="food" class="food-card">
+<mat-card *ngIf="food && !foodPlan" class="food-card">
 	<div class="food-card-header">
-		<mat-card-title [class.food-card-title-small]="!foodPlan">{{food.name}}</mat-card-title>
+		<mat-card-title class="food-card-title-small">{{food.name}}</mat-card-title>
 		<button [matMenuTriggerFor]="menu" mat-icon-button>
 			<mat-icon>more_vert</mat-icon>
 		</button>
 		<mat-menu #menu>
-			<button (click)="editFood()" *ngIf="!foodPlan" mat-menu-item>
+			<button (click)="editFood()" mat-menu-item>
 				<mat-icon>edit</mat-icon>
 				<span>Edit</span>
 			</button>
-			<button (click)="deleteFood()" *ngIf="!foodPlan" mat-menu-item>
+			<button (click)="deleteFood()" mat-menu-item>
 				<mat-icon>delete</mat-icon>
 				<span>Delete</span>
-			</button>
-			<button (click)="removeFood()" *ngIf="foodPlan" mat-menu-item>
-				<mat-icon>delete</mat-icon>
-				<span>Remove</span>
 			</button>
 		</mat-menu>
 	</div>
 	<img alt="Photo of {{food.name}}" class="food-image" mat-card-image src="{{food.image || defaultImage}}">
-	<mat-card-content *ngIf="!foodPlan" class="food-card-description">
+	<mat-card-content class="food-card-description">
 		{{food.description}}
 	</mat-card-content>
+</mat-card>
+
+<!-- Simple Food Details -->
+<mat-card *ngIf="food && foodPlan" class="simple-food-card">
+	<img alt="Photo of {{food.name}}" class="simple-food-image" src="{{food.image || defaultImage}}">
+	<div class="food-card-title-big">{{food.name}}</div>
+	<button [matMenuTriggerFor]="menu" class="simple-food-card-menu-btn" mat-icon-button>
+		<mat-icon>more_vert</mat-icon>
+	</button>
+	<mat-menu #menu>
+		<button (click)="removeFood()" mat-menu-item>
+			<mat-icon>delete</mat-icon>
+			<span>Remove</span>
+		</button>
+	</mat-menu>
 </mat-card>

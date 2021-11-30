@@ -6,12 +6,30 @@
 	box-sizing: border-box;
 }
 
+.simple-food-card {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	margin-bottom: 5px;
+}
+
+.simple-food-card-menu-btn {
+	margin-left: auto;
+	align-self: flex-start;
+}
+
 .food-image {
 	max-width: 90%;
 	height: auto;
 	object-fit: scale-down;
 	display: block;
 	margin: 0 auto 10px;
+}
+
+.simple-food-image {
+	width: 56px;
+	height: 56px;
+	margin-right: 10px;
 }
 
 .food-card-header {
@@ -25,6 +43,10 @@
 .food-card-title-small {
 	font-size: 1.0em;
 	margin-bottom: 0;
+}
+
+.food-card-title-big {
+	font-size: 1.5em;
 }
 
 .food-card-description {
