@@ -1,16 +1,19 @@
 <div>
-	<h2>{{foodPlan.date.toMillis() | date: 'EEEE dd/MM/yyyy'}}</h2>
+	<div class="day-header">
+		<h2>{{foodPlan.date.toMillis() | date: 'EEEE dd/MM/yyyy'}}</h2>
+		<button (click)="addFood()" *ngIf="showAddFoodsBtn" mat-button>
+			<mat-icon style="color: green">add_circle</mat-icon>
+		</button>
+	</div>
 	<mat-card-content>
 		<div *ngIf="foods$ | async as foodsList">
 			<app-food-detail *ngFor="let food of foodsList"
 							 [foodPlan]="foodPlan"
 							 [food]="food">{{food}}</app-food-detail>
 		</div>
-		<div *ngIf="showAddFoodsBtn">
-			<mat-card (click)="addFood()" class="add-food-card">
-				<button mat-button>
-					<mat-icon style="color: green">add_circle</mat-icon>
-				</button>
+		<div *ngIf="!(foods$ | async)">
+			<mat-card class="empty-list-card">
+				Nothing here yet 😞
 			</mat-card>
 		</div>
 	</mat-card-content>
