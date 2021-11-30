@@ -1,7 +1,7 @@
 <div class="dialog-header">
 	<h2>Choose a Food</h2>
-	<button (click)="chooseRandomFood()" mat-button>
-		<mat-icon>casino</mat-icon>
+	<button (click)="chooseRandomFood()" mat-button style="padding-right: 0;">
+		<mat-icon>shuffle</mat-icon>
 	</button>
 </div>
 <mat-form-field style="width: 100%">
@@ -10,13 +10,11 @@
 </mat-form-field>
 <mat-dialog-content>
 	<mat-card *ngFor="let food of filteredFoods" class="food-card">
-		<mat-card-title-group>
-			<img alt="Photo of {{food.name}}" mat-card-sm-image src="{{food.image || defaultImage}}">
-			<mat-card-title>{{food.name}}</mat-card-title>
-			<button (click)="chooseFood(food)" mat-button>
-				<mat-icon style="color: green">add_circle</mat-icon>
-			</button>
-		</mat-card-title-group>
+		<img alt="Photo of {{food.name}}" class="food-image" src="{{food.image || defaultImage}}">
+		<div>{{food.name}}</div>
+		<button (click)="chooseFood(food)" mat-button style="margin-left: auto; padding-right: 0;">
+			<mat-icon style="color: green">add_circle</mat-icon>
+		</button>
 	</mat-card>
 	<div *ngIf="foods.length < 1">
 		<h3 style="text-align: center">No foods found. 😔</h3>

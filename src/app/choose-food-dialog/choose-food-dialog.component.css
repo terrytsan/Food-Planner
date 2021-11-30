@@ -5,5 +5,15 @@
 }
 
 .food-card {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: flex-start;
 	margin-bottom: 5px;
+}
+
+.food-image {
+	width: 56px;
+	height: 56px;
+	margin-right: 10px;
 }
