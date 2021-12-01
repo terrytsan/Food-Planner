@@ -1,6 +1,7 @@
 import { Component, ViewChild } from '@angular/core';
 import { MatSidenav } from "@angular/material/sidenav";
-import { BreakpointObserver } from "@angular/cdk/layout";
+import { MediaObserver } from "@angular/flex-layout";
+import { Subscription } from "rxjs";
 
 @Component({
 	selector: 'app-root',
@@ -13,19 +14,23 @@ export class AppComponent {
 	@ViewChild(MatSidenav)
 	sidenav!: MatSidenav;
 
-	constructor(private observer: BreakpointObserver) {
-	}
+	mobileDisplay = this.media.isActive('xs');
+	private mediaSubscription: Subscription;
 
-	ngAfterViewInit() {
-		// Responsively close and open the sidenav depending on screen size
-		this.observer.observe(['(max-width: 800px)']).subscribe((res) => {
-			if (res.matches) {
+	constructor(private media: MediaObserver) {
+		this.mediaSubscription = this.media.asObservable().subscribe(() => {
+			// Triggered when display size changes
+			if (this.media.isActive('xs')) {
 				this.sidenav.mode = 'over';
-				this.sidenav.close();
+				this.mobileDisplay = true;
 			} else {
 				this.sidenav.mode = 'side';
-				this.sidenav.open();
+				this.mobileDisplay = false;
 			}
 		});
+	}
+
+	ngOnDestroy(): void {
+		this.mediaSubscription.unsubscribe();
 	}
 }
