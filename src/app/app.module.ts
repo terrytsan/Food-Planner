@@ -33,6 +33,8 @@ import { ChooseFoodDialogComponent } from './choose-food-dialog/choose-food-dial
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { MatGridListModule } from "@angular/material/grid-list";
 import { FlexLayoutModule } from "@angular/flex-layout";
+import { FoodCatalogueComponent } from './food-catalogue/food-catalogue.component';
+import { CatalogueItemComponent } from './catalogue-item/catalogue-item.component';
 
 @NgModule({
 	declarations: [
@@ -43,7 +45,9 @@ import { FlexLayoutModule } from "@angular/flex-layout";
 		FoodDetailComponent,
 		FoodEditDialogComponent,
 		FoodPlanDetailComponent,
-		ChooseFoodDialogComponent
+		ChooseFoodDialogComponent,
+		FoodCatalogueComponent,
+		CatalogueItemComponent
 	],
 	imports: [
 		BrowserModule,
