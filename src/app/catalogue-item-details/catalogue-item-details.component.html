@@ -1,0 +1,26 @@
+<div *ngIf="catalogueItem">
+	<img alt="Photo of {{catalogueItem.name}}"
+		 class="catalogueItem-image"
+		 mat-card-image
+		 src="{{catalogueItem.image || defaultImage}}">
+	<h1 style="margin: 0;">{{catalogueItem.name}}</h1>
+	<h3>{{catalogueItem.storePurchased}}</h3>
+	<p>{{catalogueItem.description}}</p>
+	<div fxLayout="row" fxLayoutAlign="space-evenly">
+		<button mat-button>
+			<mat-icon (click)="toggleLikeCatalogueItem()"
+					  [ngClass]="{'liked-colour': catalogueItem.status === 'liked'}">
+				thumb_up
+			</mat-icon>
+		</button>
+		<button mat-button>
+			<mat-icon (click)="toggleDislikeCatalogueItem()"
+					  [ngClass]="{'disliked-colour': catalogueItem.status === 'disliked'}">
+				thumb_down
+			</mat-icon>
+		</button>
+	</div>
+</div>
+<div *ngIf="!catalogueItem" style="text-align: center;">
+	Error loading item 😔
+</div>

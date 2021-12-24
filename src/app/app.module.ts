@@ -35,6 +35,7 @@ import { MatGridListModule } from "@angular/material/grid-list";
 import { FlexLayoutModule } from "@angular/flex-layout";
 import { FoodCatalogueComponent } from './food-catalogue/food-catalogue.component';
 import { CatalogueItemComponent } from './catalogue-item/catalogue-item.component';
+import { CatalogueItemDetailsComponent } from './catalogue-item-details/catalogue-item-details.component';
 
 @NgModule({
 	declarations: [
@@ -47,7 +48,8 @@ import { CatalogueItemComponent } from './catalogue-item/catalogue-item.componen
 		FoodPlanDetailComponent,
 		ChooseFoodDialogComponent,
 		FoodCatalogueComponent,
-		CatalogueItemComponent
+		CatalogueItemComponent,
+		CatalogueItemDetailsComponent
 	],
 	imports: [
 		BrowserModule,
