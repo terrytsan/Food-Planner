@@ -1,7 +1,10 @@
 <div class="main-container">
 	<mat-toolbar color="primary">
-		<button (click)="sidenav.toggle()" mat-icon-button>
-			<mat-icon style="padding: 0 5px;">menu</mat-icon>
+		<button (click)="navigateBack()" *ngIf="showBackBtn" mat-icon-button>
+			<mat-icon class="nav-btn-icon">arrow_back</mat-icon>
+		</button>
+		<button (click)="sidenav.toggle()" *ngIf="!showBackBtn" mat-icon-button>
+			<mat-icon class="nav-btn-icon">menu</mat-icon>
 		</button>
 		<mat-icon>restaurant_menu</mat-icon>
 		<span>Food Planner</span>

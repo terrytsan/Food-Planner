@@ -18,6 +18,10 @@ mat-icon {
 	padding-right: 10px;
 }
 
+.nav-btn-icon {
+	padding: 0 5px;
+}
+
 mat-sidenav {
 	width: 200px;
 }
