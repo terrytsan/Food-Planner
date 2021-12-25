@@ -3,10 +3,36 @@
 		 class="catalogueItem-image"
 		 mat-card-image
 		 src="{{catalogueItem.image || defaultImage}}">
-	<h1 style="margin: 0;">{{catalogueItem.name}}</h1>
-	<h3>{{catalogueItem.storePurchased}}</h3>
-	<p>{{catalogueItem.description}}</p>
-	<div fxLayout="row" fxLayoutAlign="space-evenly">
+
+	<!-- Name -->
+	<div fxLayout="row" fxLayoutAlign="flex-start center">
+		<h1 *ngIf="!isEditing" style="margin: 0;">{{catalogueItem.name}}</h1>
+		<mat-form-field *ngIf="isEditing" appearance="fill">
+			<mat-label>Name</mat-label>
+			<input [(ngModel)]="catalogueItem.name" matInput>
+		</mat-form-field>
+	</div>
+
+	<!-- Store Purchased -->
+	<h3 *ngIf="!isEditing">{{catalogueItem.storePurchased}}</h3>
+	<mat-form-field *ngIf="isEditing" appearance="fill">
+		<mat-label>Store</mat-label>
+		<input [(ngModel)]="catalogueItem.storePurchased" matInput>
+	</mat-form-field>
+
+	<!-- Description -->
+	<p *ngIf="!isEditing">{{catalogueItem.description}}</p>
+	<mat-form-field *ngIf="isEditing" appearance="fill">
+		<mat-label>Description</mat-label>
+		<textarea [(ngModel)]="catalogueItem.description"
+				  cdkAutosizeMaxRows="6"
+				  cdkAutosizeMinRows="3"
+				  cdkTextareaAutosize
+				  matInput></textarea>
+	</mat-form-field>
+
+	<!-- Thumbs buttons -->
+	<div *ngIf="!isEditing" fxLayout="row" fxLayoutAlign="space-evenly">
 		<button mat-button>
 			<mat-icon (click)="toggleLikeCatalogueItem()"
 					  [ngClass]="{'liked-colour': catalogueItem.status === 'liked'}">
@@ -20,7 +46,19 @@
 			</mat-icon>
 		</button>
 	</div>
+
+	<!-- Delete btn -->
+	<button (click)="deleteCatalogueItem()" *ngIf="isEditing" class="delete-btn" color="warn" mat-flat-button>
+		Delete
+	</button>
+
+	<!-- Editing fab -->
+	<button (click)="toggleEditing()" class="btn-toggle-edit" mat-fab>
+		<mat-icon *ngIf="!isEditing">edit</mat-icon>
+		<mat-icon *ngIf="isEditing">done</mat-icon>
+	</button>
 </div>
+
 <div *ngIf="!catalogueItem" style="text-align: center;">
 	Error loading item 😔
 </div>

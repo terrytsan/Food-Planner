@@ -18,3 +18,18 @@
 .neutral-colour {
 	color: white;
 }
+
+.btn-toggle-edit {
+	position: fixed;
+	right: 20px;
+	left: auto;
+	bottom: 20px;
+}
+
+.delete-btn {
+	width: 100%;
+}
+
+mat-form-field {
+	width: 100%;
+}

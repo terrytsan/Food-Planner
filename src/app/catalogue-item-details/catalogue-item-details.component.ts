@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from "@angular/router";
-import { doc, Firestore, onSnapshot, updateDoc } from "@angular/fire/firestore";
+import { ActivatedRoute, Router } from "@angular/router";
+import { deleteDoc, doc, Firestore, onSnapshot, updateDoc } from "@angular/fire/firestore";
 import { CatalogueItem } from "../catalogue-item/catalogueItem";
 
 @Component({
@@ -11,10 +11,11 @@ import { CatalogueItem } from "../catalogue-item/catalogueItem";
 export class CatalogueItemDetailsComponent implements OnInit {
 
 	id: string;
+	isEditing: boolean = false;
 	defaultImage: string = "assets/images/placeholder.jpg";
 	catalogueItem: CatalogueItem;
 
-	constructor(private route: ActivatedRoute, private afs: Firestore) {
+	constructor(private route: ActivatedRoute, private afs: Firestore, private router: Router) {
 		this.id = this.route.snapshot.params['id'];
 
 		onSnapshot(doc(this.afs, "catalogueItems", this.id), (doc) => {
@@ -23,6 +24,24 @@ export class CatalogueItemDetailsComponent implements OnInit {
 	}
 
 	ngOnInit(): void {
+	}
+
+	toggleEditing() {
+		if (this.isEditing) {
+			this.updateCatalogueItem();
+		}
+		this.isEditing = !this.isEditing;
+	}
+
+	async updateCatalogueItem() {
+		const catalogueItemRef = doc(this.afs, 'catalogueItems', this.id);
+
+		await updateDoc(catalogueItemRef, {
+			name: this.catalogueItem.name,
+			description: this.catalogueItem.description,
+			storePurchased: this.catalogueItem.storePurchased,
+			image: this.catalogueItem.image
+		});
 	}
 
 	async toggleLikeCatalogueItem() {
@@ -39,5 +58,11 @@ export class CatalogueItemDetailsComponent implements OnInit {
 		await updateDoc(catalogueItemRef, {
 			status: newStatus
 		});
+	}
+
+	async deleteCatalogueItem() {
+		const catalogueItemRef = doc(this.afs, 'catalogueItems', this.id);
+		await deleteDoc(catalogueItemRef);
+		await this.router.navigate(['/foodCatalogue']);
 	}
 }
