@@ -1,4 +1,4 @@
-<div *ngIf="catalogueItem">
+<div *ngIf="catalogueItem || isAdding">
 	<img alt="Photo of {{catalogueItem.name}}"
 		 class="catalogueItem-image"
 		 mat-card-image
@@ -48,7 +48,11 @@
 	</div>
 
 	<!-- Delete btn -->
-	<button (click)="deleteCatalogueItem()" *ngIf="isEditing" class="delete-btn" color="warn" mat-flat-button>
+	<button (click)="deleteCatalogueItem()"
+			*ngIf="isEditing && !isAdding"
+			class="delete-btn"
+			color="warn"
+			mat-flat-button>
 		Delete
 	</button>
 
@@ -59,6 +63,6 @@
 	</button>
 </div>
 
-<div *ngIf="!catalogueItem" style="text-align: center;">
+<div *ngIf="!catalogueItem && !isAdding" style="text-align: center;">
 	Error loading item 😔
 </div>
