@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { CatalogueItem } from "./catalogueItem";
 import { doc, Firestore, updateDoc } from "@angular/fire/firestore";
+import { GlobalVariable } from "../global";
 
 @Component({
 	selector: 'app-catalogue-item',
@@ -10,6 +11,7 @@ import { doc, Firestore, updateDoc } from "@angular/fire/firestore";
 export class CatalogueItemComponent implements OnInit {
 
 	@Input() catalogueItem: CatalogueItem;
+	defaultImage = GlobalVariable.PLACEHOLDER_IMAGE_URL;
 
 	constructor(public afs: Firestore) {
 	}

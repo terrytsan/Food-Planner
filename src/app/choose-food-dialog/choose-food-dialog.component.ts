@@ -5,6 +5,7 @@ import { collection, collectionData, CollectionReference, Firestore, orderBy, qu
 import { MatDialogRef } from "@angular/material/dialog";
 import { FoodEditDialogComponent } from "../food-edit-dialog/food-edit-dialog.component";
 import { take } from "rxjs/operators";
+import { GlobalVariable } from "../global";
 
 @Component({
 	selector: 'app-choose-food-dialog',
@@ -13,7 +14,7 @@ import { take } from "rxjs/operators";
 })
 export class ChooseFoodDialogComponent implements OnInit {
 
-	defaultImage: string = "assets/images/placeholder.jpg";
+	defaultImage: string = GlobalVariable.PLACEHOLDER_IMAGE_URL;
 	foods$: Observable<Food[]>;
 	foods: Food[] = [];
 	filteredFoods: Food[] = [];

@@ -5,6 +5,7 @@ import { CatalogueItem } from "../catalogue-item/catalogueItem";
 import { Timestamp } from "firebase/firestore";
 import { MatDialog } from "@angular/material/dialog";
 import { UploadImageDialogComponent } from "../upload-image-dialog/upload-image-dialog.component";
+import { GlobalVariable } from "../global";
 
 @Component({
 	selector: 'app-catalogue-item-details',
@@ -16,7 +17,7 @@ export class CatalogueItemDetailsComponent implements OnInit {
 	id: string;
 	isEditing: boolean = false;
 	isAdding: boolean = false;
-	defaultImage: string = "assets/images/placeholder.jpg";
+	defaultImage: string = GlobalVariable.PLACEHOLDER_IMAGE_URL;
 	catalogueItem: CatalogueItem;
 
 	constructor(

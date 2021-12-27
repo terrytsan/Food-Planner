@@ -6,6 +6,7 @@ import { MatDialog } from "@angular/material/dialog";
 import { FoodEditDialogComponent } from "../food-edit-dialog/food-edit-dialog.component";
 import { FoodPlan } from "../food-plan-detail/foodPlan";
 import { deleteField, doc, Firestore, updateDoc } from "@angular/fire/firestore";
+import { GlobalVariable } from "../global";
 
 @Component({
 	selector: 'app-food-detail',
@@ -16,7 +17,7 @@ export class FoodDetailComponent implements OnInit {
 
 	@Input() food: Food | null = null;
 	@Input() foodPlan: FoodPlan | null = null;
-	defaultImage: string = "assets/images/placeholder.jpg";
+	defaultImage: string = GlobalVariable.PLACEHOLDER_IMAGE_URL;
 
 	constructor(
 		public firestore: AngularFirestore,
