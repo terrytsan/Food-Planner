@@ -1,8 +1,17 @@
+<link href="https://fonts.googleapis.com/css?family=Material+Icons|Material+Icons+Outlined|Material+Icons+Two+Tone|Material+Icons+Round|Material+Icons+Sharp"
+	  rel="stylesheet">
+
 <div *ngIf="catalogueItem || isAdding">
-	<img alt="Photo of {{catalogueItem.name}}"
-		 class="catalogueItem-image"
-		 mat-card-image
-		 src="{{catalogueItem.image || defaultImage}}">
+	<!-- Image -->
+	<div class="image-container">
+		<img alt="Photo of {{catalogueItem.name}}"
+			 class="catalogueItem-image"
+			 mat-card-image
+			 src="{{catalogueItem.imageUrl || defaultImage}}">
+		<button (click)="openUploadImageDialog()" *ngIf="isEditing" class="btn-edit-image" color="primary" mat-fab>
+			<mat-icon class="material-icons-outlined" color="secondary">edit</mat-icon>
+		</button>
+	</div>
 
 	<!-- Name -->
 	<div fxLayout="row" fxLayoutAlign="flex-start center">

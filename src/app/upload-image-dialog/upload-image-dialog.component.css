@@ -1,0 +1,31 @@
+.mat-dialog-content {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+.file-input {
+	display: none;
+}
+
+.file-upload {
+	margin-bottom: 10px;
+}
+
+.mat-dialog-actions {
+	justify-content: flex-end;
+}
+
+.preview-image {
+	max-width: 250px;
+	max-height: 200px;
+}
+
+.progress-bar {
+	margin: 10px 0;
+}
+
+/* Allows progress bar to be hidden */
+[hidden] {
+	visibility: hidden !important;
+}

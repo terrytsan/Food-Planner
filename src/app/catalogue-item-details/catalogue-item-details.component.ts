@@ -3,6 +3,8 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { addDoc, collection, deleteDoc, doc, Firestore, onSnapshot, updateDoc } from "@angular/fire/firestore";
 import { CatalogueItem } from "../catalogue-item/catalogueItem";
 import { Timestamp } from "firebase/firestore";
+import { MatDialog } from "@angular/material/dialog";
+import { UploadImageDialogComponent } from "../upload-image-dialog/upload-image-dialog.component";
 
 @Component({
 	selector: 'app-catalogue-item-details',
@@ -17,7 +19,12 @@ export class CatalogueItemDetailsComponent implements OnInit {
 	defaultImage: string = "assets/images/placeholder.jpg";
 	catalogueItem: CatalogueItem;
 
-	constructor(private route: ActivatedRoute, private afs: Firestore, private router: Router) {
+	constructor(
+		private route: ActivatedRoute,
+		private afs: Firestore,
+		private router: Router,
+		private dialog: MatDialog
+	) {
 		this.id = this.route.snapshot.params['id'];
 
 		if (this.id === "new") {
@@ -25,7 +32,8 @@ export class CatalogueItemDetailsComponent implements OnInit {
 				name: '',
 				description: '',
 				storePurchased: '',
-				image: '',
+				imageUrl: '',
+				imagePath: '',
 				status: 'neutral'
 			};
 			this.isAdding = this.isEditing = true;
@@ -56,7 +64,24 @@ export class CatalogueItemDetailsComponent implements OnInit {
 			name: this.catalogueItem.name,
 			description: this.catalogueItem.description,
 			storePurchased: this.catalogueItem.storePurchased,
-			image: this.catalogueItem.image
+			imageUrl: this.catalogueItem.imageUrl,
+			imagePath: this.catalogueItem.imagePath
+		});
+	}
+
+	openUploadImageDialog() {
+		const dialogRef = this.dialog.open(UploadImageDialogComponent, {
+			width: '300px',
+			data: {
+				FirebaseStorePath: 'catalogueItemImages/'
+			}
+		});
+
+		dialogRef.afterClosed().subscribe(uploadedImage => {
+			if (uploadedImage) {
+				this.catalogueItem.imageUrl = uploadedImage.ImageUrl;
+				this.catalogueItem.imagePath = uploadedImage.ImagePath;
+			}
 		});
 	}
 

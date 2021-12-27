@@ -36,6 +36,7 @@ import { FlexLayoutModule } from "@angular/flex-layout";
 import { FoodCatalogueComponent } from './food-catalogue/food-catalogue.component';
 import { CatalogueItemComponent } from './catalogue-item/catalogue-item.component';
 import { CatalogueItemDetailsComponent } from './catalogue-item-details/catalogue-item-details.component';
+import { UploadImageDialogComponent } from './upload-image-dialog/upload-image-dialog.component';
 
 @NgModule({
 	declarations: [
@@ -49,7 +50,8 @@ import { CatalogueItemDetailsComponent } from './catalogue-item-details/catalogu
 		ChooseFoodDialogComponent,
 		FoodCatalogueComponent,
 		CatalogueItemComponent,
-		CatalogueItemDetailsComponent
+		CatalogueItemDetailsComponent,
+		UploadImageDialogComponent
 	],
 	imports: [
 		BrowserModule,

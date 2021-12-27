@@ -1,0 +1,27 @@
+<h1 mat-dialog-title>Upload Image</h1>
+
+<div mat-dialog-content>
+	<input #fileUpload
+		   (change)="onFileSelected($event)"
+		   accept="image/*"
+		   class="file-input"
+		   required
+		   type="file">
+	<div class="file-upload">
+		{{fileName || "Upload an image."}}
+		<button (click)="fileUpload.click()" class="mat-elevation-z0" color="primary" mat-mini-fab type="button">
+			<mat-icon>add_photo_alternate</mat-icon>
+		</button>
+	</div>
+	<img *ngIf="imgPreviewSrc" [src]="imgPreviewSrc" alt="Preview image" class="preview-image">
+	<mat-progress-bar [hidden]="!fileUploadProgress"
+					  class="progress-bar"
+					  mode="determinate"
+					  value="{{fileUploadProgress}}"></mat-progress-bar>
+</div>
+
+<div mat-dialog-actions>
+	<button (click)="onCancelClick()" mat-button>Cancel</button>
+	<button (click)="onSaveClick()" [disabled]="!imgPreviewSrc" color="primary" mat-button mat-raised-button>Save
+	</button>
+</div>

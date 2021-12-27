@@ -2,7 +2,7 @@
  'disliked-colour' : catalogueItem.status == 'disliked',
  'neutral-colour': catalogueItem.status  == 'neutral'}"
 		  [routerLink]="['/catalogueItem', catalogueItem.id]">
-	<img alt="Photo of {{catalogueItem.name}}" mat-card-image src="{{catalogueItem.image}}">
+	<img alt="Photo of {{catalogueItem.name}}" mat-card-image src="{{catalogueItem.imageUrl}}">
 	<div>
 		<mat-card-title>{{catalogueItem.name}}</mat-card-title>
 	</div>
