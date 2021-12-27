@@ -9,3 +9,15 @@
 .neutral-colour {
 	background-color: white;
 }
+
+
+.catalogue-item-thumbs {
+	padding-bottom: 15px;
+}
+
+.catalogue-item-card {
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}

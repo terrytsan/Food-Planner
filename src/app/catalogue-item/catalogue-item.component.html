@@ -1,18 +1,16 @@
 <mat-card [ngClass]="{'liked-colour' : catalogueItem.status == 'liked',
  'disliked-colour' : catalogueItem.status == 'disliked',
  'neutral-colour': catalogueItem.status  == 'neutral'}"
+		  class="catalogue-item-card"
 		  [routerLink]="['/catalogueItem', catalogueItem.id]">
 	<img alt="Photo of {{catalogueItem.name}}" mat-card-image src="{{catalogueItem.imageUrl || defaultImage}}">
 	<div>
 		<mat-card-title>{{catalogueItem.name}}</mat-card-title>
-	</div>
-	<div>
-		<mat-card-content>
-			{{catalogueItem.description}}
+		<mat-card-content *ngIf="catalogueItem.storePurchased">
 			<strong>Store: </strong>{{catalogueItem.storePurchased}}
 		</mat-card-content>
 	</div>
-	<mat-card-footer fxLayout="row" fxLayoutAlign="space-around">
+	<mat-card-footer class="catalogue-item-thumbs" fxLayout="row" fxLayoutAlign="space-around">
 		<button (click)="toggleLikeCatalogueItem(); $event.stopPropagation();" mat-icon-button>
 			<mat-icon>thumb_up</mat-icon>
 		</button>
