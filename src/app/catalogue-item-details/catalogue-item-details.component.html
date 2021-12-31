@@ -6,7 +6,6 @@
 	<div class="image-container">
 		<img alt="Photo of {{catalogueItem.name}}"
 			 class="catalogueItem-image"
-			 mat-card-image
 			 src="{{catalogueItem.imageUrl || defaultImage}}">
 		<button (click)="openUploadImageDialog()" *ngIf="isEditing" class="btn-edit-image" color="primary" mat-fab>
 			<mat-icon class="material-icons-outlined" color="secondary">edit</mat-icon>

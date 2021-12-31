@@ -14,7 +14,7 @@
 		</button>
 	</div>
 	<img *ngIf="imgPreviewSrc" [src]="imgPreviewSrc" alt="Preview image" class="preview-image">
-	<mat-progress-bar [hidden]="!fileUploadProgress"
+	<mat-progress-bar [hidden]="!uploadingFile"
 					  class="progress-bar"
 					  mode="determinate"
 					  value="{{fileUploadProgress}}"></mat-progress-bar>
@@ -22,6 +22,10 @@
 
 <div mat-dialog-actions>
 	<button (click)="onCancelClick()" mat-button>Cancel</button>
-	<button (click)="onSaveClick()" [disabled]="!imgPreviewSrc" color="primary" mat-button mat-raised-button>Save
+	<button (click)="onSaveClick()"
+			[disabled]="!imgPreviewSrc || uploadingFile"
+			color="primary"
+			mat-button
+			mat-raised-button>Save
 	</button>
 </div>

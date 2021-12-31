@@ -109,11 +109,14 @@ export class CatalogueItemDetailsComponent implements OnInit {
 	}
 
 	async addCatalogueItem() {
-		await addDoc(collection(this.afs, 'catalogueItems'), {
+		let newDocRef = await addDoc(collection(this.afs, 'catalogueItems'), {
 			name: this.catalogueItem.name,
 			description: this.catalogueItem.description,
 			storePurchased: this.catalogueItem.storePurchased,
+			imageUrl: this.catalogueItem.imageUrl,
+			imagePath: this.catalogueItem.imagePath,
 			dateAdded: Timestamp.fromDate(new Date())
 		});
+		this.id = newDocRef.id;
 	}
 }
