@@ -37,6 +37,8 @@ import { FoodCatalogueComponent } from './food-catalogue/food-catalogue.componen
 import { CatalogueItemComponent } from './catalogue-item/catalogue-item.component';
 import { CatalogueItemDetailsComponent } from './catalogue-item-details/catalogue-item-details.component';
 import { UploadImageDialogComponent } from './upload-image-dialog/upload-image-dialog.component';
+import { MatDatepickerModule } from "@angular/material/datepicker";
+import { MAT_DATE_LOCALE, MatNativeDateModule } from "@angular/material/core";
 
 @NgModule({
 	declarations: [
@@ -83,9 +85,13 @@ import { UploadImageDialogComponent } from './upload-image-dialog/upload-image-d
 			registrationStrategy: 'registerWhenStable:30000'
 		}),
 		MatGridListModule,
-		FlexLayoutModule
+		FlexLayoutModule,
+		MatDatepickerModule,
+		MatNativeDateModule
 	],
-	providers: [],
+	providers: [
+		{provide: MAT_DATE_LOCALE, useValue: 'en-GB'}
+	],
 	bootstrap: [AppComponent]
 })
 export class AppModule {

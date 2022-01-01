@@ -1,11 +1,25 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from "@angular/router";
-import { addDoc, collection, deleteDoc, doc, Firestore, onSnapshot, updateDoc } from "@angular/fire/firestore";
+import {
+	addDoc,
+	collection,
+	collectionData,
+	CollectionReference,
+	deleteDoc,
+	doc,
+	Firestore,
+	onSnapshot,
+	orderBy,
+	query,
+	updateDoc
+} from "@angular/fire/firestore";
 import { CatalogueItem } from "../catalogue-item/catalogueItem";
 import { Timestamp } from "firebase/firestore";
 import { MatDialog } from "@angular/material/dialog";
 import { UploadImageDialogComponent } from "../upload-image-dialog/upload-image-dialog.component";
 import { GlobalVariable } from "../global";
+import { PriceHistory } from "../catalogue-item/priceHistory";
+import { Observable } from "rxjs";
 
 @Component({
 	selector: 'app-catalogue-item-details',
@@ -14,11 +28,35 @@ import { GlobalVariable } from "../global";
 })
 export class CatalogueItemDetailsComponent implements OnInit {
 
-	id: string;
+	// Price History
+	priceHistory$: Observable<PriceHistory[]>;
 	isEditing: boolean = false;
 	isAdding: boolean = false;
 	defaultImage: string = GlobalVariable.PLACEHOLDER_IMAGE_URL;
 	catalogueItem: CatalogueItem;
+	isAddingPriceHistory: boolean = false;
+	newPriceHistory: PriceHistory = {
+		price: undefined,
+		store: ''
+	};
+	newPriceHistoryDate: Date = new Date();
+
+	// Catalogue Item
+	_id: string = '';
+
+	get id(): string {
+		return this._id;
+	}
+
+	set id(newID: string) {
+		this.priceHistory$ = collectionData<PriceHistory>(
+			query<PriceHistory>(
+				collection(this.afs, "catalogueItems", newID, "priceHistory") as CollectionReference<PriceHistory>,
+				orderBy("date", "desc")
+			), {idField: "id"}
+		);
+		this._id = newID;
+	}
 
 	constructor(
 		private route: ActivatedRoute,
@@ -118,5 +156,28 @@ export class CatalogueItemDetailsComponent implements OnInit {
 			dateAdded: Timestamp.fromDate(new Date())
 		});
 		this.id = newDocRef.id;
+	}
+
+	// Price History
+
+	toggleNewPriceHistoryForm() {
+		this.isAddingPriceHistory = !this.isAddingPriceHistory;
+		this.resetNewPriceHistoryForm();
+	}
+
+	resetNewPriceHistoryForm() {
+		this.newPriceHistory.price = undefined;
+		this.newPriceHistory.store = '';
+		this.newPriceHistoryDate = new Date();
+	}
+
+	async createPriceHistory() {
+		await addDoc(collection(this.afs, 'catalogueItems', this.id, 'priceHistory'), {
+			date: Timestamp.fromDate(this.newPriceHistoryDate),
+			price: this.newPriceHistory.price,
+			store: this.newPriceHistory.store
+		});
+		this.isAddingPriceHistory = false;
+		this.resetNewPriceHistoryForm();
 	}
 }

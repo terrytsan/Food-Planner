@@ -39,6 +39,41 @@
 				  matInput></textarea>
 	</mat-form-field>
 
+	<!-- Price History -->
+	<div *ngIf="!isEditing" style="margin-bottom: 20px;">
+		<mat-divider style="margin-bottom: 10px;"></mat-divider>
+		<div fxLayout="row" fxLayoutAlign="space-between center">
+			<h2 style="margin: 0;">Price History</h2>
+			<button (click)="toggleNewPriceHistoryForm()" mat-button>
+				<mat-icon *ngIf="!isAddingPriceHistory" style="color: green">add_circle</mat-icon>
+				<mat-icon *ngIf="isAddingPriceHistory" style="color: red">cancel</mat-icon>
+			</button>
+		</div>
+		<div *ngFor="let history of priceHistory$ | async" fxLayout="row" fxLayoutAlign="space-around center">
+			<span>{{(history.date?.toMillis() || '') | date: 'dd/MM/yyyy'}}</span>
+			<span>{{(history.price | currency:'GBP')}}</span>
+			<span>{{history.store}}</span>
+		</div>
+		<div *ngIf="isAddingPriceHistory" fxLayout="row" fxLayoutAlign="space-between center">
+			<mat-form-field style="width: 100px;">
+				<mat-label>Date</mat-label>
+				<input [(ngModel)]="newPriceHistoryDate" [matDatepicker]="picker" matInput>
+				<mat-datepicker-toggle [for]="picker" matSuffix></mat-datepicker-toggle>
+				<mat-datepicker #picker></mat-datepicker>
+			</mat-form-field>
+			<mat-form-field style="width: 70px;">
+				<mat-label>Price</mat-label>
+				<input [(ngModel)]="newPriceHistory.price" matInput type="number">
+				<span matPrefix>£&nbsp;</span>
+			</mat-form-field>
+			<mat-form-field style="width: 80px;">
+				<mat-label>Store</mat-label>
+				<input [(ngModel)]="newPriceHistory.store" matInput>
+			</mat-form-field>
+			<mat-icon (click)="createPriceHistory()">done</mat-icon>
+		</div>
+	</div>
+
 	<!-- Thumbs buttons -->
 	<div *ngIf="!isEditing" fxLayout="row" fxLayoutAlign="space-evenly">
 		<button mat-button>
