@@ -20,6 +20,8 @@ import { UploadImageDialogComponent } from "../upload-image-dialog/upload-image-
 import { GlobalVariable } from "../global";
 import { PriceHistory } from "../catalogue-item/priceHistory";
 import { Observable } from "rxjs";
+import { PriceHistoryEditDialogComponent } from "../price-history-edit-dialog/price-history-edit-dialog.component";
+import { MatSnackBar } from "@angular/material/snack-bar";
 
 @Component({
 	selector: 'app-catalogue-item-details',
@@ -36,6 +38,7 @@ export class CatalogueItemDetailsComponent implements OnInit {
 	catalogueItem: CatalogueItem;
 	isAddingPriceHistory: boolean = false;
 	newPriceHistory: PriceHistory = {
+		id: '',
 		price: undefined,
 		store: ''
 	};
@@ -62,7 +65,8 @@ export class CatalogueItemDetailsComponent implements OnInit {
 		private route: ActivatedRoute,
 		private afs: Firestore,
 		private router: Router,
-		private dialog: MatDialog
+		private dialog: MatDialog,
+		private _snackBar: MatSnackBar
 	) {
 		this.id = this.route.snapshot.params['id'];
 
@@ -179,5 +183,29 @@ export class CatalogueItemDetailsComponent implements OnInit {
 		});
 		this.isAddingPriceHistory = false;
 		this.resetNewPriceHistoryForm();
+	}
+
+	openEditPriceHistoryDialog(priceHistory: PriceHistory) {
+		this.dialog.open(PriceHistoryEditDialogComponent, {
+			width: '300px',
+			data: {
+				CatalogueItemId: this.id,
+				PriceHistory: priceHistory
+			}
+		});
+	}
+
+	async deletePriceHistory(history: PriceHistory) {
+		let priceHistoryRef = doc(this.afs, 'catalogueItems', this.id, 'priceHistory', history.id);
+		await deleteDoc(priceHistoryRef);
+
+		let snackBarRef = this._snackBar.open(`Deleted ${(history.date?.toDate().toLocaleDateString())}.`, 'Undo', {duration: 3000});
+		snackBarRef.onAction().subscribe(async () => {
+			await addDoc(collection(this.afs, 'catalogueItems', this.id, 'priceHistory'), {
+				date: history.date,
+				price: history.price,
+				store: history.store
+			});
+		});
 	}
 }

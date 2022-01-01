@@ -39,6 +39,7 @@ import { CatalogueItemDetailsComponent } from './catalogue-item-details/catalogu
 import { UploadImageDialogComponent } from './upload-image-dialog/upload-image-dialog.component';
 import { MatDatepickerModule } from "@angular/material/datepicker";
 import { MAT_DATE_LOCALE, MatNativeDateModule } from "@angular/material/core";
+import { PriceHistoryEditDialogComponent } from './price-history-edit-dialog/price-history-edit-dialog.component';
 
 @NgModule({
 	declarations: [
@@ -53,7 +54,8 @@ import { MAT_DATE_LOCALE, MatNativeDateModule } from "@angular/material/core";
 		FoodCatalogueComponent,
 		CatalogueItemComponent,
 		CatalogueItemDetailsComponent,
-		UploadImageDialogComponent
+		UploadImageDialogComponent,
+		PriceHistoryEditDialogComponent
 	],
 	imports: [
 		BrowserModule,

@@ -53,6 +53,10 @@
 			<span>{{(history.date?.toMillis() || '') | date: 'dd/MM/yyyy'}}</span>
 			<span>{{(history.price | currency:'GBP')}}</span>
 			<span>{{history.store}}</span>
+			<div>
+				<mat-icon (click)="openEditPriceHistoryDialog(history)">edit</mat-icon>
+				<mat-icon (click)="deletePriceHistory(history)" class="material-icons-outlined">delete</mat-icon>
+			</div>
 		</div>
 		<div *ngIf="isAddingPriceHistory" fxLayout="row" fxLayoutAlign="space-between center">
 			<mat-form-field style="width: 100px;">
