@@ -40,6 +40,7 @@ import { UploadImageDialogComponent } from './upload-image-dialog/upload-image-d
 import { MatDatepickerModule } from "@angular/material/datepicker";
 import { MAT_DATE_LOCALE, MatNativeDateModule } from "@angular/material/core";
 import { PriceHistoryEditDialogComponent } from './price-history-edit-dialog/price-history-edit-dialog.component';
+import { MatTableModule } from "@angular/material/table";
 
 @NgModule({
 	declarations: [
@@ -89,7 +90,8 @@ import { PriceHistoryEditDialogComponent } from './price-history-edit-dialog/pri
 		MatGridListModule,
 		FlexLayoutModule,
 		MatDatepickerModule,
-		MatNativeDateModule
+		MatNativeDateModule,
+		MatTableModule
 	],
 	providers: [
 		{provide: MAT_DATE_LOCALE, useValue: 'en-GB'}

@@ -46,6 +46,7 @@ export class CatalogueItemDetailsComponent implements OnInit {
 		store: ''
 	};
 	newPriceHistoryDate: Date = new Date();
+	displayedColumns: string[] = ["date", "price", "store", "actions"];
 
 	get id(): string {
 		return this._id;
@@ -207,5 +208,10 @@ export class CatalogueItemDetailsComponent implements OnInit {
 				store: history.store
 			});
 		});
+	}
+
+	// Allows mat-table elements to have the correct type
+	assertItemType(element: PriceHistory): PriceHistory {
+		return element;
 	}
 }

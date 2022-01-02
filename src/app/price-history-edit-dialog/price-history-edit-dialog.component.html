@@ -3,7 +3,7 @@
 <div fxLayout="column" fxLayoutAlign="flex-start stretch">
 	<mat-form-field>
 		<mat-label>Date</mat-label>
-		<input [(ngModel)]="date" [matDatepicker]="picker" matInput>
+		<input [(ngModel)]="date" [matDatepicker]="picker" matInput autocomplete="off">
 		<mat-datepicker-toggle [for]="picker" matSuffix></mat-datepicker-toggle>
 		<mat-datepicker #picker></mat-datepicker>
 	</mat-form-field>
@@ -14,7 +14,7 @@
 	</mat-form-field>
 	<mat-form-field>
 		<mat-label>Store</mat-label>
-		<input [(ngModel)]="store" matInput>
+		<input [(ngModel)]="store" matInput autocomplete="off">
 	</mat-form-field>
 </div>
 

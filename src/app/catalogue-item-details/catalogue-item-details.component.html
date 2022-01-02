@@ -49,30 +49,54 @@
 				<mat-icon *ngIf="isAddingPriceHistory" style="color: red">cancel</mat-icon>
 			</button>
 		</div>
-		<div *ngFor="let history of priceHistory$ | async" fxLayout="row" fxLayoutAlign="space-around center">
-			<span>{{(history.date?.toMillis() || '') | date: 'dd/MM/yyyy'}}</span>
-			<span>{{(history.price | currency:'GBP')}}</span>
-			<span>{{history.store}}</span>
-			<div>
-				<mat-icon (click)="openEditPriceHistoryDialog(history)">edit</mat-icon>
-				<mat-icon (click)="deletePriceHistory(history)" class="material-icons-outlined">delete</mat-icon>
-			</div>
-		</div>
-		<div *ngIf="isAddingPriceHistory" fxLayout="row" fxLayoutAlign="space-between center">
+
+		<table mat-table [dataSource]="priceHistory$" *ngIf="(priceHistory$ | async)?.length">
+			<ng-container matColumnDef="date">
+				<th mat-header-cell *matHeaderCellDef>Date</th>
+				<td mat-cell *matCellDef="let element">
+					<ng-container *ngIf="assertItemType(element) as history">
+						{{(history.date?.toMillis() || '') | date: 'dd/MM/yyyy'}}
+					</ng-container>
+				</td>
+			</ng-container>
+			<ng-container matColumnDef="price">
+				<th mat-header-cell *matHeaderCellDef>Price</th>
+				<td mat-cell *matCellDef="let element">
+					<ng-container *ngIf="assertItemType(element) as history">
+						{{history.price | currency: 'GBP'}}
+					</ng-container>
+				</td>
+			</ng-container>
+			<ng-container matColumnDef="store">
+				<th mat-header-cell *matHeaderCellDef>Store</th>
+				<td mat-cell *matCellDef="let element">{{element.store}}</td>
+			</ng-container>
+			<ng-container matColumnDef="actions">
+				<th mat-header-cell *matHeaderCellDef></th>
+				<td mat-cell *matCellDef="let element">
+					<mat-icon (click)="openEditPriceHistoryDialog(element)">edit</mat-icon>
+					<mat-icon (click)="deletePriceHistory(element)" class="material-icons-outlined">delete</mat-icon>
+				</td>
+			</ng-container>
+			<tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+			<tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+		</table>
+
+		<div *ngIf="isAddingPriceHistory" fxLayout="row" fxLayoutAlign="space-around center">
 			<mat-form-field style="width: 100px;">
 				<mat-label>Date</mat-label>
-				<input [(ngModel)]="newPriceHistoryDate" [matDatepicker]="picker" matInput>
+				<input [(ngModel)]="newPriceHistoryDate" [matDatepicker]="picker" matInput autocomplete="off">
 				<mat-datepicker-toggle [for]="picker" matSuffix></mat-datepicker-toggle>
 				<mat-datepicker #picker></mat-datepicker>
 			</mat-form-field>
 			<mat-form-field style="width: 70px;">
 				<mat-label>Price</mat-label>
-				<input [(ngModel)]="newPriceHistory.price" matInput type="number">
+				<input [(ngModel)]="newPriceHistory.price" matInput type="number" autocomplete="off">
 				<span matPrefix>£&nbsp;</span>
 			</mat-form-field>
 			<mat-form-field style="width: 80px;">
 				<mat-label>Store</mat-label>
-				<input [(ngModel)]="newPriceHistory.store" matInput>
+				<input [(ngModel)]="newPriceHistory.store" matInput autocomplete="off">
 			</mat-form-field>
 			<mat-icon (click)="createPriceHistory()">done</mat-icon>
 		</div>
