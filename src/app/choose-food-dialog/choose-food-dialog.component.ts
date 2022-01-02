@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable, Subscription } from "rxjs";
-import { Food } from "../food-detail/food";
+import { Food } from "../food-card/food";
 import { collection, collectionData, CollectionReference, Firestore, orderBy, query } from "@angular/fire/firestore";
 import { MatDialogRef } from "@angular/material/dialog";
 import { FoodEditDialogComponent } from "../food-edit-dialog/food-edit-dialog.component";

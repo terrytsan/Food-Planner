@@ -9,11 +9,11 @@ import { deleteField, doc, Firestore, updateDoc } from "@angular/fire/firestore"
 import { GlobalVariable } from "../global";
 
 @Component({
-	selector: 'app-food-detail',
-	templateUrl: './food-detail.component.html',
-	styleUrls: ['./food-detail.component.css']
+	selector: 'app-food-card',
+	templateUrl: './food-card.component.html',
+	styleUrls: ['./food-card.component.css']
 })
-export class FoodDetailComponent implements OnInit {
+export class FoodCardComponent implements OnInit {
 
 	@Input() food: Food | null = null;
 	@Input() foodPlan: FoodPlan | null = null;

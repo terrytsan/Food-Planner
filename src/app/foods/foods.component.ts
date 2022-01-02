@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { collection, collectionData, CollectionReference, Firestore, orderBy, query } from "@angular/fire/firestore";
 import { Observable } from "rxjs";
-import { Food } from "../food-detail/food";
+import { Food } from "../food-card/food";
 import { MatDialog } from "@angular/material/dialog";
 import { FoodEditDialogComponent } from "../food-edit-dialog/food-edit-dialog.component";
 

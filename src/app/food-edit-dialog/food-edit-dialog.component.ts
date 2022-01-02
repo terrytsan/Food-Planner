@@ -2,7 +2,7 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { getDownloadURL, ref, Storage, uploadBytesResumable, UploadTask } from '@angular/fire/storage';
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 import { AngularFirestore } from "@angular/fire/compat/firestore";
-import { Food } from "../food-detail/food";
+import { Food } from "../food-card/food";
 import { FormBuilder, Validators } from "@angular/forms";
 
 @Component({

@@ -15,7 +15,7 @@ import { WeekPlanComponent } from './week-plan/week-plan.component';
 import { DayPlanComponent } from './day-plan/day-plan.component';
 import { MatCardModule } from "@angular/material/card";
 import { FoodsComponent } from './foods/foods.component';
-import { FoodDetailComponent } from './food-detail/food-detail.component';
+import { FoodCardComponent } from './food-card/food-card.component';
 import { MatSidenavModule } from "@angular/material/sidenav";
 import { MatButtonModule } from "@angular/material/button";
 import { MatListModule } from "@angular/material/list";
@@ -48,7 +48,7 @@ import { MatTableModule } from "@angular/material/table";
 		WeekPlanComponent,
 		DayPlanComponent,
 		FoodsComponent,
-		FoodDetailComponent,
+		FoodCardComponent,
 		FoodEditDialogComponent,
 		FoodPlanDetailComponent,
 		ChooseFoodDialogComponent,

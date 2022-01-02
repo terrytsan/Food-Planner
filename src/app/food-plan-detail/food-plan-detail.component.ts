@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FoodPlan } from "./foodPlan";
-import { Food } from "../food-detail/food";
+import { Food } from "../food-card/food";
 import { Observable } from "rxjs";
 import { AngularFirestore } from "@angular/fire/compat/firestore";
 import { MatDialog } from "@angular/material/dialog";

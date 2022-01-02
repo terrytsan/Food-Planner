@@ -1,7 +1,7 @@
 <h1>Foods</h1>
 <div fxLayout="row wrap" fxLayoutGap="10px grid">
 	<div *ngFor="let food of foods$ | async" fxFlex="25%" fxFlex.sm="33%" fxFlex.xs="50%">
-		<app-food-detail [food]="food"></app-food-detail>
+		<app-food-card [food]="food"></app-food-card>
 	</div>
 </div>
 <button (click)="openAddFoodDialog()" class="btn-add-foods" mat-fab>

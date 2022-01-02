@@ -7,9 +7,9 @@
 	</div>
 	<mat-card-content>
 		<div *ngIf="foods$ | async as foodsList">
-			<app-food-detail *ngFor="let food of foodsList"
-							 [foodPlan]="foodPlan"
-							 [food]="food">{{food}}</app-food-detail>
+			<app-food-card *ngFor="let food of foodsList"
+						   [foodPlan]="foodPlan"
+						   [food]="food">{{food}}</app-food-card>
 		</div>
 		<div *ngIf="!(foods$ | async)">
 			<mat-card class="empty-list-card">
