@@ -11,7 +11,8 @@ import {
 	onSnapshot,
 	orderBy,
 	query,
-	updateDoc
+	updateDoc,
+	writeBatch
 } from "@angular/fire/firestore";
 import { CatalogueItem } from "../catalogue-item/catalogueItem";
 import { Timestamp } from "firebase/firestore";
@@ -146,6 +147,16 @@ export class CatalogueItemDetailsComponent implements OnInit {
 	}
 
 	async deleteCatalogueItem() {
+		// Delete price history first
+		this.priceHistory$.subscribe(async priceHistory => {
+			const batch = writeBatch(this.afs);
+			priceHistory.forEach(pH => {
+				let pHRef = doc(this.afs, 'catalogueItems', this.id, 'priceHistory', pH.id);
+				batch.delete(pHRef);
+			});
+			await batch.commit();
+		});
+
 		const catalogueItemRef = doc(this.afs, 'catalogueItems', this.id);
 		await deleteDoc(catalogueItemRef);
 		await this.router.navigate(['/foodCatalogue']);
