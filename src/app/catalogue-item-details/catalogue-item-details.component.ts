@@ -30,12 +30,15 @@ import { MatSnackBar } from "@angular/material/snack-bar";
 })
 export class CatalogueItemDetailsComponent implements OnInit {
 
-	// Price History
-	priceHistory$: Observable<PriceHistory[]>;
+	// Catalogue Item
+	_id: string = '';
 	isEditing: boolean = false;
 	isAdding: boolean = false;
 	defaultImage: string = GlobalVariable.PLACEHOLDER_IMAGE_URL;
 	catalogueItem: CatalogueItem;
+
+	// Price History
+	priceHistory$: Observable<PriceHistory[]>;
 	isAddingPriceHistory: boolean = false;
 	newPriceHistory: PriceHistory = {
 		id: '',
@@ -43,9 +46,6 @@ export class CatalogueItemDetailsComponent implements OnInit {
 		store: ''
 	};
 	newPriceHistoryDate: Date = new Date();
-
-	// Catalogue Item
-	_id: string = '';
 
 	get id(): string {
 		return this._id;
