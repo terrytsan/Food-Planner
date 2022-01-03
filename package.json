@@ -23,6 +23,7 @@
 	  "@angular/platform-browser-dynamic": "~12.2.0",
 	  "@angular/router": "~12.2.0",
 	  "@angular/service-worker": "~12.2.0",
+	  "ngx-image-compress": "^13.1.4",
 	  "firebase": "^9.1.0",
 	  "rxfire": "^6.0.0",
 	  "rxjs": "~6.6.0",
