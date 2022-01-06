@@ -4,6 +4,7 @@ import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 import { AngularFirestore } from "@angular/fire/compat/firestore";
 import { Food } from "../food-card/food";
 import { FormBuilder, Validators } from "@angular/forms";
+import { ImageService } from "../../image.service";
 
 @Component({
 	selector: 'app-food-edit-dialog',
@@ -33,7 +34,8 @@ export class FoodEditDialogComponent implements OnInit {
 		private fb: FormBuilder,
 		public dialogRef: MatDialogRef<FoodEditDialogComponent>,
 		private storage: Storage,
-		public firestore: AngularFirestore
+		public firestore: AngularFirestore,
+		private imageService: ImageService
 	) {
 	}
 
@@ -65,6 +67,11 @@ export class FoodEditDialogComponent implements OnInit {
 		if (!target.files) return;
 
 		const file: File = target.files[0];
+		let compressedImage = await this.imageService.compressImage(file);
+		await this.uploadFileToFirebase(compressedImage);
+	}
+
+	async uploadFileToFirebase(file: File) {
 		const fileName = file.name.split('.')[0];
 		this.fileName = file.name;
 		const ext = file.name.split('.').pop();

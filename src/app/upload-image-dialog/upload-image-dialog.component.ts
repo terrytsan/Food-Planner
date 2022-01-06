@@ -1,6 +1,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 import { getDownloadURL, ref, Storage, uploadBytesResumable, UploadTask } from "@angular/fire/storage";
+import { ImageService } from "../../image.service";
 
 @Component({
 	selector: 'app-upload-image-dialog',
@@ -19,7 +20,8 @@ export class UploadImageDialogComponent implements OnInit {
 	constructor(
 		public dialogRef: MatDialogRef<UploadImageDialogComponent>,
 		@Inject(MAT_DIALOG_DATA) public data: UploadImageDialogData,
-		private storage: Storage
+		private storage: Storage,
+		private imageService: ImageService
 	) {
 		this.firebaseStoragePath = data.FirebaseStorePath;
 	}
@@ -53,9 +55,11 @@ export class UploadImageDialogComponent implements OnInit {
 		const path = `${this.firebaseStoragePath}${fileName}-${new Date().toISOString().slice(0, 19)}.${ext}`;
 		response.ImagePath = path;
 
+		let compressedImage = await this.imageService.compressImage(this.file);
+
 		try {
 			const storageRef = ref(this.storage, path);
-			let uploadTask: UploadTask = uploadBytesResumable(storageRef, this.file);
+			let uploadTask: UploadTask = uploadBytesResumable(storageRef, compressedImage);
 			uploadTask.on('state_changed',
 				(snapshot) => {
 					this.fileUploadProgress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;

@@ -2,11 +2,11 @@
   "name": "food-planner",
   "version": "0.0.0",
   "scripts": {
-    "ng": "ng",
-    "start": "ng serve",
-    "build": "ng build",
-    "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+	  "ng": "ng",
+	  "start": "ng serve",
+	  "build": "ng build",
+	  "watch": "ng build --watch --configuration development",
+	  "test": "ng test"
   },
   "private": true,
   "dependencies": {
@@ -24,6 +24,7 @@
 	  "@angular/router": "~12.2.0",
 	  "@angular/service-worker": "~12.2.0",
 	  "ngx-image-compress": "^13.1.4",
+	  "buffer-esm": "^1.2.0",
 	  "firebase": "^9.1.0",
 	  "rxfire": "^6.0.0",
 	  "rxjs": "~6.6.0",
