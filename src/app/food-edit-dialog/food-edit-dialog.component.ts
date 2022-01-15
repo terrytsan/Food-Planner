@@ -58,7 +58,9 @@ export class FoodEditDialogComponent implements OnInit {
 	}
 
 	ngOnDestroy() {
-		this.uploadTask.cancel();
+		if (this.uploadTask) {
+			this.uploadTask.cancel();
+		}
 	}
 
 	async onFileSelected($event: Event) {
