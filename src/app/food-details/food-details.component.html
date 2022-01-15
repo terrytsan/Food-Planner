@@ -1,0 +1,21 @@
+<div *ngIf="food">
+	<!-- Image -->
+	<div class="image-container">
+		<img alt="Photo of {{food.name}}"
+			 class="food-details-image"
+			 src="{{food.image || defaultImage}}">
+	</div>
+
+	<!-- Name -->
+	<div fxLayout="row" fxLayoutAlign="flex-start center">
+		<h1>{{food.name}}</h1>
+	</div>
+
+	<!-- Description -->
+	<p class="description">{{food.description}}</p>
+
+	<!-- Editing fab -->
+	<button (click)="openEditFoodDialog()" class="btn-toggle-edit" mat-fab>
+		<mat-icon>edit</mat-icon>
+	</button>
+</div>

@@ -37,7 +37,7 @@ export class AppComponent {
 		this.routerSubscription = this.router.events.pipe(
 			filter((event): event is NavigationEnd => event instanceof NavigationEnd)
 		).subscribe((event: NavigationEnd) => {
-			this.showBackBtn = event.urlAfterRedirects.startsWith('/catalogueItem');
+			this.showBackBtn = event.urlAfterRedirects.startsWith('/catalogueItem') || event.urlAfterRedirects.startsWith('/foods/');
 		});
 	}
 

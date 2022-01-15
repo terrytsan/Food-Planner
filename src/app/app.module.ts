@@ -41,6 +41,7 @@ import { MatDatepickerModule } from "@angular/material/datepicker";
 import { MAT_DATE_LOCALE, MatNativeDateModule } from "@angular/material/core";
 import { PriceHistoryEditDialogComponent } from './price-history-edit-dialog/price-history-edit-dialog.component';
 import { MatTableModule } from "@angular/material/table";
+import { FoodDetailsComponent } from './food-details/food-details.component';
 
 @NgModule({
 	declarations: [
@@ -56,7 +57,8 @@ import { MatTableModule } from "@angular/material/table";
 		CatalogueItemComponent,
 		CatalogueItemDetailsComponent,
 		UploadImageDialogComponent,
-		PriceHistoryEditDialogComponent
+		PriceHistoryEditDialogComponent,
+		FoodDetailsComponent
 	],
 	imports: [
 		BrowserModule,

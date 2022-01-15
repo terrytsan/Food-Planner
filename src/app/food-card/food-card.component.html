@@ -1,7 +1,7 @@
-<mat-card *ngIf="food && !foodPlan" class="food-card">
+<mat-card *ngIf="food && !foodPlan" class="food-card" [routerLink]="['/foods', food.id]">
 	<div class="food-card-header">
 		<mat-card-title class="food-card-title-small">{{food.name}}</mat-card-title>
-		<button [matMenuTriggerFor]="menu" mat-icon-button>
+		<button [matMenuTriggerFor]="menu" mat-icon-button (click)="$event.stopPropagation()">
 			<mat-icon>more_vert</mat-icon>
 		</button>
 		<mat-menu #menu>
