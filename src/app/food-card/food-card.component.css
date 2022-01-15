@@ -48,8 +48,3 @@
 .food-card-title-big {
 	font-size: 1.5em;
 }
-
-.food-card-description {
-	overflow: auto;
-	flex: 1 1 auto;
-}
