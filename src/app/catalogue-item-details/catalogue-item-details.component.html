@@ -21,13 +21,6 @@
 		</mat-form-field>
 	</div>
 
-	<!-- Store Purchased -->
-	<h3 *ngIf="!isEditing">{{catalogueItem.storePurchased}}</h3>
-	<mat-form-field *ngIf="isEditing" appearance="fill">
-		<mat-label>Store</mat-label>
-		<input [(ngModel)]="catalogueItem.storePurchased" matInput>
-	</mat-form-field>
-
 	<!-- Description -->
 	<p *ngIf="!isEditing">{{catalogueItem.description}}</p>
 	<mat-form-field *ngIf="isEditing" appearance="fill">

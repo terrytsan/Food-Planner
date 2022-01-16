@@ -6,9 +6,6 @@
 	<img alt="Photo of {{catalogueItem.name}}" mat-card-image src="{{catalogueItem.imageUrl || defaultImage}}">
 	<div>
 		<mat-card-title>{{catalogueItem.name}}</mat-card-title>
-		<mat-card-content *ngIf="catalogueItem.storePurchased">
-			<strong>Store: </strong>{{catalogueItem.storePurchased}}
-		</mat-card-content>
 	</div>
 	<mat-card-footer class="catalogue-item-thumbs" fxLayout="row" fxLayoutAlign="space-around">
 		<button (click)="toggleLikeCatalogueItem(); $event.stopPropagation();" mat-icon-button>

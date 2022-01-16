@@ -76,7 +76,6 @@ export class CatalogueItemDetailsComponent implements OnInit {
 			this.catalogueItem = <CatalogueItem>{
 				name: '',
 				description: '',
-				storePurchased: '',
 				imageUrl: '',
 				imagePath: '',
 				status: 'neutral'
@@ -108,7 +107,6 @@ export class CatalogueItemDetailsComponent implements OnInit {
 		await updateDoc(catalogueItemRef, {
 			name: this.catalogueItem.name,
 			description: this.catalogueItem.description,
-			storePurchased: this.catalogueItem.storePurchased,
 			imageUrl: this.catalogueItem.imageUrl,
 			imagePath: this.catalogueItem.imagePath
 		});
@@ -166,7 +164,6 @@ export class CatalogueItemDetailsComponent implements OnInit {
 		let newDocRef = await addDoc(collection(this.afs, 'catalogueItems'), {
 			name: this.catalogueItem.name,
 			description: this.catalogueItem.description,
-			storePurchased: this.catalogueItem.storePurchased,
 			imageUrl: this.catalogueItem.imageUrl,
 			imagePath: this.catalogueItem.imagePath,
 			dateAdded: Timestamp.fromDate(new Date())

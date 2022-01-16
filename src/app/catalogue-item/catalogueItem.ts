@@ -5,7 +5,6 @@ export interface CatalogueItem {
 	id: string;
 	name: string;
 	description: string;
-	storePurchased: string;
 	imageUrl: string;
 	imagePath: string;
 	dateAdded: Timestamp;
