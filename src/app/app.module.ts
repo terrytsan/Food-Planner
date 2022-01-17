@@ -42,6 +42,7 @@ import { MAT_DATE_LOCALE, MatNativeDateModule } from "@angular/material/core";
 import { PriceHistoryEditDialogComponent } from './price-history-edit-dialog/price-history-edit-dialog.component';
 import { MatTableModule } from "@angular/material/table";
 import { FoodDetailsComponent } from './food-details/food-details.component';
+import { MatChipsModule } from "@angular/material/chips";
 
 @NgModule({
 	declarations: [
@@ -93,7 +94,8 @@ import { FoodDetailsComponent } from './food-details/food-details.component';
 		FlexLayoutModule,
 		MatDatepickerModule,
 		MatNativeDateModule,
-		MatTableModule
+		MatTableModule,
+		MatChipsModule
 	],
 	providers: [
 		{provide: MAT_DATE_LOCALE, useValue: 'en-GB'}

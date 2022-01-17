@@ -25,7 +25,8 @@ export class FoodEditDialogComponent implements OnInit {
 		name: "",
 		description: "",
 		image: "",
-		imagePath: ""
+		imagePath: "",
+		labels: []
 	};
 	foodImagesFolder: string = 'foodImages/';
 

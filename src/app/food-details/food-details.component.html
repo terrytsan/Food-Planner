@@ -14,6 +14,26 @@
 	<!-- Description -->
 	<p class="description">{{food.description}}</p>
 
+	<!-- Labels -->
+	<mat-form-field class="labels-chip-list" appearance="outline">
+		<mat-label>Labels</mat-label>
+		<mat-chip-list #chipList aria-label="Label selection">
+			<mat-chip *ngFor="let label of food.labels" (removed)="remove(label)">
+				{{label}}
+				<button matChipRemove>
+					<mat-icon>cancel</mat-icon>
+				</button>
+			</mat-chip>
+			<input placeholder="Add a label..."
+				   [matChipInputFor]="chipList"
+				   [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+				   [matChipInputAddOnBlur]="addOnBlur"
+				   (matChipInputTokenEnd)="add($event)"
+				   autocomplete="off">
+		</mat-chip-list>
+	</mat-form-field>
+
+
 	<!-- Editing fab -->
 	<button (click)="openEditFoodDialog()" class="btn-toggle-edit" mat-fab>
 		<mat-icon>edit</mat-icon>

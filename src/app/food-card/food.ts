@@ -4,4 +4,5 @@ export interface Food {
 	description: string;
 	image: string;
 	imagePath: string;
+	labels: string[];
 }
