@@ -29,6 +29,7 @@ export class FoodDetailsComponent implements OnInit {
 
 		onSnapshot(doc(this.afs, "foods", this.id), (doc) => {
 			this.food = doc.data() as Food;
+			this.food.labels.sort();
 			this.food.id = doc.id;
 		});
 	}
