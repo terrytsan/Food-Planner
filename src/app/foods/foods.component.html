@@ -1,6 +1,32 @@
 <h1>Foods</h1>
+<mat-form-field class="labels-filter-input" appearance="fill">
+	<mat-label>Filter Labels</mat-label>
+	<mat-chip-list #chipList aria-label="Label Selection">
+		<mat-chip
+			*ngFor="let label of selectedLabels$|async"
+			(removed)="removeLabel(label)">
+			{{label}}
+			<button matChipRemove>
+				<mat-icon>cancel</mat-icon>
+			</button>
+		</mat-chip>
+		<input
+			placeholder="Enter label..."
+			#labelInput
+			[formControl]="labelCtrl"
+			[matAutocomplete]="auto"
+			[matChipInputFor]="chipList"
+			[matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+			(matChipInputTokenEnd)="addLabel($event)">
+	</mat-chip-list>
+	<mat-autocomplete #auto="matAutocomplete" (optionSelected)="autocompleteItemSelected($event)">
+		<mat-option *ngFor="let label of unusedLabels" [value]="label">
+			{{label}}
+		</mat-option>
+	</mat-autocomplete>
+</mat-form-field>
 <div fxLayout="row wrap" fxLayoutGap="10px grid">
-	<div *ngFor="let food of foods$ | async" fxFlex="25%" fxFlex.sm="33%" fxFlex.xs="50%">
+	<div *ngFor="let food of filteredFoods$ | async" fxFlex="25%" fxFlex.sm="33%" fxFlex.xs="50%">
 		<app-food-card [food]="food"></app-food-card>
 	</div>
 </div>

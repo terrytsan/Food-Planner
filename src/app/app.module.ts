@@ -43,6 +43,7 @@ import { PriceHistoryEditDialogComponent } from './price-history-edit-dialog/pri
 import { MatTableModule } from "@angular/material/table";
 import { FoodDetailsComponent } from './food-details/food-details.component';
 import { MatChipsModule } from "@angular/material/chips";
+import { MatAutocompleteModule } from "@angular/material/autocomplete";
 
 @NgModule({
 	declarations: [
@@ -95,7 +96,8 @@ import { MatChipsModule } from "@angular/material/chips";
 		MatDatepickerModule,
 		MatNativeDateModule,
 		MatTableModule,
-		MatChipsModule
+		MatChipsModule,
+		MatAutocompleteModule
 	],
 	providers: [
 		{provide: MAT_DATE_LOCALE, useValue: 'en-GB'}
