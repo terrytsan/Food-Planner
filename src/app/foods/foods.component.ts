@@ -29,6 +29,17 @@ export class FoodsComponent implements OnInit {
 	selectedLabels$ = new BehaviorSubject<string[]>([]);		// Subject that will be updated as labels are selected. Need observable so it can be combined with firebase observable and filtered
 	selectedLabels: string[] = [];					// Normal form of selected labels
 	unusedLabels: string[];							// Autocomplete for input box. Shows only the labels that haven't been selected and input box can filter these.
+	private _lblFilterOp: Operator = Operator.OR;
+	private _lblFilterOp$ = new BehaviorSubject<Operator>(this._lblFilterOp);	// Allows food filtering when changing operator
+
+	get lblFilterOp(): Operator {
+		return this._lblFilterOp;
+	}
+
+	set lblFilterOp(value: Operator) {
+		this._lblFilterOp = value;
+		this._lblFilterOp$.next(this._lblFilterOp);
+	}
 
 	ngUnsubscribe = new Subject();					// Used for unsubscribing from observables
 
@@ -92,7 +103,8 @@ export class FoodsComponent implements OnInit {
 		this.filteredFoods$ = combineLatest([
 			// startWith required as combineLatest requires both sources to emit before emitting itself
 			this.foods$.pipe(startWith(<Food[]>[]), takeUntil(this.ngUnsubscribe)),
-			this.selectedLabels$.pipe(startWith(<string[]>[]), takeUntil(this.ngUnsubscribe))
+			this.selectedLabels$.pipe(startWith(<string[]>[]), takeUntil(this.ngUnsubscribe)),
+			this._lblFilterOp$.pipe(startWith(Operator.OR))
 		]).pipe(map(([foods, filterLabels]) => {
 				filterLabels = filterLabels.map(label => label.toLowerCase());
 				let filtered = <Food[]>[];
@@ -103,7 +115,14 @@ export class FoodsComponent implements OnInit {
 						if (!food.labels) {
 							return false;
 						}
-						return food.labels.some(l => filterLabels.includes(l.toLowerCase()));
+
+						switch (this._lblFilterOp) {
+							case Operator.OR:
+								return food.labels.some(l => filterLabels.includes(l.toLowerCase()));
+							case Operator.AND:
+								food.labels = food.labels.map(l => l.toLowerCase());
+								return filterLabels.every(l => food.labels.includes(l));
+						}
 					});
 				}
 				return filtered;
@@ -155,4 +174,9 @@ export class FoodsComponent implements OnInit {
 		this.labelInput.nativeElement.value = '';
 		this.labelCtrl.setValue(null);
 	}
+}
+
+enum Operator {
+	OR,
+	AND
 }

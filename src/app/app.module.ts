@@ -44,6 +44,7 @@ import { MatTableModule } from "@angular/material/table";
 import { FoodDetailsComponent } from './food-details/food-details.component';
 import { MatChipsModule } from "@angular/material/chips";
 import { MatAutocompleteModule } from "@angular/material/autocomplete";
+import { MatRadioModule } from "@angular/material/radio";
 
 @NgModule({
 	declarations: [
@@ -97,7 +98,8 @@ import { MatAutocompleteModule } from "@angular/material/autocomplete";
 		MatNativeDateModule,
 		MatTableModule,
 		MatChipsModule,
-		MatAutocompleteModule
+		MatAutocompleteModule,
+		MatRadioModule
 	],
 	providers: [
 		{provide: MAT_DATE_LOCALE, useValue: 'en-GB'}

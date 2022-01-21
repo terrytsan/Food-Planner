@@ -1,30 +1,39 @@
 <h1>Foods</h1>
-<mat-form-field class="labels-filter-input" appearance="fill">
-	<mat-label>Filter Labels</mat-label>
-	<mat-chip-list #chipList aria-label="Label Selection">
-		<mat-chip
-			*ngFor="let label of selectedLabels$|async"
-			(removed)="removeLabel(label)">
-			{{label}}
-			<button matChipRemove>
-				<mat-icon>cancel</mat-icon>
-			</button>
-		</mat-chip>
-		<input
-			placeholder="Enter label..."
-			#labelInput
-			[formControl]="labelCtrl"
-			[matAutocomplete]="auto"
-			[matChipInputFor]="chipList"
-			[matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-			(matChipInputTokenEnd)="addLabel($event)">
-	</mat-chip-list>
-	<mat-autocomplete #auto="matAutocomplete" (optionSelected)="autocompleteItemSelected($event)">
-		<mat-option *ngFor="let label of unusedLabels" [value]="label">
-			{{label}}
-		</mat-option>
-	</mat-autocomplete>
-</mat-form-field>
+<div fxLayout="row" fxLayoutAlign="flex-start center">
+	<mat-form-field class="labels-filter-input" appearance="fill">
+		<mat-label>Filter Labels</mat-label>
+		<mat-chip-list #chipList aria-label="Label Selection">
+			<mat-chip
+				*ngFor="let label of selectedLabels$|async"
+				(removed)="removeLabel(label)">
+				{{label}}
+				<button matChipRemove>
+					<mat-icon>cancel</mat-icon>
+				</button>
+			</mat-chip>
+			<input
+				placeholder="Enter label..."
+				#labelInput
+				[formControl]="labelCtrl"
+				[matAutocomplete]="auto"
+				[matChipInputFor]="chipList"
+				[matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+				(matChipInputTokenEnd)="addLabel($event)">
+		</mat-chip-list>
+		<mat-autocomplete #auto="matAutocomplete" (optionSelected)="autocompleteItemSelected($event)">
+			<mat-option *ngFor="let label of unusedLabels" [value]="label">
+				{{label}}
+			</mat-option>
+		</mat-autocomplete>
+	</mat-form-field>
+	<mat-radio-group fxLayout="column"
+					 class="mat-form-field-wrapper"
+					 style="margin-left:15px;"
+					 [(ngModel)]="lblFilterOp">
+		<mat-radio-button style="margin:2px;" [value]="0">OR</mat-radio-button>
+		<mat-radio-button style="margin:2px;" [value]="1">AND</mat-radio-button>
+	</mat-radio-group>
+</div>
 <div fxLayout="row wrap" fxLayoutGap="10px grid">
 	<div *ngFor="let food of filteredFoods$ | async" fxFlex="25%" fxFlex.sm="33%" fxFlex.xs="50%">
 		<app-food-card [food]="food"></app-food-card>
