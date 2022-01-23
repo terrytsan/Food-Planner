@@ -45,10 +45,9 @@ export class WeekPlanComponent implements OnInit {
 		let date = new Date();
 		let day = date.getDay();
 		let monDiff = date.getDate() - day + (day == 0 ? -6 : 1); // adjust when day is sunday
-		let sunDiff = date.getDate() - day + 7;
 		let mondayDate = new Date(date.setDate(monDiff));
 		mondayDate.setHours(0, 0, 0, 0);
-		let sundayDate = new Date(new Date().setDate(sunDiff));		// Create new date variable, 'date' is modified above
+		let sundayDate = new Date(date.setDate(date.getDate() - date.getDay() + 7));		// relies on 'date' being set to Monday's date above
 		sundayDate.setHours(0, 0, 0, 0);
 
 		return {

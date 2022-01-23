@@ -18,6 +18,7 @@ export class FoodDetailsComponent implements OnInit {
 	id: string;
 	food: Food;
 	defaultImage: string = GlobalVariable.PLACEHOLDER_IMAGE_URL;
+	foodUnsubscribe: any;
 
 	// Labels
 	readonly separatorKeysCodes = [ENTER, COMMA] as const;
@@ -27,14 +28,20 @@ export class FoodDetailsComponent implements OnInit {
 	constructor(private route: ActivatedRoute, private afs: Firestore, public dialog: MatDialog) {
 		this.id = this.route.snapshot.params['id'];
 
-		onSnapshot(doc(this.afs, "foods", this.id), (doc) => {
+		this.foodUnsubscribe = onSnapshot(doc(this.afs, "foods", this.id), (doc) => {
 			this.food = doc.data() as Food;
-			this.food.labels.sort();
+			if (this.food.labels) {
+				this.food.labels.sort();
+			}
 			this.food.id = doc.id;
 		});
 	}
 
 	ngOnInit(): void {
+	}
+
+	ngOnDestroy() {
+		this.foodUnsubscribe();
 	}
 
 	openEditFoodDialog() {

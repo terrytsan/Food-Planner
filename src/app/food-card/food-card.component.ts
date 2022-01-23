@@ -47,7 +47,8 @@ export class FoodCardComponent implements OnInit {
 				name: foodToDelete.name,
 				description: foodToDelete.description,
 				image: foodToDelete.image,
-				imagePath: foodToDelete.imagePath
+				imagePath: foodToDelete.imagePath,
+				labels: foodToDelete.labels
 			});
 		});
 	}
