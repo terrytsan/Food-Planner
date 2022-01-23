@@ -1,11 +1,10 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Food } from "./food";
-import { AngularFirestore } from "@angular/fire/compat/firestore";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { MatDialog } from "@angular/material/dialog";
 import { FoodEditDialogComponent } from "../food-edit-dialog/food-edit-dialog.component";
 import { FoodPlan } from "../food-plan-detail/foodPlan";
-import { deleteField, doc, Firestore, updateDoc } from "@angular/fire/firestore";
+import { deleteDoc, deleteField, doc, Firestore, setDoc, updateDoc } from "@angular/fire/firestore";
 import { GlobalVariable } from "../global";
 
 @Component({
@@ -19,12 +18,7 @@ export class FoodCardComponent implements OnInit {
 	@Input() foodPlan: FoodPlan | null = null;
 	defaultImage: string = GlobalVariable.PLACEHOLDER_IMAGE_URL;
 
-	constructor(
-		public firestore: AngularFirestore,
-		private _snackBar: MatSnackBar,
-		public dialog: MatDialog,
-		public afs: Firestore
-	) {
+	constructor(private _snackBar: MatSnackBar, public dialog: MatDialog, public afs: Firestore) {
 	}
 
 	ngOnInit(): void {
@@ -38,21 +32,22 @@ export class FoodCardComponent implements OnInit {
 		});
 	}
 
-	deleteFood() {
+	async deleteFood() {
 		let foodToDelete = this.food;
 		if (!foodToDelete) return;
-		this.firestore.collection("foods").doc(foodToDelete.id).delete().then(() => {
-			if (!foodToDelete) return;
-			let snackBarRef = this._snackBar.open(`Deleted ${foodToDelete.name}.`, 'Undo', {duration: 3000});
 
-			snackBarRef.onAction().subscribe(() => {
-				if (!foodToDelete) return;
-				this.firestore.collection('foods').doc(foodToDelete.id).set({
-					name: foodToDelete.name,
-					description: foodToDelete.description,
-					image: foodToDelete.image,
-					imagePath: foodToDelete.imagePath
-				});
+		let foodRef = doc(this.afs, 'foods', foodToDelete.id);
+		await deleteDoc(foodRef);
+
+		let snackBarRef = this._snackBar.open(`Deleted ${foodToDelete.name}.`, 'Undo', {duration: 3000});
+		snackBarRef.onAction().subscribe(async () => {
+			if (!foodToDelete) return;
+
+			await setDoc(doc(this.afs, 'foods', foodToDelete.id), {
+				name: foodToDelete.name,
+				description: foodToDelete.description,
+				image: foodToDelete.image,
+				imagePath: foodToDelete.imagePath
 			});
 		});
 	}

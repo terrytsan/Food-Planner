@@ -25,7 +25,6 @@ import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatInputModule } from "@angular/material/input";
 import { MatProgressBarModule } from "@angular/material/progress-bar";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
-import { AngularFireModule } from "@angular/fire/compat";
 import { MatMenuModule } from "@angular/material/menu";
 import { MatSnackBarModule } from "@angular/material/snack-bar";
 import { FoodPlanDetailComponent } from './food-plan-detail/food-plan-detail.component';
@@ -82,7 +81,6 @@ import { MatRadioModule } from "@angular/material/radio";
 		MatInputModule,
 		MatProgressBarModule,
 		FormsModule,
-		AngularFireModule.initializeApp(environment.firebase),
 		ReactiveFormsModule,
 		MatMenuModule,
 		MatSnackBarModule,

@@ -1,9 +1,17 @@
 import { Component, OnInit } from '@angular/core';
-import { collection, collectionData, CollectionReference, Firestore, query, where } from "@angular/fire/firestore";
+import {
+	collection,
+	collectionData,
+	CollectionReference,
+	doc,
+	Firestore,
+	query,
+	where,
+	writeBatch
+} from "@angular/fire/firestore";
 import { Observable } from "rxjs";
 import { FoodPlan } from "../food-plan-detail/foodPlan";
 import { Timestamp } from "firebase/firestore";
-import { AngularFirestore } from "@angular/fire/compat/firestore";
 import { take } from "rxjs/operators";
 
 @Component({
@@ -17,7 +25,7 @@ export class WeekPlanComponent implements OnInit {
 	selectedWeek: Week;
 	earliestStartingWeek = Timestamp.fromDate(new Date("25 October 2021"));		// Prevent weeks earlier than this date from being generated
 
-	constructor(public afs: Firestore, public firestore: AngularFirestore) {
+	constructor(public afs: Firestore) {
 		this.selectedWeek = this.getCurrentWeek();
 		this.foodPlans$ = collectionData<FoodPlan>(
 			query<FoodPlan>(
@@ -75,7 +83,7 @@ export class WeekPlanComponent implements OnInit {
 
 	private addMissingDays() {
 		// Only need this to run once (user can't add/remove foodPlans)
-		this.foodPlans$.pipe(take(1)).subscribe(foodPlans => {
+		this.foodPlans$.pipe(take(1)).subscribe(async foodPlans => {
 			if (foodPlans.length >= 7) {
 				return;
 			}
@@ -91,12 +99,12 @@ export class WeekPlanComponent implements OnInit {
 			}
 
 			// Batch add the missing days
-			const batch = this.firestore.firestore.batch();
+			const batch = writeBatch(this.afs);
 			datesToAdd.forEach(date => {
-				const newPlanRef = this.firestore.firestore.collection('foodPlans').doc();
+				const newPlanRef = doc(collection(this.afs, 'foodPlans'));
 				batch.set(newPlanRef, {date: date});
 			});
-			batch.commit();
+			await batch.commit();
 		});
 	}
 }

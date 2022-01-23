@@ -2,9 +2,18 @@ import { Component, Input, OnInit } from '@angular/core';
 import { FoodPlan } from "./foodPlan";
 import { Food } from "../food-card/food";
 import { Observable } from "rxjs";
-import { AngularFirestore } from "@angular/fire/compat/firestore";
 import { MatDialog } from "@angular/material/dialog";
 import { ChooseFoodDialogComponent } from "../choose-food-dialog/choose-food-dialog.component";
+import {
+	collection,
+	collectionData,
+	CollectionReference,
+	doc,
+	Firestore,
+	query,
+	updateDoc,
+	where
+} from "@angular/fire/firestore";
 
 @Component({
 	selector: 'app-food-plan-detail',
@@ -18,13 +27,18 @@ export class FoodPlanDetailComponent implements OnInit {
 	foods$: Observable<Food[]>;
 	showAddFoodsBtn: boolean = true;
 
-	constructor(public firestore: AngularFirestore, public dialog: MatDialog) {
+	constructor(private afs: Firestore, public dialog: MatDialog) {
 	}
 
 	ngOnInit(): void {
 		if (this.foodPlan.foods) {
 			// __name__ is document id
-			this.foods$ = this.firestore.collection('foods', food => food.where("__name__", "in", this.foodPlan.foods)).valueChanges({idField: 'id'}) as Observable<Food[]>;
+			this.foods$ = collectionData<Food>(
+				query<Food>(
+					collection(this.afs, 'foods') as CollectionReference<Food>,
+					where('__name__', 'in', this.foodPlan.foods)
+				), {idField: 'id'}
+			);
 
 			this.showAddFoodsBtn = this.foodPlan.foods.length <= 10;		// "in" query limited to max 10
 		}
@@ -36,10 +50,13 @@ export class FoodPlanDetailComponent implements OnInit {
 			autoFocus: false
 		});
 
-		dialogRef.afterClosed().subscribe(result => {
+		dialogRef.afterClosed().subscribe(async result => {
 			if (result) {
 				let foods = this.foodPlan.foods ? this.foodPlan.foods.concat([result.id]) : [result.id];
-				this.firestore.collection('foodPlans').doc(this.foodPlan.id).update({foods: foods});
+				let foodRef = doc(this.afs, 'foodPlans', this.foodPlan.id);
+				await updateDoc(foodRef, {
+					foods: foods
+				});
 			}
 		});
 	}

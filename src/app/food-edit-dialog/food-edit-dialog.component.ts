@@ -1,10 +1,10 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { getDownloadURL, ref, Storage, uploadBytesResumable, UploadTask } from '@angular/fire/storage';
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
-import { AngularFirestore } from "@angular/fire/compat/firestore";
 import { Food } from "../food-card/food";
 import { FormBuilder, Validators } from "@angular/forms";
 import { ImageService } from "../../image.service";
+import { addDoc, collection, doc, Firestore, updateDoc } from "@angular/fire/firestore";
 
 @Component({
 	selector: 'app-food-edit-dialog',
@@ -35,7 +35,7 @@ export class FoodEditDialogComponent implements OnInit {
 		private fb: FormBuilder,
 		public dialogRef: MatDialogRef<FoodEditDialogComponent>,
 		private storage: Storage,
-		public firestore: AngularFirestore,
+		private afs: Firestore,
 		private imageService: ImageService
 	) {
 	}
@@ -112,20 +112,20 @@ export class FoodEditDialogComponent implements OnInit {
 		}
 
 		if (this.foodData) {
-			this.firestore.collection('foods').doc(this.food.id).update({
+			let foodRef = doc(this.afs, 'foods', this.food.id);
+			updateDoc(foodRef, {
 				name: this.foodForm.value.name,
 				description: this.foodForm.value.description,
 				image: this.food.image,
 				imagePath: this.food.imagePath
 			}).then(() => this.dialogRef.close());
 		} else {
-			this.firestore.collection('foods')
-				.add({
-					name: this.foodForm.value.name,
-					description: this.foodForm.value.description,
-					image: this.food.image,
-					imagePath: this.food.imagePath
-				}).then(() => this.dialogRef.close());
+			addDoc(collection(this.afs, 'foods'), {
+				name: this.foodForm.value.name,
+				description: this.foodForm.value.description,
+				image: this.food.image,
+				imagePath: this.food.imagePath
+			}).then(() => this.dialogRef.close());
 		}
 	}
 }
