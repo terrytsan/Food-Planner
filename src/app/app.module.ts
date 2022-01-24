@@ -67,6 +67,7 @@ import { MatTooltipModule } from "@angular/material/tooltip";
 import { FoodPlanDetailsComponent } from './food-plan-details/food-plan-details.component';
 import { ShoppingListComponent } from './shopping-list/shopping-list.component';
 import { DragDropModule } from "@angular/cdk/drag-drop";
+import { AdminComponent } from "./admin/admin.component";
 
 @NgModule({
 	declarations: [
@@ -93,7 +94,8 @@ import { DragDropModule } from "@angular/cdk/drag-drop";
 		PrivacyPolicyDialogComponent,
 		ConfirmationDialogComponent,
 		FoodPlanDetailsComponent,
-		ShoppingListComponent
+		ShoppingListComponent,
+		AdminComponent
 	],
 	imports: [
 		BrowserModule,

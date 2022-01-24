@@ -11,6 +11,7 @@ import { ProfileComponent } from "./profile/profile.component";
 import { SignupComponent } from "./signup/signup.component";
 import { PrivacyPolicyDialogComponent } from "./privacy-policy-dialog/privacy-policy-dialog.component";
 import { FoodPlanDetailsComponent } from "./food-plan-details/food-plan-details.component";
+import { AdminComponent } from "./admin/admin.component";
 
 let redirectUnauthorizedToLogin = () => redirectUnauthorizedTo(['login']);
 let redirectLoggedInToHome = () => redirectLoggedInTo(['']);
@@ -68,7 +69,8 @@ const routes: Routes = [
 		component: CatalogueItemDetailsComponent,
 		canActivate: [AuthGuard],
 		data: {authGuardPipe: redirectUnauthorizedToLogin}
-	}
+	},
+	{path: 'admin', component: AdminComponent}
 ];
 
 @NgModule({
