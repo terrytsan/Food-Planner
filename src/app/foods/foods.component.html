@@ -39,6 +39,8 @@
 		<app-food-card [food]="food"></app-food-card>
 	</div>
 </div>
+<div *ngIf="(filteredFoods$ | async)?.length as filteredFoodsLength"
+	 class="food-summary">{{filteredFoodsLength}} {{filteredFoodsLength > 1 ? 'Foods' : 'Food'}}</div>
 <button (click)="openAddFoodDialog()" class="btn-add-foods" mat-fab>
 	<mat-icon>add</mat-icon>
 </button>
