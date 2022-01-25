@@ -18,3 +18,20 @@
 		</div>
 	</div>
 </mat-card>
+
+<!-- Unused Images -->
+<mat-card *ngIf="unusedFoodImages.concat(unusedCatalogueItemImages) as unusedImages">
+	<h2>Unused Images</h2>
+	<h4>{{unusedFoodImages.length}} unused food images</h4>
+	<h4>{{unusedCatalogueItemImages.length}} unused catalogue images</h4>
+
+	<mat-divider *ngIf="unusedImages.length > 0"></mat-divider>
+
+	<div *ngFor="let image of unusedImages" style="padding-top: 10px;">
+		<div fxLayout="row" fxLayoutAlign="space-between center" style="padding-bottom: 12px;">
+			<img alt="Photo of {{image.imageUrl}}" src="{{image.imageUrl}}" style="width: 56px; height: 56px;">
+			<span style="max-width: 50%; word-break: break-all;">{{image.imagePath}}</span>
+			<mat-icon (click)="deleteImage(image.imagePath)">delete</mat-icon>
+		</div>
+	</div>
+</mat-card>
