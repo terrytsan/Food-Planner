@@ -23,6 +23,7 @@ export class WeekPlanComponent implements OnInit {
 
 	foodPlans$: Observable<FoodPlan[]>;
 	selectedWeek: Week;
+	startOfWeek = 'Sunday';
 	earliestStartingWeek = Timestamp.fromDate(new Date("25 October 2021"));		// Prevent weeks earlier than this date from being generated
 
 	constructor(public afs: Firestore) {
@@ -42,18 +43,33 @@ export class WeekPlanComponent implements OnInit {
 	}
 
 	getCurrentWeek(): Week {
-		let date = new Date();
-		let day = date.getDay();
-		let monDiff = date.getDate() - day + (day == 0 ? -6 : 1); // adjust when day is sunday
-		let mondayDate = new Date(date.setDate(monDiff));
-		mondayDate.setHours(0, 0, 0, 0);
-		let sundayDate = new Date(date.setDate(date.getDate() - date.getDay() + 7));		// relies on 'date' being set to Monday's date above
-		sundayDate.setHours(0, 0, 0, 0);
+		switch (this.startOfWeek) {
+			case "Sunday":
+				let current = new Date();
+				let firstDay = current.getDate() - current.getDay();
+				let startDate = new Date(current.setDate(firstDay));
+				startDate.setHours(0, 0, 0, 0);
+				let endDate = new Date(current.setDate(current.getDate() - current.getDay() + 6));
+				endDate.setHours(0, 0, 0, 0);
 
-		return {
-			startDate: Timestamp.fromDate(mondayDate),
-			endDate: Timestamp.fromDate(sundayDate)
-		};
+				return {
+					startDate: Timestamp.fromDate(startDate),
+					endDate: Timestamp.fromDate(endDate)
+				};
+			default:
+				let date = new Date();
+				let day = date.getDay();
+				let monDiff = date.getDate() - day + (day == 0 ? -6 : 1); // adjust when day is sunday
+				let mondayDate = new Date(date.setDate(monDiff));
+				mondayDate.setHours(0, 0, 0, 0);
+				let sundayDate = new Date(date.setDate(date.getDate() - date.getDay() + 7));		// relies on 'date' being set to Monday's date above
+				sundayDate.setHours(0, 0, 0, 0);
+
+				return {
+					startDate: Timestamp.fromDate(mondayDate),
+					endDate: Timestamp.fromDate(sundayDate)
+				};
+		}
 	}
 
 	trackById(index: number, item: any) {
@@ -87,9 +103,10 @@ export class WeekPlanComponent implements OnInit {
 				return;
 			}
 
-			let existingDates = foodPlans.map(f => f.date.toDate().getTime());		// Store as time so it can be compared
+			let existingDates = foodPlans.map(f => f.date.toDate().setHours(0, 0, 0, 0));		// Store as time so it can be compared. Discard hours component
 			let datesToAdd: Timestamp[] = [];
 			let i = this.selectedWeek.startDate.toDate();
+			i.setHours(0, 0, 0, 0);
 			for (; i <= this.selectedWeek.endDate.toDate();) {
 				if (!existingDates.includes(i.getTime())) {
 					datesToAdd.push(Timestamp.fromDate(i));
@@ -109,8 +126,8 @@ export class WeekPlanComponent implements OnInit {
 }
 
 interface Week {
-	// Date of Monday
+	// Date of Monday/Sunday	(depends on value of startOfWeek)
 	startDate: Timestamp;
-	// Date of Sunday
+	// Date of Sunday/Saturday
 	endDate: Timestamp;
 }
