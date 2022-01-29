@@ -44,11 +44,12 @@ export class AdminComponent implements OnInit {
 			), {idField: 'id'}
 		).pipe(map(foodPlans => {
 			const lookup = foodPlans.reduce((a, e) => {
-				a.set(e.date.seconds, (a.get(e.date.seconds) ?? 0) + 1);
+				let dateWithoutHours = new Date(e.date.toMillis()).setHours(0, 0, 0, 0);
+				a.set(dateWithoutHours, (a.get(dateWithoutHours) ?? 0) + 1);
 				return a;
 			}, new Map());
 
-			return foodPlans.filter(e => lookup.get(e.date.seconds) > 1);
+			return foodPlans.filter(e => lookup.get(new Date(e.date.toMillis()).setHours(0, 0, 0, 0)) > 1);
 		}));
 
 		this.emptyDuplicateFoodPlans$ = this.duplicateFoodPlans$.pipe(map(foodPlans => {

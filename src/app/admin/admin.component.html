@@ -10,7 +10,7 @@
 
 	<div *ngFor="let foodPlan of duplicateFoodPlans" style="padding-top: 10px;">
 		<div fxLayout="row" fxLayoutAlign="space-between center" style="padding-bottom: 12px;">
-			<div>{{foodPlan.date.toMillis() | date: 'EEEE dd/MM/yyyy'}}</div>
+			<div>{{foodPlan.date.toMillis() | date: 'EEEE dd/MM/yyyy h:mm:ss a zzzz'}}</div>
 			<mat-icon (click)="deleteFoodPlan(foodPlan.id)">delete</mat-icon>
 		</div>
 		<div *ngFor="let food of foodPlan.foods" style="padding-left: 10px;">
