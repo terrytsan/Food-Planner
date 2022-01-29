@@ -6,9 +6,9 @@ import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
 import { environment } from '../environments/environment';
-import { getAuth, provideAuth } from '@angular/fire/auth';
-import { getFirestore, provideFirestore } from '@angular/fire/firestore';
-import { getStorage, provideStorage } from "@angular/fire/storage";
+import { connectAuthEmulator, getAuth, provideAuth } from '@angular/fire/auth';
+import { connectFirestoreEmulator, getFirestore, provideFirestore } from '@angular/fire/firestore';
+import { connectStorageEmulator, getStorage, provideStorage } from "@angular/fire/storage";
 import { MatToolbarModule } from "@angular/material/toolbar";
 import { MatIconModule } from "@angular/material/icon";
 import { WeekPlanComponent } from './week-plan/week-plan.component';
@@ -67,9 +67,30 @@ import { MatRadioModule } from "@angular/material/radio";
 		AppRoutingModule,
 		BrowserAnimationsModule,
 		provideFirebaseApp(() => initializeApp(environment.firebase)),
-		provideAuth(() => getAuth()),
-		provideFirestore(() => getFirestore()),
-		provideStorage(() => getStorage()),
+		provideAuth(() => {
+			if (environment.useEmulators) {
+				const auth = getAuth();
+				connectAuthEmulator(auth, "http://localhost:9099");
+				return auth;
+			}
+			return getAuth();
+		}),
+		provideFirestore(() => {
+			if (environment.useEmulators) {
+				const firestore = getFirestore();
+				connectFirestoreEmulator(firestore, 'localhost', 8080);
+				return firestore;
+			}
+			return getFirestore();
+		}),
+		provideStorage(() => {
+			if (environment.useEmulators) {
+				const storage = getStorage();
+				connectStorageEmulator(storage, "localhost", 9199);
+				return storage;
+			}
+			return getStorage();
+		}),
 		MatToolbarModule,
 		MatIconModule,
 		MatCardModule,
