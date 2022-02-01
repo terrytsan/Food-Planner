@@ -1,5 +1,12 @@
 import { Injectable } from '@angular/core';
-import { Auth, signInWithEmailAndPassword, user } from "@angular/fire/auth";
+import {
+	Auth,
+	createUserWithEmailAndPassword,
+	getAuth,
+	signInWithEmailAndPassword,
+	updateProfile,
+	user
+} from "@angular/fire/auth";
 import { signOut } from 'firebase/auth';
 import { concatMap } from "rxjs/operators";
 import { doc, Firestore, getDoc } from "@angular/fire/firestore";
@@ -31,6 +38,17 @@ export class AuthService {
 
 	signInWithEmailAndPassword(email: string, password: string) {
 		return signInWithEmailAndPassword(this.auth, email, password);
+	}
+
+	createUserWithEmailAndPassword(email: string, password: string) {
+		return createUserWithEmailAndPassword(this.auth, email, password);
+	}
+
+	updateProfile(properties: any) {
+		const auth = getAuth();
+		if (auth.currentUser != null) {
+			updateProfile(auth.currentUser, properties);
+		}
 	}
 
 	signOut() {

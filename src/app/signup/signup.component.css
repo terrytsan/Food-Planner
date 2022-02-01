@@ -1,0 +1,15 @@
+.signup-error {
+	margin-top: 10px;
+	min-height: 20px;
+	font-size: 12px;
+}
+
+.signup-card {
+	max-width: 500px;
+	margin: 50px auto auto;
+	padding-bottom: 5px;
+}
+
+.mat-raised-button {
+	margin-bottom: 10px;
+}

@@ -46,6 +46,7 @@ import { MatAutocompleteModule } from "@angular/material/autocomplete";
 import { MatRadioModule } from "@angular/material/radio";
 import { LoginComponent } from './login/login.component';
 import { ProfileComponent } from './profile/profile.component';
+import { SignupComponent } from './signup/signup.component';
 
 @NgModule({
 	declarations: [
@@ -64,7 +65,8 @@ import { ProfileComponent } from './profile/profile.component';
 		PriceHistoryEditDialogComponent,
 		FoodDetailsComponent,
 		LoginComponent,
-		ProfileComponent
+		ProfileComponent,
+		SignupComponent
 	],
 	imports: [
 		BrowserModule,

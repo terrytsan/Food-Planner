@@ -1,14 +1,19 @@
-<mat-card class="login-card">
+<mat-card class="signup-card">
 	<mat-card-content>
 		<form #loginForm="ngForm" (ngSubmit)="onSubmit()">
-			<h1 fxLayoutAlign="center">Log In</h1>
+			<h1 fxLayoutAlign="center">Sign Up</h1>
 			<div fxLayout="column" style="padding-bottom: 10px;">
 				<mat-form-field>
-					<input [(ngModel)]="email" matInput name="email" placeholder="Email" required>
+					<input [(ngModel)]="displayName" matInput name="new-name" placeholder="Name" required>
+					<mat-error>Please provide a valid name</mat-error>
+				</mat-form-field>
+				<mat-form-field>
+					<input [(ngModel)]="email" matInput name="new-email" placeholder="Email" required>
 					<mat-error>Please provide a valid email address</mat-error>
 				</mat-form-field>
 				<mat-form-field>
 					<input [(ngModel)]="password"
+						   autocomplete="new-password"
 						   matInput
 						   name="password"
 						   placeholder="Password"
@@ -17,11 +22,7 @@
 					<mat-error>Please provide a valid password</mat-error>
 				</mat-form-field>
 			</div>
-			<button [disabled]="!loginForm.form.valid" color="primary" mat-raised-button type="submit">Login</button>
-			<button mat-raised-button routerLink="/signup" style="margin-left: 15px;" type="button">Sign Up</button>
+			<button [disabled]="!loginForm.form.valid" color="primary" mat-raised-button type="submit">Sign Up</button>
 		</form>
-		<mat-error [hidden]="!loginError" class="login-error">
-			{{loginError}}
-		</mat-error>
 	</mat-card-content>
 </mat-card>
