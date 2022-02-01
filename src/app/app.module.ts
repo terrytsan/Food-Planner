@@ -44,6 +44,8 @@ import { FoodDetailsComponent } from './food-details/food-details.component';
 import { MatChipsModule } from "@angular/material/chips";
 import { MatAutocompleteModule } from "@angular/material/autocomplete";
 import { MatRadioModule } from "@angular/material/radio";
+import { LoginComponent } from './login/login.component';
+import { ProfileComponent } from './profile/profile.component';
 
 @NgModule({
 	declarations: [
@@ -60,7 +62,9 @@ import { MatRadioModule } from "@angular/material/radio";
 		CatalogueItemDetailsComponent,
 		UploadImageDialogComponent,
 		PriceHistoryEditDialogComponent,
-		FoodDetailsComponent
+		FoodDetailsComponent,
+		LoginComponent,
+		ProfileComponent
 	],
 	imports: [
 		BrowserModule,

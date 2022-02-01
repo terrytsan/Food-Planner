@@ -1,0 +1,11 @@
+.login-error {
+	margin-top: 10px;
+	min-height: 20px;
+	font-size: 12px;
+}
+
+.login-card {
+	max-width: 500px;
+	margin: 50px auto auto;
+	padding-bottom: 5px;
+}

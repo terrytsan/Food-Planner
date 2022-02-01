@@ -1,13 +1,20 @@
 <div class="main-container">
-	<mat-toolbar color="primary">
-		<button (click)="navigateBack()" *ngIf="showBackBtn" mat-icon-button>
-			<mat-icon class="nav-btn-icon">arrow_back</mat-icon>
-		</button>
-		<button (click)="sidenav.toggle()" *ngIf="!showBackBtn" mat-icon-button>
-			<mat-icon class="nav-btn-icon">menu</mat-icon>
-		</button>
-		<mat-icon>restaurant_menu</mat-icon>
-		<span>Food Planner</span>
+	<mat-toolbar color="primary" fxLayoutAlign="space-between">
+		<div fxLayoutAlign="flex-start center">
+			<button (click)="navigateBack()" *ngIf="showBackBtn" mat-icon-button>
+				<mat-icon class="nav-btn-icon">arrow_back</mat-icon>
+			</button>
+			<button (click)="sidenav.toggle()" *ngIf="!showBackBtn" mat-icon-button>
+				<mat-icon class="nav-btn-icon">menu</mat-icon>
+			</button>
+			<mat-icon>restaurant_menu</mat-icon>
+			<span>Food Planner</span>
+		</div>
+		<div fxLayoutAlign="center center">
+			<button mat-icon-button routerLink="/profile">
+				<mat-icon class="nav-btn-icon">account_circle</mat-icon>
+			</button>
+		</div>
 	</mat-toolbar>
 	<mat-sidenav-container class="sidenav-container">
 		<mat-sidenav #sidenav (click)="mobileDisplay && sidenav.toggle()" [opened]="!mobileDisplay">

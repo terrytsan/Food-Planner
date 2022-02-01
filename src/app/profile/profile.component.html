@@ -1,0 +1,21 @@
+<h1>Profile</h1>
+<div *ngIf="user$ | async as user">
+	<table class="basic-info-table" style="width: 100%;">
+		<tr>
+			<td>Name</td>
+			<td>{{user.displayName}}</td>
+		</tr>
+		<tr>
+			<td>Email</td>
+			<td>{{user.email}}</td>
+		</tr>
+		<tr>
+			<td>Selected Group</td>
+			<td>{{user.selectedGroup}}</td>
+		</tr>
+	</table>
+	<button (click)="signOut()" color="warn" mat-raised-button>
+		<mat-icon>logout</mat-icon>
+		Log Out
+	</button>
+</div>
