@@ -14,8 +14,57 @@
 			<td>{{user.selectedGroup}}</td>
 		</tr>
 	</table>
+	<mat-divider class="divider"></mat-divider>
+
+	<h2>Groups</h2>
+	<div *ngIf="groups$ | async as groups">
+		<div *ngFor="let group of groups; trackBy: identify" class="group-details">
+			<mat-accordion class="align-headers">
+				<mat-expansion-panel>
+					<mat-expansion-panel-header>
+						<mat-panel-title>
+							{{group.name}}
+						</mat-panel-title>
+						<mat-panel-description>
+							Members: {{1 + group.editors.length + group.viewers.length}}
+						</mat-panel-description>
+					</mat-expansion-panel-header>
+					<mat-list>
+						<mat-list-item>
+							<ng-template *ngTemplateOutlet="userTemplate; context: { type: UserType.Owner, user: group.owner }"></ng-template>
+							<mat-divider *ngIf="group.editors.length > 0 || group.viewers.length > 0"></mat-divider>
+						</mat-list-item>
+						<mat-list-item *ngFor="let editor of group.editors; let isLast = last;">
+							<ng-template *ngTemplateOutlet="userTemplate; context: { type: UserType.Editor, user: editor }"></ng-template>
+							<mat-divider *ngIf="!isLast || group.viewers.length > 0"></mat-divider>
+						</mat-list-item>
+						<mat-list-item *ngFor="let viewer of group.viewers; let isLast = last">
+							<ng-template *ngTemplateOutlet="userTemplate; context: { type: UserType.Viewer, user: viewer }"></ng-template>
+							<mat-divider *ngIf="!isLast"></mat-divider>
+						</mat-list-item>
+					</mat-list>
+				</mat-expansion-panel>
+			</mat-accordion>
+		</div>
+	</div>
+
 	<button (click)="signOut()" color="warn" mat-raised-button>
 		<mat-icon>logout</mat-icon>
 		Log Out
 	</button>
 </div>
+
+<ng-template #userTemplate let-user="user" let-userType="type">
+	<div fxFlex="grow" fxLayout="row" fxLayoutAlign="space-between center">
+		{{user.name}}
+		<mat-basic-chip *ngIf="userType == UserType.Owner" class="permissions-chip owner-colors" disableRipple>
+			Owner
+		</mat-basic-chip>
+		<mat-basic-chip *ngIf="userType == UserType.Editor" class="permissions-chip editor-colors">
+			Can Edit
+		</mat-basic-chip>
+		<mat-basic-chip *ngIf="userType == UserType.Viewer" class="permissions-chip viewer-colors">
+			Can View
+		</mat-basic-chip>
+	</div>
+</ng-template>

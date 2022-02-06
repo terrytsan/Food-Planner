@@ -59,3 +59,9 @@ export class AuthService {
 export interface FoodPlannerUser extends User {
 	selectedGroup: string;
 }
+
+export interface SimpleUser {
+	id: string;
+	name: string;
+	selectedGroup: string;
+}

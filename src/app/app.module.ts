@@ -47,6 +47,7 @@ import { MatRadioModule } from "@angular/material/radio";
 import { LoginComponent } from './login/login.component';
 import { ProfileComponent } from './profile/profile.component';
 import { SignupComponent } from './signup/signup.component';
+import { MatExpansionModule } from "@angular/material/expansion";
 
 @NgModule({
 	declarations: [
@@ -124,7 +125,8 @@ import { SignupComponent } from './signup/signup.component';
 		MatTableModule,
 		MatChipsModule,
 		MatAutocompleteModule,
-		MatRadioModule
+		MatRadioModule,
+		MatExpansionModule
 	],
 	providers: [
 		{provide: MAT_DATE_LOCALE, useValue: 'en-GB'}
