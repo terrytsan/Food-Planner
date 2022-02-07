@@ -24,6 +24,21 @@
 					<mat-expansion-panel-header>
 						<mat-panel-title>
 							{{group.name}}
+							<button (click)="$event.stopPropagation()" [matMenuTriggerFor]="menu" mat-icon-button>
+								<mat-icon>more_vert</mat-icon>
+							</button>
+							<mat-menu #menu="matMenu">
+								<button (click)="addMember(group)" *ngIf="group.owner.id == user.uid" mat-menu-item>
+									<mat-icon>person_add</mat-icon>
+									<span>Add Member</span>
+								</button>
+								<button (click)="removeMember(group, user.uid)"
+										*ngIf="mapUsersToIds(group.editors).includes(user.uid) || mapUsersToIds(group.viewers).includes(user.uid)"
+										mat-menu-item>
+									<mat-icon>cancel</mat-icon>
+									<span>Leave Group</span>
+								</button>
+							</mat-menu>
 						</mat-panel-title>
 						<mat-panel-description>
 							Members: {{1 + group.editors.length + group.viewers.length}}

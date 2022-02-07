@@ -1,0 +1,23 @@
+<h2 style="margin-bottom: 0;">Add Member</h2>
+<p>{{group.name}}</p>
+<form (ngSubmit)="onSubmit()" [formGroup]="member" fxLayout="column">
+	<mat-dialog-content fxFlex="grow" fxLayout="column" fxLayoutAlign="center center">
+		<mat-form-field>
+			<mat-label>User ID</mat-label>
+			<input autocomplete="off" formControlName="userId" matInput required>
+			<mat-error *ngIf="member.controls.userId.hasError('invalidUser')">User not found</mat-error>
+		</mat-form-field>
+		<mat-form-field>
+			<mat-label>Permission</mat-label>
+			<mat-select formControlName="permission">
+				<mat-option value="viewer">Viewer</mat-option>
+				<mat-option value="editor">Editor</mat-option>
+			</mat-select>
+		</mat-form-field>
+	</mat-dialog-content>
+
+	<div fxLayoutAlign="flex-end" mat-dialog-actions>
+		<button (click)="onCancelClick()" mat-button type="button">Cancel</button>
+		<button color="primary" mat-button mat-raised-button type="submit">Save</button>
+	</div>
+</form>

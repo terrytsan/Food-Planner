@@ -18,11 +18,13 @@ td {
 .align-headers .mat-expansion-panel-header-title,
 .align-headers .mat-expansion-panel-header-description {
 	flex: 1;
+	align-items: center;
 }
 
 .align-headers .mat-expansion-panel-header-description {
 	justify-content: center;
 	align-items: center;
+	margin-right: 0;
 }
 
 .align-headers .mat-form-field + .mat-form-field {

@@ -48,6 +48,8 @@ import { LoginComponent } from './login/login.component';
 import { ProfileComponent } from './profile/profile.component';
 import { SignupComponent } from './signup/signup.component';
 import { MatExpansionModule } from "@angular/material/expansion";
+import { GroupMemberEditDialogComponent } from './groups/group-member-edit-dialog/group-member-edit-dialog.component';
+import { MatSelectModule } from "@angular/material/select";
 
 @NgModule({
 	declarations: [
@@ -67,7 +69,8 @@ import { MatExpansionModule } from "@angular/material/expansion";
 		FoodDetailsComponent,
 		LoginComponent,
 		ProfileComponent,
-		SignupComponent
+		SignupComponent,
+		GroupMemberEditDialogComponent
 	],
 	imports: [
 		BrowserModule,
@@ -126,7 +129,8 @@ import { MatExpansionModule } from "@angular/material/expansion";
 		MatChipsModule,
 		MatAutocompleteModule,
 		MatRadioModule,
-		MatExpansionModule
+		MatExpansionModule,
+		MatSelectModule
 	],
 	providers: [
 		{provide: MAT_DATE_LOCALE, useValue: 'en-GB'}
