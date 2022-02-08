@@ -1,10 +1,11 @@
 import { Component, Inject, Injectable, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 import { AbstractControl, AsyncValidator, FormControl, FormGroup, ValidationErrors, Validators } from "@angular/forms";
-import { arrayUnion, doc, Firestore, getDoc, updateDoc } from "@angular/fire/firestore";
+import { doc, Firestore, getDoc } from "@angular/fire/firestore";
 import { from, Observable } from "rxjs";
 import { map } from "rxjs/operators";
 import { Group } from "../group";
+import { GroupService } from "../group.service";
 
 @Component({
 	selector: 'app-group-member-edit-dialog',
@@ -20,14 +21,22 @@ export class GroupMemberEditDialogComponent implements OnInit {
 		}),
 		permission: new FormControl('viewer', [Validators.required])
 	});
+	isAdding: boolean = true;
 
 
 	constructor(
-		@Inject(MAT_DIALOG_DATA) public group: Group,
+		@Inject(MAT_DIALOG_DATA) public data: GroupMemberEditDialogData,
 		private dialogRef: MatDialogRef<GroupMemberEditDialogComponent>,
 		private afs: Firestore,
-		private userExistsValidator: UserExistsValidator
+		private userExistsValidator: UserExistsValidator,
+		private groupService: GroupService
 	) {
+		if (data.userId) {
+			this.isAdding = false;
+			this.member.controls['userId'].disable();
+			this.member.controls['userId'].setValue(data.userId);
+			this.member.controls['permission'].setValue(data.currentPermission.toLowerCase());
+		}
 	}
 
 	ngOnInit(): void {
@@ -37,26 +46,20 @@ export class GroupMemberEditDialogComponent implements OnInit {
 		this.dialogRef.close();
 	}
 
-	async onSubmit() {
+	onSubmit() {
 		if (!this.member.valid) {
 			return;
 		}
-
-		const groupRef = doc(this.afs, "groups", this.group.id);
-
-		switch (this.member.value.permission) {
-			case "viewer":
-				await updateDoc(groupRef, {
-					viewers: arrayUnion(this.member.value.userId)
-				});
-				break;
-			case "editor":
-				await updateDoc(groupRef, {
-					editors: arrayUnion(this.member.value.userId)
-				});
-				break;
+		if (this.isAdding) {
+			this.groupService.addMember(this.data.group, this.member.value.userId, this.member.value.permission).then(() => this.dialogRef.close());
+		} else {
+			// Get raw value as form control will be disabled
+			this.groupService.changePermission(this.data.group, this.member.getRawValue().userId, this.member.value.permission).then(() => this.dialogRef.close());
 		}
-		this.dialogRef.close();
+	}
+
+	removeMember() {
+		this.groupService.removeMember(this.data.group, this.data.userId).then(() => this.dialogRef.close());
 	}
 }
 
@@ -76,4 +79,10 @@ export class UserExistsValidator implements AsyncValidator {
 			}
 		}));
 	}
+}
+
+export interface GroupMemberEditDialogData {
+	userId: string;
+	currentPermission: string;
+	group: Group;
 }

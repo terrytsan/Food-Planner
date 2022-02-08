@@ -46,15 +46,15 @@
 					</mat-expansion-panel-header>
 					<mat-list>
 						<mat-list-item>
-							<ng-template *ngTemplateOutlet="userTemplate; context: { type: UserType.Owner, user: group.owner }"></ng-template>
+							<ng-template *ngTemplateOutlet="userTemplate; context: { type: UserType.Owner, user: group.owner, group: group, canEdit: group.owner.id == user.uid }"></ng-template>
 							<mat-divider *ngIf="group.editors.length > 0 || group.viewers.length > 0"></mat-divider>
 						</mat-list-item>
 						<mat-list-item *ngFor="let editor of group.editors; let isLast = last;">
-							<ng-template *ngTemplateOutlet="userTemplate; context: { type: UserType.Editor, user: editor }"></ng-template>
+							<ng-template *ngTemplateOutlet="userTemplate; context: { type: UserType.Editor, user: editor, group: group, canEdit: group.owner.id == user.uid }"></ng-template>
 							<mat-divider *ngIf="!isLast || group.viewers.length > 0"></mat-divider>
 						</mat-list-item>
 						<mat-list-item *ngFor="let viewer of group.viewers; let isLast = last">
-							<ng-template *ngTemplateOutlet="userTemplate; context: { type: UserType.Viewer, user: viewer }"></ng-template>
+							<ng-template *ngTemplateOutlet="userTemplate; context: { type: UserType.Viewer, user: viewer, group: group, canEdit: group.owner.id == user.uid }"></ng-template>
 							<mat-divider *ngIf="!isLast"></mat-divider>
 						</mat-list-item>
 					</mat-list>
@@ -69,8 +69,12 @@
 	</button>
 </div>
 
-<ng-template #userTemplate let-user="user" let-userType="type">
-	<div fxFlex="grow" fxLayout="row" fxLayoutAlign="space-between center">
+<ng-template #userTemplate let-canEdit="canEdit" let-group="group" let-user="user" let-userType="type">
+	<div (click)="(userType != UserType.Owner && canEdit) && editMember(user.id, userType, group)"
+		 [class.userRow]="userType!=UserType.Owner && canEdit"
+		 fxFlex="grow"
+		 fxLayout="row"
+		 fxLayoutAlign="space-between center">
 		{{user.name}}
 		<mat-basic-chip *ngIf="userType == UserType.Owner" class="permissions-chip owner-colors" disableRipple>
 			Owner

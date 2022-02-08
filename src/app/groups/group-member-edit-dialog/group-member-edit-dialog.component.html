@@ -1,5 +1,5 @@
-<h2 style="margin-bottom: 0;">Add Member</h2>
-<p>{{group.name}}</p>
+<h2 style="margin-bottom: 0;">{{isAdding ? 'Add' : 'Edit'}} Member</h2>
+<p>{{data.group.name}}</p>
 <form (ngSubmit)="onSubmit()" [formGroup]="member" fxLayout="column">
 	<mat-dialog-content fxFlex="grow" fxLayout="column" fxLayoutAlign="center center">
 		<mat-form-field>
@@ -14,6 +14,13 @@
 				<mat-option value="editor">Editor</mat-option>
 			</mat-select>
 		</mat-form-field>
+		<button (click)="removeMember()"
+				*ngIf="!isAdding"
+				color="warn"
+				mat-flat-button
+				style="width: 100%;"
+				type="button">Remove from group
+		</button>
 	</mat-dialog-content>
 
 	<div fxLayoutAlign="flex-end" mat-dialog-actions>

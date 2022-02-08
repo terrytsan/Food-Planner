@@ -2,21 +2,15 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from "@angular/router";
 import { AuthService, FoodPlannerUser, SimpleUser } from "../auth.service";
 import { combineLatest, Observable, of, zip } from "rxjs";
-import {
-	arrayRemove,
-	collection,
-	collectionData,
-	CollectionReference,
-	doc,
-	Firestore,
-	query,
-	updateDoc,
-	where
-} from "@angular/fire/firestore";
+import { collection, collectionData, CollectionReference, Firestore, query, where } from "@angular/fire/firestore";
 import { Group } from "../groups/group";
 import { map, switchMap } from "rxjs/operators";
 import { MatDialog } from "@angular/material/dialog";
-import { GroupMemberEditDialogComponent } from "../groups/group-member-edit-dialog/group-member-edit-dialog.component";
+import {
+	GroupMemberEditDialogComponent,
+	GroupMemberEditDialogData
+} from "../groups/group-member-edit-dialog/group-member-edit-dialog.component";
+import { GroupService } from "../groups/group.service";
 
 @Component({
 	selector: 'app-profile',
@@ -33,7 +27,8 @@ export class ProfileComponent implements OnInit {
 		private authService: AuthService,
 		private router: Router,
 		private afs: Firestore,
-		private dialog: MatDialog
+		private dialog: MatDialog,
+		private groupService: GroupService
 	) {
 		this.user$ = authService.getExtendedUser();
 
@@ -117,19 +112,27 @@ export class ProfileComponent implements OnInit {
 	}
 
 	addMember(group: Group) {
+		this.openGroupMemberEditDialog("", 0, group);
+	}
+
+	async removeMember(group: Group, uid: string) {
+		await this.groupService.removeMember(group, uid);
+	}
+
+	editMember(uid: string, userType: UserType, group: Group) {
+		this.openGroupMemberEditDialog(uid, userType, group);
+	}
+
+	openGroupMemberEditDialog(uid: string, userType: UserType, group: Group) {
 		this.dialog.open(GroupMemberEditDialogComponent, {
 			width: '80%',
 			maxWidth: '600px',
 			autoFocus: false,
-			data: group
-		});
-	}
-
-	async removeMember(group: Group, uid: string) {
-		const groupRef = doc(this.afs, "groups", group.id);
-		await updateDoc(groupRef, {
-			viewers: arrayRemove(uid),
-			editors: arrayRemove(uid)
+			data: {
+				userId: uid,
+				currentPermission: UserType[userType],
+				group: group
+			} as GroupMemberEditDialogData
 		});
 	}
 }
