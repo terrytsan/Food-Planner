@@ -11,6 +11,10 @@ import {
 	GroupMemberEditDialogData
 } from "../groups/group-member-edit-dialog/group-member-edit-dialog.component";
 import { GroupService } from "../groups/group.service";
+import {
+	StringInputDialogComponent,
+	StringInputDialogData
+} from "../generic/string-input-dialog/string-input-dialog.component";
 
 @Component({
 	selector: 'app-profile',
@@ -133,6 +137,27 @@ export class ProfileComponent implements OnInit {
 				currentPermission: UserType[userType],
 				group: group
 			} as GroupMemberEditDialogData
+		});
+	}
+
+	editName(group: Group) {
+		let dialogData = new StringInputDialogData();
+		dialogData.title = "Edit Group Name";
+		dialogData.inputLabel = "Name";
+		dialogData.initialValue = group.name;
+		dialogData.confirmBtnText = "Save";
+
+		let dialogRef = this.dialog.open(StringInputDialogComponent, {
+			width: '80%',
+			maxWidth: '600px',
+			autoFocus: false,
+			data: dialogData
+		});
+
+		dialogRef.afterClosed().subscribe(newName => {
+			if (newName) {
+				this.groupService.updateName(group, newName);
+			}
 		});
 	}
 }

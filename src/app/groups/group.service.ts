@@ -36,4 +36,11 @@ export class GroupService {
 		await this.removeMember(group, userId);
 		await this.addMember(group, userId, newPermission);
 	}
+
+	async updateName(group: Group, newName: string) {
+		const groupRef = doc(this.afs, "groups", group.id);
+		return await updateDoc(groupRef, {
+			name: newName
+		});
+	}
 }

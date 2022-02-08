@@ -32,6 +32,10 @@
 									<mat-icon>person_add</mat-icon>
 									<span>Add Member</span>
 								</button>
+								<button (click)="editName(group)" *ngIf="group.owner.id == user.uid" mat-menu-item>
+									<mat-icon>edit</mat-icon>
+									<span>Edit Name</span>
+								</button>
 								<button (click)="removeMember(group, user.uid)"
 										*ngIf="mapUsersToIds(group.editors).includes(user.uid) || mapUsersToIds(group.viewers).includes(user.uid)"
 										mat-menu-item>

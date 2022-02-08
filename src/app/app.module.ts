@@ -50,6 +50,7 @@ import { SignupComponent } from './signup/signup.component';
 import { MatExpansionModule } from "@angular/material/expansion";
 import { GroupMemberEditDialogComponent } from './groups/group-member-edit-dialog/group-member-edit-dialog.component';
 import { MatSelectModule } from "@angular/material/select";
+import { StringInputDialogComponent } from './generic/string-input-dialog/string-input-dialog.component';
 
 @NgModule({
 	declarations: [
@@ -70,7 +71,8 @@ import { MatSelectModule } from "@angular/material/select";
 		LoginComponent,
 		ProfileComponent,
 		SignupComponent,
-		GroupMemberEditDialogComponent
+		GroupMemberEditDialogComponent,
+		StringInputDialogComponent
 	],
 	imports: [
 		BrowserModule,
