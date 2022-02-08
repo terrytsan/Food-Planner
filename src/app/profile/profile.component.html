@@ -42,6 +42,11 @@
 									<mat-icon>cancel</mat-icon>
 									<span>Leave Group</span>
 								</button>
+								<button (click)="deleteGroup(group, user.uid)" *ngIf="group.owner.id == user.uid"
+										mat-menu-item>
+									<mat-icon>clear</mat-icon>
+									<span>Delete Group</span>
+								</button>
 							</mat-menu>
 						</mat-panel-title>
 						<mat-panel-description>

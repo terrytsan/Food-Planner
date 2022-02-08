@@ -1,6 +1,17 @@
 import { Injectable } from '@angular/core';
 import { Group } from "./group";
-import { arrayRemove, arrayUnion, doc, Firestore, updateDoc } from "@angular/fire/firestore";
+import {
+	arrayRemove,
+	arrayUnion,
+	collection,
+	deleteDoc,
+	doc,
+	Firestore,
+	getDocs,
+	query,
+	updateDoc,
+	where
+} from "@angular/fire/firestore";
 
 @Injectable({
 	providedIn: 'root'
@@ -42,5 +53,23 @@ export class GroupService {
 		return await updateDoc(groupRef, {
 			name: newName
 		});
+	}
+
+	async deleteGroup(group: Group, userId: string): Promise<any> {
+		let userOwnedGroups: Group[] = [];
+		// Get groups owned by user
+		const q = query(collection(this.afs, 'groups'), where('owner', '==', userId));
+		const querySnapshot = await getDocs(q);
+		querySnapshot.forEach(g => {
+			userOwnedGroups.push(g.data() as Group);
+		});
+
+		if (group.viewers.length != 0 || group.editors.length != 0) {
+			return Promise.reject("Group still has members");
+		} else if (userOwnedGroups.length <= 1) {
+			return Promise.reject("Must own at least one group");
+		}
+		let groupRef = doc(this.afs, "groups", group.id);
+		return await deleteDoc(groupRef);
 	}
 }

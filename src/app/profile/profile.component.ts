@@ -15,6 +15,7 @@ import {
 	StringInputDialogComponent,
 	StringInputDialogData
 } from "../generic/string-input-dialog/string-input-dialog.component";
+import { MatSnackBar } from "@angular/material/snack-bar";
 
 @Component({
 	selector: 'app-profile',
@@ -32,7 +33,8 @@ export class ProfileComponent implements OnInit {
 		private router: Router,
 		private afs: Firestore,
 		private dialog: MatDialog,
-		private groupService: GroupService
+		private groupService: GroupService,
+		private _snackBar: MatSnackBar
 	) {
 		this.user$ = authService.getExtendedUser();
 
@@ -158,6 +160,15 @@ export class ProfileComponent implements OnInit {
 			if (newName) {
 				this.groupService.updateName(group, newName);
 			}
+		});
+	}
+
+	deleteGroup(group: Group, userId: string) {
+		this.groupService.deleteGroup(group, userId).then(() => {
+			this._snackBar.open("Successfully deleted", 'Dismiss', {duration: 3000});
+		}, err => {
+			this._snackBar.open(err, 'Dismiss', {duration: 3000});
+			console.error(err);
 		});
 	}
 }
