@@ -16,7 +16,10 @@
 	</table>
 	<mat-divider class="divider"></mat-divider>
 
-	<h2>Groups</h2>
+	<div fxLayout="row" fxLayoutAlign="space-between center" style="margin-bottom: 10px;">
+		<h2 style="margin: 0;">Groups</h2>
+		<button (click)="createGroup(user.uid)" color="primary" mat-raised-button>Create Group</button>
+	</div>
 	<div *ngIf="groups$ | async as groups">
 		<div *ngFor="let group of groups; trackBy: identify" class="group-details">
 			<mat-accordion class="align-headers">

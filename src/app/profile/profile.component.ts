@@ -171,6 +171,26 @@ export class ProfileComponent implements OnInit {
 			console.error(err);
 		});
 	}
+
+	createGroup(userId: string) {
+		let dialogData = new StringInputDialogData();
+		dialogData.title = "New Group";
+		dialogData.inputLabel = "Name";
+		dialogData.confirmBtnText = "Create";
+
+		let dialogRef = this.dialog.open(StringInputDialogComponent, {
+			width: '80%',
+			maxWidth: '600px',
+			autoFocus: false,
+			data: dialogData
+		});
+
+		dialogRef.afterClosed().subscribe(newGroupName => {
+			if (newGroupName) {
+				this.groupService.createGroup(newGroupName, userId);
+			}
+		});
+	}
 }
 
 export enum UserType {

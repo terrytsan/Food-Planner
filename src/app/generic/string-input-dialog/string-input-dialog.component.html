@@ -1,14 +1,16 @@
 <h2>{{data.title}}</h2>
-<mat-dialog-content fxLayoutAlign="center center">
-	<mat-form-field>
-		<mat-label>{{data.inputLabel}}</mat-label>
-		<input [(ngModel)]="data.initialValue" autocomplete="off" matInput required>
-	</mat-form-field>
-</mat-dialog-content>
-<div fxLayoutAlign="flex-end" mat-dialog-actions>
-	<button (click)="cancel()" mat-button>{{data.cancelBtnText}}</button>
-	<button [mat-dialog-close]="data.initialValue"
-			color="primary"
-			mat-button
-			mat-raised-button>{{data.confirmBtnText}}</button>
-</div>
+<form (ngSubmit)="close()">
+	<mat-dialog-content fxLayoutAlign="center center">
+		<mat-form-field>
+			<mat-label>{{data.inputLabel}}</mat-label>
+			<input [formControl]="stringInput" autocomplete="off" matInput name="stringInput" required>
+		</mat-form-field>
+	</mat-dialog-content>
+	<div fxLayoutAlign="flex-end" mat-dialog-actions>
+		<button (click)="cancel()" mat-button>{{data.cancelBtnText}}</button>
+		<button color="primary"
+				mat-button
+				mat-raised-button
+				type="submit">{{data.confirmBtnText}}</button>
+	</div>
+</form>

@@ -1,5 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
+import { FormControl, Validators } from "@angular/forms";
 
 @Component({
 	selector: 'app-string-input-dialog',
@@ -7,11 +8,13 @@ import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 	styleUrls: ['./string-input-dialog.component.css']
 })
 export class StringInputDialogComponent implements OnInit {
+	stringInput = new FormControl('', [Validators.required]);
 
 	constructor(
 		@Inject(MAT_DIALOG_DATA) public data: StringInputDialogData,
 		private dialogRef: MatDialogRef<StringInputDialogComponent>
 	) {
+		this.stringInput.setValue(data.initialValue);
 	}
 
 	ngOnInit(): void {
@@ -19,6 +22,12 @@ export class StringInputDialogComponent implements OnInit {
 
 	cancel() {
 		this.dialogRef.close();
+	}
+
+	close() {
+		if (!this.stringInput.invalid) {
+			this.dialogRef.close(this.stringInput.value);
+		}
 	}
 }
 

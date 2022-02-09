@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Group } from "./group";
 import {
+	addDoc,
 	arrayRemove,
 	arrayUnion,
 	collection,
@@ -71,5 +72,14 @@ export class GroupService {
 		}
 		let groupRef = doc(this.afs, "groups", group.id);
 		return await deleteDoc(groupRef);
+	}
+
+	async createGroup(name: string, ownerId: string): Promise<any> {
+		return await addDoc(collection(this.afs, 'groups'), {
+			name: name,
+			owner: ownerId,
+			editors: [],
+			viewers: []
+		});
 	}
 }
