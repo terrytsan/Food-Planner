@@ -11,6 +11,7 @@ import { signOut } from 'firebase/auth';
 import { concatMap } from "rxjs/operators";
 import { doc, Firestore, getDoc } from "@angular/fire/firestore";
 import firebase from "firebase/compat";
+import { Group } from "./groups/group";
 import User = firebase.User;
 
 @Injectable({
@@ -28,10 +29,17 @@ export class AuthService {
 			}
 
 			let additionalSettings = (await getDoc(doc(this.afs, "users", user.uid)));
+			let selectedGroupId = additionalSettings.data()?.selectedGroup;
+
+			let selectedGroup: Group = {} as Group;
+			if (selectedGroupId) {
+				selectedGroup = (await getDoc(doc(this.afs, "groups", selectedGroupId))).data() as Group;
+				selectedGroup.id = selectedGroupId;
+			}
 
 			return {
 				...user,
-				selectedGroup: additionalSettings.data()?.selectedGroup
+				selectedGroup: selectedGroup
 			} as FoodPlannerUser;
 		}));
 	}
@@ -57,7 +65,7 @@ export class AuthService {
 }
 
 export interface FoodPlannerUser extends User {
-	selectedGroup: string;
+	selectedGroup: Group;
 }
 
 export interface SimpleUser {
