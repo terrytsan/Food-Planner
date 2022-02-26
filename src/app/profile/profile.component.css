@@ -55,4 +55,7 @@ td {
 	color: white;
 }
 
+.selected-group {
+	background-color: #90ee9099;
+}
 

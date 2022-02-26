@@ -23,7 +23,7 @@
 	<div *ngIf="groups$ | async as groups">
 		<div *ngFor="let group of groups; trackBy: identify" class="group-details">
 			<mat-accordion class="align-headers">
-				<mat-expansion-panel>
+				<mat-expansion-panel [class.selected-group]="group.id == user.selectedGroup.id">
 					<mat-expansion-panel-header>
 						<mat-panel-title>
 							{{group.name}}
@@ -31,6 +31,12 @@
 								<mat-icon>more_vert</mat-icon>
 							</button>
 							<mat-menu #menu="matMenu">
+								<button (click)="selectGroup(user.uid, group.id)"
+										*ngIf="group.id != user.selectedGroup.id"
+										mat-menu-item>
+									<mat-icon>visibility</mat-icon>
+									<span>Set as Selected</span>
+								</button>
 								<button (click)="addMember(group)" *ngIf="group.owner.id == user.uid" mat-menu-item>
 									<mat-icon>person_add</mat-icon>
 									<span>Add Member</span>

@@ -4,14 +4,14 @@ import {
 	createUserWithEmailAndPassword,
 	getAuth,
 	signInWithEmailAndPassword,
-	updateProfile,
-	user
+	updateProfile
 } from "@angular/fire/auth";
 import { signOut } from 'firebase/auth';
-import { concatMap } from "rxjs/operators";
-import { doc, Firestore, getDoc } from "@angular/fire/firestore";
+import { switchMap } from "rxjs/operators";
+import { doc, docData, DocumentReference, Firestore } from "@angular/fire/firestore";
 import firebase from "firebase/compat";
 import { Group } from "./groups/group";
+import { Observable, of, zip } from "rxjs";
 import User = firebase.User;
 
 @Injectable({
@@ -22,25 +22,24 @@ export class AuthService {
 	constructor(private auth: Auth, private afs: Firestore) {
 	}
 
-	getExtendedUser() {
-		return user(this.auth).pipe(concatMap(async user => {
-			if (user == null) {
-				return user;
-			}
+	getExtendedUser(): Observable<FoodPlannerUser | null> {
+		if (this.auth.currentUser == null) {
+			return of(null);
+		}
 
-			let additionalSettings = (await getDoc(doc(this.afs, "users", user.uid)));
-			let selectedGroupId = additionalSettings.data()?.selectedGroup;
+		let user$: Observable<SimpleUser> = docData(doc(this.afs, 'users', this.auth.currentUser.uid) as DocumentReference<SimpleUser>);
 
-			let selectedGroup: Group = {} as Group;
-			if (selectedGroupId) {
-				selectedGroup = (await getDoc(doc(this.afs, "groups", selectedGroupId))).data() as Group;
-				selectedGroup.id = selectedGroupId;
-			}
+		return user$.pipe(switchMap(user => {
+			let selectedGroup$ = docData<Group>(doc(this.afs, 'groups', user.selectedGroup) as DocumentReference<Group>);
+			return zip(of(user), selectedGroup$);
+		}), switchMap(([simpleUser, selectedGroup]) => {
+			let currentUser = this.auth.currentUser;
+			selectedGroup.id = simpleUser.selectedGroup;		// Using docData doesn't return id field
 
-			return {
-				...user,
+			return of({
+				...currentUser,
 				selectedGroup: selectedGroup
-			} as FoodPlannerUser;
+			} as FoodPlannerUser);
 		}));
 	}
 

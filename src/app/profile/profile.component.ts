@@ -4,7 +4,7 @@ import { AuthService, FoodPlannerUser, SimpleUser } from "../auth.service";
 import { combineLatest, Observable, of, zip } from "rxjs";
 import { collection, collectionData, CollectionReference, Firestore, query, where } from "@angular/fire/firestore";
 import { Group } from "../groups/group";
-import { map, switchMap } from "rxjs/operators";
+import { map, skipWhile, switchMap } from "rxjs/operators";
 import { MatDialog } from "@angular/material/dialog";
 import {
 	GroupMemberEditDialogComponent,
@@ -69,10 +69,12 @@ export class ProfileComponent implements OnInit {
 				// Get all users belonging to those groups
 				switchMap(groups => {
 					let userIds = groups.flatMap(g => [g.owner, ...g.viewers, ...g.editors]);
-					let users$ = collectionData<SimpleUser>(query<SimpleUser>(collection(afs, 'users') as CollectionReference<SimpleUser>, where("__name__", "in", userIds)), {idField: 'id'});
+					let uniqueUserIds = [...new Set(userIds)];
+					// Query currently limited to 10 users
+					let users$ = collectionData<SimpleUser>(query<SimpleUser>(collection(afs, 'users') as CollectionReference<SimpleUser>, where("__name__", "in", uniqueUserIds)), {idField: 'id'});
 
 					return zip(
-						users$,
+						users$.pipe(skipWhile(users => users.length != uniqueUserIds.length)),		// 1st emit is from cache (user collection queried in auth.service)
 						of(groups)
 					);
 				}),
@@ -189,6 +191,12 @@ export class ProfileComponent implements OnInit {
 			if (newGroupName) {
 				this.groupService.createGroup(newGroupName, userId);
 			}
+		});
+	}
+
+	selectGroup(uid: string, groupId: string) {
+		this.groupService.setUsersSelectedGroup(uid, groupId).catch(e => {
+			console.error(e);
 		});
 	}
 }

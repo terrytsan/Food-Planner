@@ -82,4 +82,11 @@ export class GroupService {
 			viewers: []
 		});
 	}
+
+	async setUsersSelectedGroup(uid: string, groupId: string): Promise<any> {
+		const userRef = doc(this.afs, 'users', uid);
+		return await updateDoc(userRef, {
+			selectedGroup: groupId
+		});
+	}
 }
