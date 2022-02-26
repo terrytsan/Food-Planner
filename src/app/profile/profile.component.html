@@ -2,6 +2,10 @@
 <div *ngIf="user$ | async as user">
 	<table class="basic-info-table" style="width: 100%;">
 		<tr>
+			<td>ID</td>
+			<td style="font-size: 12px;">{{user.uid}}</td>
+		</tr>
+		<tr>
 			<td>Name</td>
 			<td>{{user.displayName}}</td>
 		</tr>
