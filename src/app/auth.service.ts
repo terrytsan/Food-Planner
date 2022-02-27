@@ -4,7 +4,8 @@ import {
 	createUserWithEmailAndPassword,
 	getAuth,
 	signInWithEmailAndPassword,
-	updateProfile
+	updateProfile,
+	user
 } from "@angular/fire/auth";
 import { signOut } from 'firebase/auth';
 import { switchMap } from "rxjs/operators";
@@ -23,24 +24,27 @@ export class AuthService {
 	}
 
 	getExtendedUser(): Observable<FoodPlannerUser | null> {
-		if (this.auth.currentUser == null) {
-			return of(null);
-		}
+		return user(this.auth).pipe(
+			switchMap(user => {
+				if (user == null) {
+					return of(null);
+				} else {
+					let user$: Observable<SimpleUser> = docData(doc(this.afs, 'users', user.uid) as DocumentReference<SimpleUser>);
+					return user$.pipe(
+						switchMap(simpleUser => {
+							let selectedGroup$ = docData<Group>(doc(this.afs, 'groups', simpleUser.selectedGroup) as DocumentReference<Group>);
+							return zip(of(simpleUser), selectedGroup$);
+						}),
+						switchMap(([simpleUser, selectedGroup]) => {
+							selectedGroup.id = simpleUser.selectedGroup;		// Using docData doesn't return id field
 
-		let user$: Observable<SimpleUser> = docData(doc(this.afs, 'users', this.auth.currentUser.uid) as DocumentReference<SimpleUser>);
-
-		return user$.pipe(switchMap(user => {
-			let selectedGroup$ = docData<Group>(doc(this.afs, 'groups', user.selectedGroup) as DocumentReference<Group>);
-			return zip(of(user), selectedGroup$);
-		}), switchMap(([simpleUser, selectedGroup]) => {
-			let currentUser = this.auth.currentUser;
-			selectedGroup.id = simpleUser.selectedGroup;		// Using docData doesn't return id field
-
-			return of({
-				...currentUser,
-				selectedGroup: selectedGroup
-			} as FoodPlannerUser);
-		}));
+							return of({
+								...user,
+								selectedGroup: selectedGroup
+							} as FoodPlannerUser);
+						}));
+				}
+			}));
 	}
 
 	signInWithEmailAndPassword(email: string, password: string) {
