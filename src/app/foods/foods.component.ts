@@ -1,14 +1,23 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { collection, collectionData, CollectionReference, Firestore, orderBy, query } from "@angular/fire/firestore";
-import { BehaviorSubject, combineLatest, Observable, Subject } from "rxjs";
+import {
+	collection,
+	collectionData,
+	CollectionReference,
+	Firestore,
+	orderBy,
+	query,
+	where
+} from "@angular/fire/firestore";
+import { BehaviorSubject, combineLatest, Observable, of, Subject } from "rxjs";
 import { Food } from "../food-card/food";
 import { MatDialog } from "@angular/material/dialog";
 import { FoodEditDialogComponent } from "../food-edit-dialog/food-edit-dialog.component";
-import { first, map, startWith, takeUntil } from "rxjs/operators";
+import { first, map, startWith, switchMap, takeUntil } from "rxjs/operators";
 import { COMMA, ENTER } from "@angular/cdk/keycodes";
 import { MatChipInputEvent } from "@angular/material/chips";
 import { FormControl } from "@angular/forms";
 import { MatAutocompleteSelectedEvent } from "@angular/material/autocomplete";
+import { AuthService, FoodPlannerUser } from "../auth.service";
 
 @Component({
 	selector: 'app-foods',
@@ -17,6 +26,7 @@ import { MatAutocompleteSelectedEvent } from "@angular/material/autocomplete";
 })
 export class FoodsComponent implements OnInit {
 
+	user$: Observable<FoodPlannerUser | null>;
 	foods$: Observable<Food[]>;
 	filteredFoods$: Observable<Food[]>;
 
@@ -43,13 +53,24 @@ export class FoodsComponent implements OnInit {
 
 	ngUnsubscribe = new Subject();					// Used for unsubscribing from observables
 
-	constructor(firestore: Firestore, public dialog: MatDialog) {
-		this.foods$ = collectionData<Food>(
-			query<Food>(
-				collection(firestore, 'foods') as CollectionReference<Food>,
-				orderBy('name')
-			), {idField: 'id'}
-		);
+	constructor(firestore: Firestore, public dialog: MatDialog, authService: AuthService) {
+		this.user$ = authService.getExtendedUser().pipe(takeUntil(this.ngUnsubscribe));
+
+		this.foods$ = this.user$.pipe(switchMap(user => {
+				if (user != null) {
+					if (user.selectedGroup) {
+						return collectionData<Food>(
+							query<Food>(
+								collection(firestore, 'foods') as CollectionReference<Food>,
+								where('group', '==', user.selectedGroup.id),
+								orderBy('name')
+							), {idField: 'id'}
+						);
+					}
+				}
+				return of([] as Food[]);
+			}),
+			takeUntil(this.ngUnsubscribe));
 
 		// Get list of all possible labels
 		this.allLabels$ = this.foods$.pipe(map((foods: Food[]) => {

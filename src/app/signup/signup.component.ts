@@ -32,7 +32,8 @@ export class SignupComponent implements OnInit {
 
 			await setDoc(doc(this.afs, 'users', userCredentials.user.uid), {
 				name: this.displayName,
-				selectedGroup: groupRef.id
+				selectedGroup: groupRef.id,
+				canEdit: true
 			});
 
 			this.router.navigate(['']);

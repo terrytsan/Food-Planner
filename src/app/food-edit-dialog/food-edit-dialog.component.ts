@@ -5,6 +5,8 @@ import { Food } from "../food-card/food";
 import { FormBuilder, Validators } from "@angular/forms";
 import { ImageService } from "../../image.service";
 import { addDoc, collection, doc, Firestore, updateDoc } from "@angular/fire/firestore";
+import { AuthService } from "../auth.service";
+import { take } from "rxjs/operators";
 
 @Component({
 	selector: 'app-food-edit-dialog',
@@ -26,7 +28,8 @@ export class FoodEditDialogComponent implements OnInit {
 		description: "",
 		image: "",
 		imagePath: "",
-		labels: []
+		labels: [],
+		group: ""
 	};
 	foodImagesFolder: string = 'foodImages/';
 
@@ -36,17 +39,24 @@ export class FoodEditDialogComponent implements OnInit {
 		public dialogRef: MatDialogRef<FoodEditDialogComponent>,
 		private storage: Storage,
 		private afs: Firestore,
-		private imageService: ImageService
+		private imageService: ImageService,
+		private authService: AuthService
 	) {
 	}
 
 	ngOnInit(): void {
+		this.authService.getSimpleUser().pipe(take(1)).subscribe(user => {
+			if (user != null) {
+				this.food.group = user.selectedGroup;
+			}
+		});
 		// Presence of foodData means this is edit mode
 		if (this.foodData) {
 			this.food = this.foodData;
 			this.foodForm.setValue({
 				name: this.foodData.name,
-				description: this.foodData.description
+				description: this.foodData.description,
+				group: this.foodData.group
 			});
 
 			let fullFileName = this.foodData.imagePath.replace(`${this.foodImagesFolder}`, "");
@@ -124,7 +134,8 @@ export class FoodEditDialogComponent implements OnInit {
 				name: this.foodForm.value.name,
 				description: this.foodForm.value.description,
 				image: this.food.image,
-				imagePath: this.food.imagePath
+				imagePath: this.food.imagePath,
+				group: this.food.group
 			}).then(() => this.dialogRef.close());
 		}
 	}

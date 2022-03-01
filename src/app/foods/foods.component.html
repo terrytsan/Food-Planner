@@ -36,11 +36,20 @@
 </div>
 <div fxLayout="row wrap" fxLayoutGap="10px grid">
 	<div *ngFor="let food of filteredFoods$ | async" fxFlex="25%" fxFlex.sm="33%" fxFlex.xs="50%">
-		<app-food-card [food]="food"></app-food-card>
+		<div *ngIf="{user: user$ | async} as userWrapper">
+			<app-food-card [canEdit]="(userWrapper.user) ? userWrapper.user.canEdit : false"
+						   [food]="food"></app-food-card>
+		</div>
 	</div>
 </div>
 <div *ngIf="(filteredFoods$ | async)?.length as filteredFoodsLength"
 	 class="food-summary">{{filteredFoodsLength}} {{filteredFoodsLength > 1 ? 'Foods' : 'Food'}}</div>
-<button (click)="openAddFoodDialog()" class="btn-add-foods" mat-fab>
-	<mat-icon>add</mat-icon>
-</button>
+<div *ngIf="{user: user$ | async} as userWrapper">
+	<button (click)="openAddFoodDialog()"
+			*ngIf="(userWrapper.user) ? userWrapper.user.canEdit : false"
+			class="btn-add-foods"
+			mat-fab>
+		<mat-icon>add</mat-icon>
+	</button>
+</div>
+

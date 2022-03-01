@@ -16,6 +16,7 @@ export class FoodCardComponent implements OnInit {
 
 	@Input() food: Food | null = null;
 	@Input() foodPlan: FoodPlan | null = null;
+	@Input() canEdit: boolean = false;
 	defaultImage: string = GlobalVariable.PLACEHOLDER_IMAGE_URL;
 
 	constructor(private _snackBar: MatSnackBar, public dialog: MatDialog, public afs: Firestore) {

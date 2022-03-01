@@ -8,11 +8,13 @@ import {
 	deleteDoc,
 	doc,
 	Firestore,
+	getDoc,
 	getDocs,
 	query,
 	updateDoc,
 	where
 } from "@angular/fire/firestore";
+import { UserType } from "../profile/profile.component";
 
 @Injectable({
 	providedIn: 'root'
@@ -84,9 +86,27 @@ export class GroupService {
 	}
 
 	async setUsersSelectedGroup(uid: string, groupId: string): Promise<any> {
+		const userType = await this.getUserType(uid, groupId);
+		let canEdit: boolean = userType === UserType.Owner || userType === UserType.Editor;
+
 		const userRef = doc(this.afs, 'users', uid);
 		return await updateDoc(userRef, {
-			selectedGroup: groupId
+			selectedGroup: groupId,
+			canEdit: canEdit
 		});
+	}
+
+	async getUserType(uid: string, groupId: string): Promise<UserType> {
+		const groupRef = doc(this.afs, 'groups', groupId);
+		const group = (await getDoc(groupRef)).data();
+
+		if (group!.owner == uid) {
+			return UserType.Owner;
+		} else if (group!.editors.includes(uid)) {
+			return UserType.Editor;
+		} else if (group!.viewers.includes(uid)) {
+			return UserType.Viewer;
+		}
+		return UserType.Viewer;
 	}
 }

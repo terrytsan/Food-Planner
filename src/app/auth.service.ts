@@ -23,26 +23,37 @@ export class AuthService {
 	constructor(private auth: Auth, private afs: Firestore) {
 	}
 
-	getExtendedUser(): Observable<FoodPlannerUser | null> {
+	getSimpleUser(): Observable<SimpleUser | null> {
 		return user(this.auth).pipe(
 			switchMap(user => {
 				if (user == null) {
 					return of(null);
 				} else {
-					let user$: Observable<SimpleUser> = docData(doc(this.afs, 'users', user.uid) as DocumentReference<SimpleUser>);
-					return user$.pipe(
-						switchMap(simpleUser => {
-							let selectedGroup$ = docData<Group>(doc(this.afs, 'groups', simpleUser.selectedGroup) as DocumentReference<Group>);
-							return zip(of(simpleUser), selectedGroup$);
-						}),
+					return docData(doc(this.afs, 'users', user.uid) as DocumentReference<SimpleUser>);
+				}
+			})
+		);
+	}
+
+	getExtendedUser(): Observable<FoodPlannerUser | null> {
+		return this.getSimpleUser().pipe(
+			switchMap(simpleUser => {
+				if (simpleUser == null) {
+					return of(null);
+				} else {
+					let selectedGroup$ = docData<Group>(doc(this.afs, 'groups', simpleUser.selectedGroup) as DocumentReference<Group>);
+					return zip(of(simpleUser), selectedGroup$).pipe(
 						switchMap(([simpleUser, selectedGroup]) => {
+							let currentUser = this.auth.currentUser;
 							selectedGroup.id = simpleUser.selectedGroup;		// Using docData doesn't return id field
 
 							return of({
-								...user,
-								selectedGroup: selectedGroup
+								...currentUser,
+								selectedGroup: selectedGroup,
+								canEdit: simpleUser.canEdit
 							} as FoodPlannerUser);
-						}));
+						})
+					);
 				}
 			}));
 	}
@@ -69,10 +80,12 @@ export class AuthService {
 
 export interface FoodPlannerUser extends User {
 	selectedGroup: Group;
+	canEdit: boolean;
 }
 
 export interface SimpleUser {
 	id: string;
 	name: string;
 	selectedGroup: string;
+	canEdit: boolean;
 }
