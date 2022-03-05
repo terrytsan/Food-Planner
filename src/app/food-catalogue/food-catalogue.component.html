@@ -1,10 +1,14 @@
 <h1>Catalogue</h1>
-<div fxLayout="row wrap" fxLayoutGap="10px grid">
+<div *ngIf="(user$ | async) as user; else noCatalogueItems" fxLayout="row wrap" fxLayoutGap="10px grid">
 	<div *ngFor="let catalogueItem of catalogueItems$ | async" fxFlex="25%" fxFlex.sm="33%" fxFlex.xs="50%">
 		<app-catalogue-item [catalogueItem]="catalogueItem"
-							[lowestPrice]="priceHistories.get(catalogueItem.id)"></app-catalogue-item>
+							[lowestPrice]="priceHistories.get(catalogueItem.id)"
+							[user]="user"></app-catalogue-item>
 	</div>
 </div>
 <button class="btn-add-catalogueItem" mat-fab routerLink="/catalogueItem/new">
 	<mat-icon>add</mat-icon>
 </button>
+<ng-template #noCatalogueItems>
+	<h1 style="text-align: center;">No items to show.</h1>
+</ng-template>

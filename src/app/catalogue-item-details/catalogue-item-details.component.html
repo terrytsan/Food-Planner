@@ -37,13 +37,13 @@
 		<mat-divider style="margin-bottom: 10px;"></mat-divider>
 		<div fxLayout="row" fxLayoutAlign="space-between center">
 			<h2 style="margin: 0;">Price History</h2>
-			<button (click)="toggleNewPriceHistoryForm()" mat-button>
+			<button *ngIf="user && user.canEdit" (click)="toggleNewPriceHistoryForm()" mat-button>
 				<mat-icon *ngIf="!isAddingPriceHistory" style="color: green">add_circle</mat-icon>
 				<mat-icon *ngIf="isAddingPriceHistory" style="color: red">cancel</mat-icon>
 			</button>
 		</div>
 
-		<table mat-table [dataSource]="priceHistory$" *ngIf="(priceHistory$ | async)?.length">
+		<table mat-table [dataSource]="priceHistory$" *ngIf="(priceHistory$ | async)?.length; else noPriceHistory">
 			<ng-container matColumnDef="date">
 				<th mat-header-cell *matHeaderCellDef>Date</th>
 				<td mat-cell *matCellDef="let element">
@@ -64,7 +64,7 @@
 				<th mat-header-cell *matHeaderCellDef>Store</th>
 				<td mat-cell *matCellDef="let element">{{element.store}}</td>
 			</ng-container>
-			<ng-container matColumnDef="actions">
+			<ng-container *ngIf="user && user.canEdit" matColumnDef="actions">
 				<th mat-header-cell *matHeaderCellDef></th>
 				<td mat-cell *matCellDef="let element">
 					<mat-icon (click)="openEditPriceHistoryDialog(element)">edit</mat-icon>
@@ -74,6 +74,9 @@
 			<tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
 			<tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
 		</table>
+		<ng-template #noPriceHistory>
+			<h3 style="text-align: center;">No Price History yet</h3>
+		</ng-template>
 
 		<div *ngIf="isAddingPriceHistory" fxLayout="row" fxLayoutAlign="space-around center">
 			<mat-form-field style="width: 100px;">
@@ -96,7 +99,7 @@
 	</div>
 
 	<!-- Thumbs buttons -->
-	<div *ngIf="!isEditing" fxLayout="row" fxLayoutAlign="space-evenly">
+	<div *ngIf="!isEditing && (user && user.canEdit)" fxLayout="row" fxLayoutAlign="space-evenly">
 		<button mat-button>
 			<mat-icon (click)="toggleLikeCatalogueItem()"
 					  [ngClass]="{'liked-colour': catalogueItem.status === 'liked'}">
@@ -121,7 +124,7 @@
 	</button>
 
 	<!-- Editing fab -->
-	<button (click)="toggleEditing()" class="btn-toggle-edit" mat-fab>
+	<button *ngIf="user && user.canEdit" (click)="toggleEditing()" class="btn-toggle-edit" mat-fab>
 		<mat-icon *ngIf="!isEditing">edit</mat-icon>
 		<mat-icon *ngIf="isEditing">done</mat-icon>
 	</button>

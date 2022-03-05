@@ -8,4 +8,5 @@ export interface CatalogueItem {
 	imagePath: string;
 	dateAdded: Timestamp;
 	status: string;
+	group: string;
 }

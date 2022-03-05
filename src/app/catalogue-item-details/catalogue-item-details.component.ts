@@ -23,6 +23,8 @@ import { PriceHistory } from "../catalogue-item/priceHistory";
 import { Observable } from "rxjs";
 import { PriceHistoryEditDialogComponent } from "../price-history-edit-dialog/price-history-edit-dialog.component";
 import { MatSnackBar } from "@angular/material/snack-bar";
+import { AuthService, SimpleUser } from "../auth.service";
+import { take } from "rxjs/operators";
 
 @Component({
 	selector: 'app-catalogue-item-details',
@@ -30,6 +32,8 @@ import { MatSnackBar } from "@angular/material/snack-bar";
 	styleUrls: ['./catalogue-item-details.component.css']
 })
 export class CatalogueItemDetailsComponent implements OnInit {
+
+	user: SimpleUser | null;
 
 	// Catalogue Item
 	_id: string = '';
@@ -44,10 +48,11 @@ export class CatalogueItemDetailsComponent implements OnInit {
 	newPriceHistory: PriceHistory = {
 		id: '',
 		price: undefined,
-		store: ''
+		store: '',
+		group: ''
 	};
 	newPriceHistoryDate: Date = new Date();
-	displayedColumns: string[] = ["date", "price", "store", "actions"];
+	displayedColumns: string[] = ["date", "price", "store"];
 
 	get id(): string {
 		return this._id;
@@ -68,8 +73,16 @@ export class CatalogueItemDetailsComponent implements OnInit {
 		private afs: Firestore,
 		private router: Router,
 		private dialog: MatDialog,
-		private _snackBar: MatSnackBar
+		private _snackBar: MatSnackBar,
+		private authService: AuthService
 	) {
+		authService.getSimpleUser().pipe(take(1)).subscribe(user => {
+			if (user && user.canEdit) {
+				this.displayedColumns.push('actions');
+			}
+			return this.user = user;
+		});
+
 		this.id = this.route.snapshot.params['id'];
 
 		if (this.id === "new") {
@@ -161,12 +174,16 @@ export class CatalogueItemDetailsComponent implements OnInit {
 	}
 
 	async addCatalogueItem() {
+		if (this.user == null) {
+			return;
+		}
 		let newDocRef = await addDoc(collection(this.afs, 'catalogueItems'), {
 			name: this.catalogueItem.name,
 			description: this.catalogueItem.description,
 			imageUrl: this.catalogueItem.imageUrl,
 			imagePath: this.catalogueItem.imagePath,
-			dateAdded: Timestamp.fromDate(new Date())
+			dateAdded: Timestamp.fromDate(new Date()),
+			group: this.user.selectedGroup
 		});
 		this.id = newDocRef.id;
 	}
@@ -185,10 +202,14 @@ export class CatalogueItemDetailsComponent implements OnInit {
 	}
 
 	async createPriceHistory() {
+		if (this.user == null) {
+			return;
+		}
 		await addDoc(collection(this.afs, 'catalogueItems', this.id, 'priceHistory'), {
 			date: Timestamp.fromDate(this.newPriceHistoryDate),
 			price: this.newPriceHistory.price,
-			store: this.newPriceHistory.store
+			store: this.newPriceHistory.store,
+			group: this.user.selectedGroup
 		});
 		this.isAddingPriceHistory = false;
 		this.resetNewPriceHistoryForm();
@@ -213,7 +234,8 @@ export class CatalogueItemDetailsComponent implements OnInit {
 			await addDoc(collection(this.afs, 'catalogueItems', this.id, 'priceHistory'), {
 				date: history.date,
 				price: history.price,
-				store: history.store
+				store: history.store,
+				group: history.group
 			});
 		});
 	}

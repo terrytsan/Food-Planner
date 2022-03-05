@@ -5,4 +5,5 @@ export interface PriceHistory {
 	date?: Timestamp;
 	price?: number;
 	store?: string;
+	group: string;
 }
