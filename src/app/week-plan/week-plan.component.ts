@@ -9,10 +9,11 @@ import {
 	where,
 	writeBatch
 } from "@angular/fire/firestore";
-import { Observable } from "rxjs";
+import { BehaviorSubject, combineLatest, Observable, of } from "rxjs";
 import { FoodPlan } from "../food-plan-detail/foodPlan";
 import { Timestamp } from "firebase/firestore";
-import { take } from "rxjs/operators";
+import { switchMap, take } from "rxjs/operators";
+import { AuthService, SimpleUser } from "../auth.service";
 
 @Component({
 	selector: 'app-week-plan',
@@ -21,20 +22,32 @@ import { take } from "rxjs/operators";
 })
 export class WeekPlanComponent implements OnInit {
 
+	user$: Observable<SimpleUser | null> = this.authService.getSimpleUser();
 	foodPlans$: Observable<FoodPlan[]>;
 	selectedWeek: Week;
+	selectedWeek$: BehaviorSubject<Week>;
 	startOfWeek = 'Sunday';
 	earliestStartingWeek = Timestamp.fromDate(new Date("25 October 2021"));		// Prevent weeks earlier than this date from being generated
 
-	constructor(public afs: Firestore) {
+	constructor(public afs: Firestore, private authService: AuthService) {
 		this.selectedWeek = this.getCurrentWeek();
-		this.foodPlans$ = collectionData<FoodPlan>(
-			query<FoodPlan>(
-				collection(afs, 'foodPlans') as CollectionReference<FoodPlan>,
-				where('date', '>=', this.selectedWeek.startDate),
-				where('date', '<=', this.selectedWeek.endDate)
-			), {idField: 'id'}
-		);
+		this.selectedWeek$ = new BehaviorSubject<Week>(this.selectedWeek);
+		this.foodPlans$ = combineLatest([
+			this.selectedWeek$,
+			this.user$
+		]).pipe(switchMap(([selectedWeek, user]) => {
+			if (user == null) {
+				return of([] as FoodPlan[]);
+			}
+			return collectionData<FoodPlan>(
+				query<FoodPlan>(
+					collection(afs, 'foodPlans') as CollectionReference<FoodPlan>,
+					where('date', '>=', selectedWeek.startDate),
+					where('date', '<=', selectedWeek.endDate),
+					where('group', '==', user.selectedGroup)
+				), {idField: 'id'}
+			);
+		}));
 
 		this.addMissingDays();
 	}
@@ -85,21 +98,17 @@ export class WeekPlanComponent implements OnInit {
 
 		this.selectedWeek.startDate = Timestamp.fromDate(newStartDate);
 		this.selectedWeek.endDate = Timestamp.fromDate(newEndDate);
-
-		this.foodPlans$ = collectionData<FoodPlan>(
-			query<FoodPlan>(
-				collection(this.afs, 'foodPlans') as CollectionReference<FoodPlan>,
-				where('date', '>=', this.selectedWeek.startDate),
-				where('date', '<=', this.selectedWeek.endDate)
-			), {idField: 'id'}
-		);
+		this.selectedWeek$.next(this.selectedWeek);
 		this.addMissingDays();
 	}
 
 	private addMissingDays() {
 		// Only need this to run once (user can't add/remove foodPlans)
-		this.foodPlans$.pipe(take(1)).subscribe(async foodPlans => {
-			if (foodPlans.length >= 7) {
+		combineLatest([
+			this.authService.getSimpleUser().pipe(take(1)),
+			this.foodPlans$.pipe(take(1))
+		]).subscribe(async ([user, foodPlans]) => {
+			if (user == null || !user.canEdit || foodPlans.length >= 7) {
 				return;
 			}
 
@@ -118,7 +127,7 @@ export class WeekPlanComponent implements OnInit {
 			const batch = writeBatch(this.afs);
 			datesToAdd.forEach(date => {
 				const newPlanRef = doc(collection(this.afs, 'foodPlans'));
-				batch.set(newPlanRef, {date: date});
+				batch.set(newPlanRef, {date: date, group: user.selectedGroup});
 			});
 			await batch.commit();
 		});

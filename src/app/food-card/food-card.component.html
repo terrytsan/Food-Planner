@@ -22,7 +22,7 @@
 <mat-card *ngIf="food && foodPlan" class="simple-food-card">
 	<img alt="Photo of {{food.name}}" class="simple-food-image" src="{{food.image || defaultImage}}">
 	<div class="food-card-title-big">{{food.name}}</div>
-	<button [matMenuTriggerFor]="menu" class="simple-food-card-menu-btn" mat-icon-button>
+	<button *ngIf="canEdit" [matMenuTriggerFor]="menu" class="simple-food-card-menu-btn" mat-icon-button>
 		<mat-icon>more_vert</mat-icon>
 	</button>
 	<mat-menu #menu>

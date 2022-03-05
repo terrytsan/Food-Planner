@@ -1,7 +1,7 @@
 <div>
 	<div class="day-header">
 		<h2>{{foodPlan.date.toMillis() | date: 'EEEE dd/MM/yyyy'}}</h2>
-		<button (click)="addFood()" *ngIf="showAddFoodsBtn" mat-button>
+		<button (click)="addFood()" *ngIf="showAddFoodsBtn && (canEdit)" mat-button>
 			<mat-icon style="color: green">add_circle</mat-icon>
 		</button>
 	</div>
@@ -9,7 +9,8 @@
 		<div *ngIf="foods$ | async as foodsList">
 			<app-food-card *ngFor="let food of foodsList"
 						   [foodPlan]="foodPlan"
-						   [food]="food">{{food}}</app-food-card>
+						   [food]="food"
+						   [canEdit]="canEdit">{{food}}</app-food-card>
 		</div>
 		<div *ngIf="!(foods$ | async)">
 			<mat-card class="empty-list-card">

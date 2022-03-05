@@ -23,6 +23,7 @@ import {
 export class FoodPlanDetailComponent implements OnInit {
 
 	@Input() foodPlan: FoodPlan = {} as FoodPlan;
+	@Input() canEdit: boolean = false;
 
 	foods$: Observable<Food[]>;
 	showAddFoodsBtn: boolean = true;
