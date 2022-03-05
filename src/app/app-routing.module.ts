@@ -14,7 +14,12 @@ let redirectUnauthorizedToLogin = () => redirectUnauthorizedTo(['login']);
 let redirectLoggedInToHome = () => redirectLoggedInTo(['']);
 
 const routes: Routes = [
-	{path: '', component: WeekPlanComponent},
+	{
+		path: '',
+		component: WeekPlanComponent,
+		canActivate: [AuthGuard],
+		data: {authGuardPipe: redirectUnauthorizedToLogin}
+	},
 	{
 		path: 'signup',
 		component: SignupComponent,
@@ -28,10 +33,30 @@ const routes: Routes = [
 		canActivate: [AuthGuard],
 		data: {authGuardPipe: redirectUnauthorizedToLogin}
 	},
-	{path: 'foods', component: FoodsComponent},
-	{path: 'foods/:id', component: FoodDetailsComponent},
-	{path: 'foodCatalogue', component: FoodCatalogueComponent},
-	{path: 'catalogueItem/:id', component: CatalogueItemDetailsComponent}
+	{
+		path: 'foods',
+		component: FoodsComponent,
+		canActivate: [AuthGuard],
+		data: {authGuardPipe: redirectUnauthorizedToLogin}
+	},
+	{
+		path: 'foods/:id',
+		component: FoodDetailsComponent,
+		canActivate: [AuthGuard],
+		data: {authGuardPipe: redirectUnauthorizedToLogin}
+	},
+	{
+		path: 'foodCatalogue',
+		component: FoodCatalogueComponent,
+		canActivate: [AuthGuard],
+		data: {authGuardPipe: redirectUnauthorizedToLogin}
+	},
+	{
+		path: 'catalogueItem/:id',
+		component: CatalogueItemDetailsComponent,
+		canActivate: [AuthGuard],
+		data: {authGuardPipe: redirectUnauthorizedToLogin}
+	}
 ];
 
 @NgModule({

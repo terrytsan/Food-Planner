@@ -106,8 +106,9 @@ export class ProfileComponent implements OnInit {
 	}
 
 	signOut() {
-		this.authService.signOut();
-		this.router.navigate(['']);
+		this.authService.signOut().then(() => {
+			this.router.navigate(['']);
+		});
 	}
 
 	// Allows group expansion panels to stay open when observable is updated
