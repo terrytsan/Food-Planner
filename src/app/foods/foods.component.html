@@ -36,7 +36,7 @@
 </div>
 <div fxLayout="row wrap" fxLayoutGap="10px grid">
 	<div *ngFor="let food of filteredFoods$ | async" fxFlex="25%" fxFlex.sm="33%" fxFlex.xs="50%">
-		<div *ngIf="{user: user$ | async} as userWrapper">
+		<div *ngIf="{user: user$ | async} as userWrapper" style="height: 100%;">
 			<app-food-card [canEdit]="(userWrapper.user) ? userWrapper.user.canEdit : false"
 						   [food]="food"></app-food-card>
 		</div>

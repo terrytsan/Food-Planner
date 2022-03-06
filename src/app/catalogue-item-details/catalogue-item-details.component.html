@@ -13,7 +13,7 @@
 	</div>
 
 	<!-- Name -->
-	<div fxLayout="row" fxLayoutAlign="flex-start center">
+	<div fxLayout="row" fxLayoutAlign="flex-start center" style="margin-bottom: 12px;">
 		<h1 *ngIf="!isEditing" style="margin: 0;">{{catalogueItem.name}}</h1>
 		<mat-form-field *ngIf="isEditing" appearance="fill">
 			<mat-label>Name</mat-label>
@@ -22,7 +22,7 @@
 	</div>
 
 	<!-- Description -->
-	<p *ngIf="!isEditing">{{catalogueItem.description}}</p>
+	<p *ngIf="!isEditing" class="catalogueItem-description">{{catalogueItem.description}}</p>
 	<mat-form-field *ngIf="isEditing" appearance="fill">
 		<mat-label>Description</mat-label>
 		<textarea [(ngModel)]="catalogueItem.description"
@@ -78,7 +78,7 @@
 			<h3 style="text-align: center;">No Price History yet</h3>
 		</ng-template>
 
-		<div *ngIf="isAddingPriceHistory" fxLayout="row" fxLayoutAlign="space-around center">
+		<div #addPriceHistoryForm *ngIf="isAddingPriceHistory" fxLayout="row" fxLayoutAlign="space-around center">
 			<mat-form-field style="width: 100px;">
 				<mat-label>Date</mat-label>
 				<input [(ngModel)]="newPriceHistoryDate" [matDatepicker]="picker" matInput autocomplete="off">

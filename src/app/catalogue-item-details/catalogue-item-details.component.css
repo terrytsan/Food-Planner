@@ -20,6 +20,10 @@
 	transform: translate(-50%, -50%);
 }
 
+.catalogueItem-description {
+	white-space: pre-wrap;
+}
+
 .liked-colour {
 	color: #9cff9c;
 }

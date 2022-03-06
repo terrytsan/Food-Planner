@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from "@angular/router";
 import {
 	addDoc,
@@ -25,6 +25,7 @@ import { PriceHistoryEditDialogComponent } from "../price-history-edit-dialog/pr
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { AuthService, SimpleUser } from "../auth.service";
 import { take } from "rxjs/operators";
+import { ScrollService } from "../scroll.service";
 
 @Component({
 	selector: 'app-catalogue-item-details',
@@ -54,6 +55,13 @@ export class CatalogueItemDetailsComponent implements OnInit {
 	newPriceHistoryDate: Date = new Date();
 	displayedColumns: string[] = ["date", "price", "store"];
 
+	@ViewChild('addPriceHistoryForm') set addPriceHistoryForm(element: ElementRef) {
+		if (element) {
+			// Scroll to bottom when this element is rendered
+			this.scrollService.scrollToBottom();
+		}
+	}
+
 	get id(): string {
 		return this._id;
 	}
@@ -74,7 +82,8 @@ export class CatalogueItemDetailsComponent implements OnInit {
 		private router: Router,
 		private dialog: MatDialog,
 		private _snackBar: MatSnackBar,
-		private authService: AuthService
+		private authService: AuthService,
+		private scrollService: ScrollService
 	) {
 		authService.getSimpleUser().pipe(take(1)).subscribe(user => {
 			if (user && user.canEdit) {

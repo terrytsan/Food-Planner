@@ -1,10 +1,11 @@
 import { Component, ViewChild } from '@angular/core';
-import { MatSidenav } from "@angular/material/sidenav";
+import { MatSidenav, MatSidenavContent } from "@angular/material/sidenav";
 import { MediaObserver } from "@angular/flex-layout";
 import { Subscription } from "rxjs";
 import { NavigationEnd, Router } from "@angular/router";
 import { filter } from "rxjs/operators";
 import { Location } from "@angular/common";
+import { ScrollService } from "./scroll.service";
 
 @Component({
 	selector: 'app-root',
@@ -17,12 +18,20 @@ export class AppComponent {
 	@ViewChild(MatSidenav)
 	sidenav!: MatSidenav;
 
+	@ViewChild('scrollingContainer')
+	public scrollContainer: MatSidenavContent;
+
 	mobileDisplay = this.media.isActive('xs');
 	showBackBtn = false;
 	private mediaSubscription: Subscription;
 	private routerSubscription: Subscription;
 
-	constructor(private media: MediaObserver, private router: Router, private location: Location) {
+	constructor(
+		private media: MediaObserver,
+		private router: Router,
+		private location: Location,
+		private scrollService: ScrollService
+	) {
 		this.mediaSubscription = this.media.asObservable().subscribe(() => {
 			// Triggered when display size changes
 			if (this.media.isActive('xs')) {
@@ -39,6 +48,10 @@ export class AppComponent {
 		).subscribe((event: NavigationEnd) => {
 			this.showBackBtn = event.urlAfterRedirects.startsWith('/catalogueItem') || event.urlAfterRedirects.startsWith('/foods/');
 		});
+	}
+
+	ngAfterViewInit() {
+		this.scrollService.setScrollingContainer(this.scrollContainer.getElementRef());
 	}
 
 	navigateBack() {
