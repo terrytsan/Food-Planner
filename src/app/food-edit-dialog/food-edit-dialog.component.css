@@ -18,6 +18,31 @@
 	margin-bottom: 10px;
 }
 
+.preview-image-container {
+	position: relative;
+	width: 100%;
+	margin-top: 10px;
+}
+
+.preview-image {
+	max-width: 250px;
+	max-height: 250px;
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.btn-delete-image {
+	position: absolute;
+	top: 5%;
+	left: 90%;
+	transform: translate(-5%, -90%);
+}
+
+.progress-bar {
+	margin: 10px 0;
+}
+
 .mat-dialog-actions {
 	justify-content: flex-end;
 }

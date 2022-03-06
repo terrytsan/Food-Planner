@@ -21,14 +21,19 @@
 				<mat-icon>add_photo_alternate</mat-icon>
 			</button>
 		</div>
+		<div class="preview-image-container">
+			<img *ngIf="imgPreviewSrc" [src]="imgPreviewSrc" alt="Preview image" class="preview-image">
+			<mat-icon *ngIf="imgPreviewSrc" (click)="removeImage()" class="btn-delete-image">delete</mat-icon>
+		</div>
 		<mat-progress-bar [hidden]="!fileUploadProgress"
+						  class="progress-bar"
 						  mode="determinate"
 						  value="{{fileUploadProgress}}"></mat-progress-bar>
 	</div>
 
 	<div mat-dialog-actions>
 		<button (click)="onCancelClick()" mat-button type="button">Cancel</button>
-		<button [disabled]="!foodForm.valid || uploadingFile"
+		<button [disabled]="!foodForm.valid || saving"
 				color="primary"
 				mat-button
 				mat-raised-button

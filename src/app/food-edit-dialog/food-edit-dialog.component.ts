@@ -1,5 +1,13 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { getDownloadURL, ref, Storage, uploadBytesResumable, UploadTask } from '@angular/fire/storage';
+import {
+	deleteObject,
+	getDownloadURL,
+	getStorage,
+	ref,
+	Storage,
+	uploadBytesResumable,
+	UploadTask
+} from '@angular/fire/storage';
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 import { Food } from "../food-card/food";
 import { FormBuilder, Validators } from "@angular/forms";
@@ -18,9 +26,11 @@ export class FoodEditDialogComponent implements OnInit {
 		name: ['', Validators.required],
 		description: ['']
 	});
+	file?: File;
+	imgPreviewSrc: string;
 	fileName: string = '';
 	uploadTask: UploadTask;
-	uploadingFile: boolean = false;
+	saving: boolean = false;
 	fileUploadProgress: number;
 	food: Food = {
 		id: "",
@@ -55,9 +65,9 @@ export class FoodEditDialogComponent implements OnInit {
 			this.food = this.foodData;
 			this.foodForm.setValue({
 				name: this.foodData.name,
-				description: this.foodData.description,
-				group: this.foodData.group
+				description: this.foodData.description
 			});
+			this.imgPreviewSrc = this.food.image;
 
 			let fullFileName = this.foodData.imagePath.replace(`${this.foodImagesFolder}`, "");
 			let fileName = fullFileName.split('-')[0];
@@ -74,14 +84,16 @@ export class FoodEditDialogComponent implements OnInit {
 		}
 	}
 
-	async onFileSelected($event: Event) {
-		this.uploadingFile = true;
+	onFileSelected($event: Event) {
 		const target = $event.target as HTMLInputElement;
 		if (!target.files) return;
 
-		const file: File = target.files[0];
-		let compressedImage = await this.imageService.compressImage(file);
-		await this.uploadFileToFirebase(compressedImage);
+		const reader = new FileReader();
+		this.file = target.files[0];
+		reader.readAsDataURL(this.file);
+		reader.onload = () => {
+			this.imgPreviewSrc = reader.result as string;
+		};
 	}
 
 	async uploadFileToFirebase(file: File) {
@@ -96,13 +108,11 @@ export class FoodEditDialogComponent implements OnInit {
 			this.uploadTask = uploadBytesResumable(storageRef, file);
 			this.uploadTask.on('state_changed',
 				(snapshot) => {
+					// Observe state change events such as progress, pause, and resume
 					this.fileUploadProgress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
 				},
 				(error) => {
 					console.error("Error uploading image. ", +error);
-				},
-				() => {
-					this.uploadingFile = false;
 				}
 			);
 			await this.uploadTask;
@@ -116,9 +126,15 @@ export class FoodEditDialogComponent implements OnInit {
 		this.dialogRef.close();
 	}
 
-	onSaveClick() {
-		if (this.uploadingFile) {
+	async onSaveClick() {
+		if (this.saving) {
 			return;
+		}
+		this.saving = true;
+
+		if (this.file) {
+			let compressedImage = await this.imageService.compressImage(this.file);
+			await this.uploadFileToFirebase(compressedImage);
 		}
 
 		if (this.foodData) {
@@ -128,7 +144,10 @@ export class FoodEditDialogComponent implements OnInit {
 				description: this.foodForm.value.description,
 				image: this.food.image,
 				imagePath: this.food.imagePath
-			}).then(() => this.dialogRef.close());
+			}).then(() => {
+				this.saving = false;
+				this.dialogRef.close();
+			});
 		} else {
 			addDoc(collection(this.afs, 'foods'), {
 				name: this.foodForm.value.name,
@@ -136,7 +155,30 @@ export class FoodEditDialogComponent implements OnInit {
 				image: this.food.image,
 				imagePath: this.food.imagePath,
 				group: this.food.group
-			}).then(() => this.dialogRef.close());
+			}).then(() => {
+				this.saving = false;
+				this.dialogRef.close();
+			});
 		}
+	}
+
+	removeImage() {
+		if (this.file) {
+			this.file = undefined;
+		}
+
+		if (this.food.imagePath) {
+			let imageRef = ref(getStorage(), this.food.imagePath);
+
+			deleteObject(imageRef).then(() => {
+			}).catch(error => {
+				console.error(`Error deleting image at: ${this.food.imagePath}. ${error}`);
+			});
+		}
+
+		this.imgPreviewSrc = '';
+		this.fileName = '';
+		this.food.image = '';
+		this.food.imagePath = '';
 	}
 }

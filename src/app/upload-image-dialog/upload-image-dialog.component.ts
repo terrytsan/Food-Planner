@@ -68,6 +68,7 @@ export class UploadImageDialogComponent implements OnInit {
 					console.error("Error uploading image. ", +error);
 				},
 				() => {
+					// Successful upload
 					this.uploadingFile = false;
 				}
 			);

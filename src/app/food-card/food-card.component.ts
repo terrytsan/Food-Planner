@@ -28,7 +28,7 @@ export class FoodCardComponent implements OnInit {
 	editFood() {
 		// Open the modal, passing in food item
 		this.dialog.open(FoodEditDialogComponent, {
-			width: '298px',
+			width: '80%',
 			data: this.food
 		});
 	}
