@@ -12,6 +12,7 @@ import {
 	orderBy,
 	query,
 	updateDoc,
+	where,
 	writeBatch
 } from "@angular/fire/firestore";
 import { CatalogueItem } from "../catalogue-item/catalogueItem";
@@ -20,11 +21,11 @@ import { MatDialog } from "@angular/material/dialog";
 import { UploadImageDialogComponent } from "../upload-image-dialog/upload-image-dialog.component";
 import { GlobalVariable } from "../global";
 import { PriceHistory } from "../catalogue-item/priceHistory";
-import { Observable } from "rxjs";
+import { Observable, of } from "rxjs";
 import { PriceHistoryEditDialogComponent } from "../price-history-edit-dialog/price-history-edit-dialog.component";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { AuthService, SimpleUser } from "../auth.service";
-import { take } from "rxjs/operators";
+import { switchMap, take } from "rxjs/operators";
 import { ScrollService } from "../scroll.service";
 
 @Component({
@@ -67,11 +68,18 @@ export class CatalogueItemDetailsComponent implements OnInit {
 	}
 
 	set id(newID: string) {
-		this.priceHistory$ = collectionData<PriceHistory>(
-			query<PriceHistory>(
-				collection(this.afs, "catalogueItems", newID, "priceHistory") as CollectionReference<PriceHistory>,
-				orderBy("date", "desc")
-			), {idField: "id"}
+		this.priceHistory$ = this.authService.getSimpleUser().pipe(
+			switchMap(user => {
+				if (user == null) {
+					return of([] as PriceHistory[]);
+				}
+				return collectionData<PriceHistory>(
+					query<PriceHistory>(
+						collection(this.afs, "catalogueItems", newID, "priceHistory") as CollectionReference<PriceHistory>,
+						where('group', '==', user.selectedGroup),
+						orderBy("date", "desc")
+					), {idField: "id"});
+			})
 		);
 		this._id = newID;
 	}

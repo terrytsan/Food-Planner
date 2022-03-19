@@ -1,11 +1,20 @@
 import { Component, OnInit } from '@angular/core';
-import { Observable, Subscription } from "rxjs";
+import { Observable, of, Subscription } from "rxjs";
 import { Food } from "../food-card/food";
-import { collection, collectionData, CollectionReference, Firestore, orderBy, query } from "@angular/fire/firestore";
+import {
+	collection,
+	collectionData,
+	CollectionReference,
+	Firestore,
+	orderBy,
+	query,
+	where
+} from "@angular/fire/firestore";
 import { MatDialogRef } from "@angular/material/dialog";
 import { FoodEditDialogComponent } from "../food-edit-dialog/food-edit-dialog.component";
-import { take } from "rxjs/operators";
+import { switchMap, take } from "rxjs/operators";
 import { GlobalVariable } from "../global";
+import { AuthService } from "../auth.service";
 
 @Component({
 	selector: 'app-choose-food-dialog',
@@ -21,12 +30,24 @@ export class ChooseFoodDialogComponent implements OnInit {
 	randomFood: Food;
 	foodSubscription: Subscription;
 
-	constructor(public dialogRef: MatDialogRef<FoodEditDialogComponent>, firestore: Firestore) {
-		this.foods$ = collectionData<Food>(
-			query<Food>(
-				collection(firestore, 'foods') as CollectionReference<Food>,
-				orderBy("name")
-			), {idField: 'id'}
+	constructor(
+		private dialogRef: MatDialogRef<FoodEditDialogComponent>,
+		private firestore: Firestore,
+		private authService: AuthService
+	) {
+		this.foods$ = this.authService.getSimpleUser().pipe(
+			switchMap(user => {
+				if (user == null) {
+					return of([] as Food[]);
+				}
+				return collectionData<Food>(
+					query<Food>(
+						collection(firestore, 'foods') as CollectionReference<Food>,
+						where("group", "==", user.selectedGroup),
+						orderBy("name")
+					), {idField: 'id'}
+				);
+			})
 		);
 
 		this.foodSubscription = this.foods$.pipe(take(2)).subscribe(foods => {
