@@ -1,4 +1,4 @@
-<mat-card class="login-card">
+<mat-card @flyIn class="login-card">
 	<mat-card-content>
 		<form #loginForm="ngForm" (ngSubmit)="onSubmit()">
 			<h1 fxLayoutAlign="center">Log In</h1>
@@ -17,8 +17,12 @@
 					<mat-error>Please provide a valid password</mat-error>
 				</mat-form-field>
 			</div>
-			<button [disabled]="!loginForm.form.valid" color="primary" mat-raised-button type="submit">Login</button>
-			<button mat-raised-button routerLink="/signup" style="margin-left: 15px;" type="button">Sign Up</button>
+			<div fxLayoutAlign="end">
+				<button [disabled]="!loginForm.form.valid" color="primary" mat-raised-button type="submit">
+					Login
+				</button>
+				<button mat-raised-button routerLink="/signup" style="margin-left: 15px;" type="button">Sign Up</button>
+			</div>
 		</form>
 		<mat-error [hidden]="!loginError" class="login-error">
 			{{loginError}}

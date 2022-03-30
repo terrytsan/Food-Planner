@@ -22,7 +22,11 @@
 					<mat-error>Please provide a valid password</mat-error>
 				</mat-form-field>
 			</div>
-			<button [disabled]="!loginForm.form.valid" color="primary" mat-raised-button type="submit">Sign Up</button>
+			<div fxLayoutAlign="end">
+				<button [disabled]="!loginForm.form.valid" color="primary" mat-raised-button type="submit">
+					Sign Up
+				</button>
+			</div>
 		</form>
 	</mat-card-content>
 </mat-card>

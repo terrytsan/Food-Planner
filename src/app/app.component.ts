@@ -1,11 +1,12 @@
 import { Component, ViewChild } from '@angular/core';
 import { MatSidenav, MatSidenavContent } from "@angular/material/sidenav";
 import { MediaObserver } from "@angular/flex-layout";
-import { Subscription } from "rxjs";
+import { Observable, Subscription } from "rxjs";
 import { NavigationEnd, Router } from "@angular/router";
 import { filter } from "rxjs/operators";
 import { Location } from "@angular/common";
 import { ScrollService } from "./scroll.service";
+import { AuthService, SimpleUser } from "./auth.service";
 
 @Component({
 	selector: 'app-root',
@@ -23,6 +24,7 @@ export class AppComponent {
 
 	mobileDisplay = this.media.isActive('xs');
 	showBackBtn = false;
+	loggedInUser$: Observable<SimpleUser | null>;
 	private mediaSubscription: Subscription;
 	private routerSubscription: Subscription;
 
@@ -30,8 +32,11 @@ export class AppComponent {
 		private media: MediaObserver,
 		private router: Router,
 		private location: Location,
-		private scrollService: ScrollService
+		private scrollService: ScrollService,
+		private authService: AuthService
 	) {
+		this.loggedInUser$ = authService.getSimpleUser();
+
 		this.mediaSubscription = this.media.asObservable().subscribe(() => {
 			// Triggered when display size changes
 			if (this.media.isActive('xs')) {
