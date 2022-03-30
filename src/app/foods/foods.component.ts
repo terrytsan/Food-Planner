@@ -51,7 +51,7 @@ export class FoodsComponent implements OnInit {
 		this._lblFilterOp$.next(this._lblFilterOp);
 	}
 
-	ngUnsubscribe = new Subject();					// Used for unsubscribing from observables
+	ngUnsubscribe = new Subject<void>();					// Used for unsubscribing from observables
 
 	constructor(firestore: Firestore, public dialog: MatDialog, authService: AuthService) {
 		this.user$ = authService.getExtendedUser().pipe(takeUntil(this.ngUnsubscribe));
