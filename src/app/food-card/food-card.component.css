@@ -32,6 +32,7 @@
 	width: 56px;
 	height: 56px;
 	margin-right: 10px;
+	object-fit: cover;
 }
 
 .food-card-header {

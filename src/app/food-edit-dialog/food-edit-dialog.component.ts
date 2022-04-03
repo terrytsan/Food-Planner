@@ -133,6 +133,11 @@ export class FoodEditDialogComponent implements OnInit {
 		this.saving = true;
 
 		if (this.file) {
+			// Delete previous image if exists
+			if (this.food.imagePath) {
+				this.deleteFirestoreFile(this.food.imagePath);
+			}
+
 			let compressedImage = await this.imageService.compressImage(this.file);
 			await this.uploadFileToFirebase(compressedImage);
 		}
@@ -168,17 +173,21 @@ export class FoodEditDialogComponent implements OnInit {
 		}
 
 		if (this.food.imagePath) {
-			let imageRef = ref(getStorage(), this.food.imagePath);
-
-			deleteObject(imageRef).then(() => {
-			}).catch(error => {
-				console.error(`Error deleting image at: ${this.food.imagePath}. ${error}`);
-			});
+			this.deleteFirestoreFile(this.food.imagePath);
 		}
 
 		this.imgPreviewSrc = '';
 		this.fileName = '';
 		this.food.image = '';
 		this.food.imagePath = '';
+	}
+
+	deleteFirestoreFile(path: string) {
+		let fileRef = ref(getStorage(), path);
+
+		deleteObject(fileRef).then(() => {
+		}).catch(error => {
+			console.error(`Error deleting image at: ${this.food.imagePath}. ${error}`);
+		});
 	}
 }

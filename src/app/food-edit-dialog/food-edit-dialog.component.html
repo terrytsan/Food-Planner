@@ -1,5 +1,4 @@
 <h2 style="margin-bottom: 0;">{{foodData ? 'Edit' : 'Add'}} Food</h2>
-<p>Group: {{food.group}}</p>
 <form (ngSubmit)="onSaveClick()" [formGroup]="foodForm" autocomplete="off">
 	<div class="dialog-content">
 		<mat-form-field appearance="fill" class="food-details-input">

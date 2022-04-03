@@ -36,8 +36,8 @@ export class ChooseFoodDialogComponent implements OnInit {
 	// Random Food Configuration
 	recentTimeFrame: number = 14;				// Number of days in the past to be considered recent.
 	recentFoodWeight: number = 1;
-	recentLabelWeightPenalty: number = 2;		// Maximum reduced weighting (from normal). Achieved if all labels of a food matches recent labels.
-	normalFoodWeight: number = 5;
+	recentLabelWeightPenalty: number = 5;		// Maximum reduced weighting (from normal). Achieved if all labels of a food matches recent labels.
+	normalFoodWeight: number = 10;
 
 	constructor(
 		private dialogRef: MatDialogRef<FoodEditDialogComponent>,

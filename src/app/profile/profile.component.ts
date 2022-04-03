@@ -28,6 +28,8 @@ export class ProfileComponent implements OnInit {
 	groups$: Observable<Group[]> = new Observable<Group[]>();
 	UserType = UserType;
 
+	loadingGroups: boolean = false;
+
 	constructor(
 		private authService: AuthService,
 		private router: Router,
@@ -47,6 +49,7 @@ export class ProfileComponent implements OnInit {
 			let editorGroups$ = collectionData(query(collection(afs, 'groups') as CollectionReference, where("editors", "array-contains", user.uid)), {idField: 'id'});
 			let viewerGroups$ = collectionData(query(collection(afs, 'groups') as CollectionReference, where("viewers", "array-contains", user.uid)), {idField: 'id'});
 
+			this.loadingGroups = true;
 			this.groups$ = combineLatest([
 				ownerGroups$,
 				editorGroups$,
@@ -96,6 +99,7 @@ export class ProfileComponent implements OnInit {
 						};
 						return mappedGroup;
 					});
+					this.loadingGroups = false;
 
 					return of(mappedGroups);
 				}));

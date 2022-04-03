@@ -24,6 +24,7 @@
 		<h2 style="margin: 0;">Groups</h2>
 		<button (click)="createGroup(user.uid)" color="primary" mat-raised-button>Create Group</button>
 	</div>
+	<mat-spinner *ngIf="loadingGroups" [diameter]="40" class="groups-spinner"></mat-spinner>
 	<div *ngIf="groups$ | async as groups">
 		<div *ngFor="let group of groups; trackBy: identify" class="group-details">
 			<mat-accordion class="align-headers">

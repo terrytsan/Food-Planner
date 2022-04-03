@@ -51,6 +51,7 @@ import { MatExpansionModule } from "@angular/material/expansion";
 import { GroupMemberEditDialogComponent } from './groups/group-member-edit-dialog/group-member-edit-dialog.component';
 import { MatSelectModule } from "@angular/material/select";
 import { StringInputDialogComponent } from './generic/string-input-dialog/string-input-dialog.component';
+import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
 
 @NgModule({
 	declarations: [
@@ -132,7 +133,8 @@ import { StringInputDialogComponent } from './generic/string-input-dialog/string
 		MatAutocompleteModule,
 		MatRadioModule,
 		MatExpansionModule,
-		MatSelectModule
+		MatSelectModule,
+		MatProgressSpinnerModule
 	],
 	providers: [
 		{provide: MAT_DATE_LOCALE, useValue: 'en-GB'}
