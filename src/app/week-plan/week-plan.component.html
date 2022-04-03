@@ -16,7 +16,8 @@
 		<div *ngIf="{user: user$ | async} as userWrapper">
 			<app-food-plan-detail *ngFor="let foodPlan of foodPlans; trackBy: trackById"
 								  [foodPlan]="foodPlan"
-								  [canEdit]="(userWrapper.user) ? userWrapper.user.canEdit : false"></app-food-plan-detail>
+								  [canEdit]="(userWrapper.user) ? userWrapper.user.canEdit : false"
+								  [selectedEndDate]="selectedWeek.endDate.toDate()"></app-food-plan-detail>
 		</div>
 	</div>
 </div>

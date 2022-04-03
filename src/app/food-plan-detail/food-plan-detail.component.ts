@@ -24,6 +24,7 @@ export class FoodPlanDetailComponent implements OnInit {
 
 	@Input() foodPlan: FoodPlan = {} as FoodPlan;
 	@Input() canEdit: boolean = false;
+	@Input() selectedEndDate: Date = new Date();
 
 	foods$: Observable<Food[]>;
 	showAddFoodsBtn: boolean = true;
@@ -48,7 +49,8 @@ export class FoodPlanDetailComponent implements OnInit {
 	addFood() {
 		const dialogRef = this.dialog.open(ChooseFoodDialogComponent, {
 			width: '500px',
-			autoFocus: false
+			autoFocus: false,
+			data: this.selectedEndDate
 		});
 
 		dialogRef.afterClosed().subscribe(async result => {
