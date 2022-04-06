@@ -52,6 +52,7 @@ import { GroupMemberEditDialogComponent } from './groups/group-member-edit-dialo
 import { MatSelectModule } from "@angular/material/select";
 import { StringInputDialogComponent } from './generic/string-input-dialog/string-input-dialog.component';
 import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
+import { FoodLabelsInputComponent } from './food-labels-input/food-labels-input.component';
 
 @NgModule({
 	declarations: [
@@ -73,7 +74,8 @@ import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
 		ProfileComponent,
 		SignupComponent,
 		GroupMemberEditDialogComponent,
-		StringInputDialogComponent
+		StringInputDialogComponent,
+		FoodLabelsInputComponent
 	],
 	imports: [
 		BrowserModule,

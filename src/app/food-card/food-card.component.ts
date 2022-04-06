@@ -29,7 +29,7 @@ export class FoodCardComponent implements OnInit {
 		// Open the modal, passing in food item
 		this.dialog.open(FoodEditDialogComponent, {
 			width: '80%',
-			data: this.food
+			data: {FoodData: this.food}
 		});
 	}
 

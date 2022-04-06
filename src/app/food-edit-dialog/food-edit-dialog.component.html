@@ -1,14 +1,27 @@
-<h2 style="margin-bottom: 0;">{{foodData ? 'Edit' : 'Add'}} Food</h2>
+<h2 style="margin-bottom: 0;">{{data.FoodData ? 'Edit' : 'Add'}} Food</h2>
 <form (ngSubmit)="onSaveClick()" [formGroup]="foodForm" autocomplete="off">
 	<div class="dialog-content">
+		<!-- Name -->
 		<mat-form-field appearance="fill" class="food-details-input">
 			<mat-label>Name</mat-label>
 			<input formControlName="name" id="name" matInput required>
 		</mat-form-field>
+
+		<!-- Description -->
 		<mat-form-field appearance="fill" class="food-details-input">
 			<mat-label>Description</mat-label>
 			<textarea cdkTextareaAutosize formControlName="description" id="description" matInput></textarea>
 		</mat-form-field>
+
+		<!-- Labels -->
+		<app-food-labels-input *ngIf="!data.FoodData"
+							   [(labels)]="food.labels"
+							   [addOnBlur]="false"
+							   [labelSuggestions]="data.AllLabels"
+							   class="food-details-input">
+		</app-food-labels-input>
+
+		<!-- Image -->
 		<input #fileUpload
 			   (change)="onFileSelected($event)"
 			   accept="image/*"

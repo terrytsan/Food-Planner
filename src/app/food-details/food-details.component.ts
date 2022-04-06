@@ -1,12 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from "@angular/router";
-import { arrayRemove, arrayUnion, doc, Firestore, onSnapshot, updateDoc } from "@angular/fire/firestore";
+import { doc, Firestore, onSnapshot, updateDoc } from "@angular/fire/firestore";
 import { Food } from "../food-card/food";
 import { GlobalVariable } from "../global";
 import { FoodEditDialogComponent } from "../food-edit-dialog/food-edit-dialog.component";
 import { MatDialog } from "@angular/material/dialog";
 import { COMMA, ENTER } from "@angular/cdk/keycodes";
-import { MatChipInputEvent } from "@angular/material/chips";
 
 @Component({
 	selector: 'app-food-details',
@@ -47,29 +46,13 @@ export class FoodDetailsComponent implements OnInit {
 	openEditFoodDialog() {
 		this.dialog.open(FoodEditDialogComponent, {
 			width: '80%',
-			data: this.food
+			data: {FoodData: this.food}
 		});
 	}
 
-	// Labels
-
-	async add($event: MatChipInputEvent) {
-		const value = ($event.value || '').trim();
-
-		if (value) {
-			await updateDoc(doc(this.afs, "foods", this.id), {
-				labels: arrayUnion(value)
-			});
-		}
-
-		// Clear the input value
-		$event.chipInput!.clear();
-	}
-
-	async remove(label: string) {
+	async labelChanged(labels: string[]) {
 		await updateDoc(doc(this.afs, "foods", this.id), {
-			labels: arrayRemove(label)
+			labels: labels
 		});
 	}
-
 }

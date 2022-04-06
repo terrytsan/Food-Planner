@@ -44,7 +44,7 @@ export class FoodEditDialogComponent implements OnInit {
 	foodImagesFolder: string = 'foodImages/';
 
 	constructor(
-		@Inject(MAT_DIALOG_DATA) public foodData: Food,
+		@Inject(MAT_DIALOG_DATA) public data: FoodEditDialogData,
 		private fb: FormBuilder,
 		public dialogRef: MatDialogRef<FoodEditDialogComponent>,
 		private storage: Storage,
@@ -61,15 +61,15 @@ export class FoodEditDialogComponent implements OnInit {
 			}
 		});
 		// Presence of foodData means this is edit mode
-		if (this.foodData) {
-			this.food = this.foodData;
+		if (this.data.FoodData) {
+			this.food = this.data.FoodData;
 			this.foodForm.setValue({
-				name: this.foodData.name,
-				description: this.foodData.description
+				name: this.data.FoodData.name,
+				description: this.data.FoodData.description
 			});
 			this.imgPreviewSrc = this.food.image;
 
-			let fullFileName = this.foodData.imagePath.replace(`${this.foodImagesFolder}`, "");
+			let fullFileName = this.data.FoodData.imagePath.replace(`${this.foodImagesFolder}`, "");
 			let fileName = fullFileName.split('-')[0];
 			let ext = fullFileName.split('.').pop();
 
@@ -142,7 +142,7 @@ export class FoodEditDialogComponent implements OnInit {
 			await this.uploadFileToFirebase(compressedImage);
 		}
 
-		if (this.foodData) {
+		if (this.data.FoodData) {
 			let foodRef = doc(this.afs, 'foods', this.food.id);
 			updateDoc(foodRef, {
 				name: this.foodForm.value.name,
@@ -159,7 +159,8 @@ export class FoodEditDialogComponent implements OnInit {
 				description: this.foodForm.value.description,
 				image: this.food.image,
 				imagePath: this.food.imagePath,
-				group: this.food.group
+				group: this.food.group,
+				labels: this.food.labels
 			}).then(() => {
 				this.saving = false;
 				this.dialogRef.close();
@@ -190,4 +191,9 @@ export class FoodEditDialogComponent implements OnInit {
 			console.error(`Error deleting image at: ${this.food.imagePath}. ${error}`);
 		});
 	}
+}
+
+export interface FoodEditDialogData {
+	FoodData: Food;
+	AllLabels: string[];
 }

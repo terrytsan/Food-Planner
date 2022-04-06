@@ -1,0 +1,25 @@
+<mat-form-field [appearance]="appearance" class="labels-chip-list">
+	<mat-label>Labels</mat-label>
+	<mat-chip-list #chipList aria-label="Label selection">
+		<mat-chip (removed)="remove(label)" *ngFor="let label of labels">
+			{{label}}
+			<button matChipRemove>
+				<mat-icon>cancel</mat-icon>
+			</button>
+		</mat-chip>
+		<input #labelInput
+			   (matChipInputTokenEnd)="add($event)"
+			   [formControl]="labelCtrl"
+			   [matAutocomplete]="auto"
+			   [matChipInputAddOnBlur]="addOnBlur"
+			   [matChipInputFor]="chipList"
+			   [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+			   autocomplete="off"
+			   placeholder="Add a label...">
+	</mat-chip-list>
+	<mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
+		<mat-option *ngFor="let labelSuggestion of filteredLabelSuggestions | async" [value]="labelSuggestion">
+			{{labelSuggestion}}
+		</mat-option>
+	</mat-autocomplete>
+</mat-form-field>
