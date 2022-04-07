@@ -16,11 +16,25 @@ import {
 	StringInputDialogData
 } from "../generic/string-input-dialog/string-input-dialog.component";
 import { MatSnackBar } from "@angular/material/snack-bar";
+import { animate, query as animationQuery, stagger, style, transition, trigger } from "@angular/animations";
 
 @Component({
 	selector: 'app-profile',
 	templateUrl: './profile.component.html',
-	styleUrls: ['./profile.component.css']
+	styleUrls: ['./profile.component.css'],
+	animations: [
+		trigger('fadeInStagger', [
+			transition(':enter', [
+				animationQuery(':enter', [
+					style({transform: 'translateY(10px)', opacity: 0}),
+					stagger('100ms', [
+						animate('220ms cubic-bezier(0.250, 0.460, 0.450, 0.940)'),
+						style({transform: 'translateY(0)', opacity: 1})
+					])
+				])
+			])
+		])
+	]
 })
 export class ProfileComponent implements OnInit {
 

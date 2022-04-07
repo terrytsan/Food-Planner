@@ -63,3 +63,9 @@ td {
 	background-color: #90ee9099;
 }
 
+/* Fix to prevent mat-accordion being expanded whilst animation is executing */
+::ng-deep .ng-animating mat-accordion mat-expansion-panel div.mat-expansion-panel-content {
+	height: 0;
+	visibility: hidden;
+}
+
