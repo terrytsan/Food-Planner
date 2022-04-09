@@ -7,6 +7,7 @@ import { filter } from "rxjs/operators";
 import { Location } from "@angular/common";
 import { ScrollService } from "./scroll.service";
 import { AuthService, SimpleUser } from "./auth.service";
+import { UpdateService } from "./update.service";
 
 @Component({
 	selector: 'app-root',
@@ -33,7 +34,8 @@ export class AppComponent {
 		private router: Router,
 		private location: Location,
 		private scrollService: ScrollService,
-		private authService: AuthService
+		private authService: AuthService,
+		private updateService: UpdateService
 	) {
 		this.loggedInUser$ = authService.getSimpleUser();
 
