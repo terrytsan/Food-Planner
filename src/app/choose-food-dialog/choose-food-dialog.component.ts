@@ -70,7 +70,8 @@ export class ChooseFoodDialogComponent implements OnInit {
 			}
 
 			const endDate = new Date(selectedEndDate.getTime());		// Copy to new variable first - setDate() will overwrite
-			const startDate: Date = new Date(selectedEndDate.setDate(selectedEndDate.getDate() - this.recentTimeFrame));
+			const tempDate = new Date(selectedEndDate.getTime());
+			const startDate: Date = new Date(tempDate.setDate(tempDate.getDate() - this.recentTimeFrame));
 			const foodPlanQuery = await getDocs(
 				query(
 					collection(this.firestore, 'foodPlans'),
