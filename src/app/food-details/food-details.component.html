@@ -1,4 +1,4 @@
-<div *ngIf="food">
+<mat-card *ngIf="food">
 	<!-- Image -->
 	<div class="image-container">
 		<img alt="Photo of {{food.name}}"
@@ -26,4 +26,4 @@
 	<button (click)="openEditFoodDialog()" class="btn-toggle-edit" mat-fab>
 		<mat-icon>edit</mat-icon>
 	</button>
-</div>
+</mat-card>

@@ -1,7 +1,7 @@
 <link href="https://fonts.googleapis.com/css?family=Material+Icons|Material+Icons+Outlined|Material+Icons+Two+Tone|Material+Icons+Round|Material+Icons+Sharp"
 	  rel="stylesheet">
 
-<div *ngIf="catalogueItem || isAdding">
+<mat-card *ngIf="catalogueItem || isAdding">
 	<!-- Image -->
 	<div class="image-container">
 		<img alt="Photo of {{catalogueItem.name}}"
@@ -128,7 +128,7 @@
 		<mat-icon *ngIf="!isEditing">edit</mat-icon>
 		<mat-icon *ngIf="isEditing">done</mat-icon>
 	</button>
-</div>
+</mat-card>
 
 <div *ngIf="!catalogueItem && !isAdding" style="text-align: center;">
 	Error loading item 😔
