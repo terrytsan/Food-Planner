@@ -3,7 +3,7 @@ import { CatalogueItem } from "./catalogueItem";
 import { doc, Firestore, updateDoc } from "@angular/fire/firestore";
 import { GlobalVariable } from "../global";
 import { PriceHistory } from "./priceHistory";
-import { SimpleUser } from "../auth.service";
+import { SimpleUser } from "../services/auth.service";
 
 @Component({
 	selector: 'app-catalogue-item',

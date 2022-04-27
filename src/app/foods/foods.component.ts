@@ -17,7 +17,7 @@ import { COMMA, ENTER } from "@angular/cdk/keycodes";
 import { MatChipInputEvent } from "@angular/material/chips";
 import { FormControl } from "@angular/forms";
 import { MatAutocompleteSelectedEvent } from "@angular/material/autocomplete";
-import { AuthService, FoodPlannerUser } from "../auth.service";
+import { AuthService, FoodPlannerUser } from "../services/auth.service";
 
 @Component({
 	selector: 'app-foods',

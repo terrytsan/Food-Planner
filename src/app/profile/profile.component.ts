@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from "@angular/router";
-import { AuthService, FoodPlannerUser, SimpleUser } from "../auth.service";
+import { AuthService, FoodPlannerUser, SimpleUser } from "../services/auth.service";
 import { combineLatest, Observable, of, zip } from "rxjs";
 import { collection, collectionData, CollectionReference, Firestore, query, where } from "@angular/fire/firestore";
 import { Group } from "../groups/group";

@@ -13,7 +13,7 @@ import { BehaviorSubject, combineLatest, Observable, of } from "rxjs";
 import { FoodPlan } from "../food-plan-detail/foodPlan";
 import { Timestamp } from "firebase/firestore";
 import { switchMap, take } from "rxjs/operators";
-import { AuthService, SimpleUser } from "../auth.service";
+import { AuthService, SimpleUser } from "../services/auth.service";
 
 @Component({
 	selector: 'app-week-plan',

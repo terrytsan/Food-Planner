@@ -1,4 +1,4 @@
-import { SimpleUser } from "../auth.service";
+import { SimpleUser } from "../services/auth.service";
 
 export interface Group {
 	id: string;

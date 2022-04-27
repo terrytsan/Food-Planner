@@ -11,9 +11,9 @@ import {
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 import { Food } from "../food-card/food";
 import { FormBuilder, Validators } from "@angular/forms";
-import { ImageService } from "../../image.service";
+import { ImageService } from "../services/image.service";
 import { addDoc, collection, doc, Firestore, updateDoc } from "@angular/fire/firestore";
-import { AuthService } from "../auth.service";
+import { AuthService } from "../services/auth.service";
 import { take } from "rxjs/operators";
 
 @Component({

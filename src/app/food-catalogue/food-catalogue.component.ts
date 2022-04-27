@@ -13,7 +13,7 @@ import {
 	where
 } from "@angular/fire/firestore";
 import { PriceHistory } from "../catalogue-item/priceHistory";
-import { AuthService, SimpleUser } from "../auth.service";
+import { AuthService, SimpleUser } from "../services/auth.service";
 import { switchMap, take } from "rxjs/operators";
 
 @Component({

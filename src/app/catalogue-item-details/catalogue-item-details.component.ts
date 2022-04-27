@@ -24,9 +24,9 @@ import { PriceHistory } from "../catalogue-item/priceHistory";
 import { Observable, of } from "rxjs";
 import { PriceHistoryEditDialogComponent } from "../price-history-edit-dialog/price-history-edit-dialog.component";
 import { MatSnackBar } from "@angular/material/snack-bar";
-import { AuthService, SimpleUser } from "../auth.service";
+import { AuthService, SimpleUser } from "../services/auth.service";
 import { switchMap, take } from "rxjs/operators";
-import { ScrollService } from "../scroll.service";
+import { ScrollService } from "../services/scroll.service";
 
 @Component({
 	selector: 'app-catalogue-item-details',

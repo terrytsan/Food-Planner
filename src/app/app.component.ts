@@ -5,9 +5,9 @@ import { Observable, Subscription } from "rxjs";
 import { NavigationEnd, Router } from "@angular/router";
 import { filter } from "rxjs/operators";
 import { Location } from "@angular/common";
-import { ScrollService } from "./scroll.service";
-import { AuthService, SimpleUser } from "./auth.service";
-import { UpdateService } from "./update.service";
+import { ScrollService } from "./services/scroll.service";
+import { AuthService, SimpleUser } from "./services/auth.service";
+import { UpdateService } from "./services/update.service";
 
 @Component({
 	selector: 'app-root',

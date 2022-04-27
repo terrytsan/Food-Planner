@@ -1,7 +1,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 import { getDownloadURL, ref, Storage, uploadBytesResumable, UploadTask } from "@angular/fire/storage";
-import { ImageService } from "../../image.service";
+import { ImageService } from "../services/image.service";
 
 @Component({
 	selector: 'app-upload-image-dialog',

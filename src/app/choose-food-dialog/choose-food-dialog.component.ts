@@ -15,7 +15,7 @@ import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 import { FoodEditDialogComponent } from "../food-edit-dialog/food-edit-dialog.component";
 import { switchMap } from "rxjs/operators";
 import { GlobalVariable } from "../global";
-import { AuthService } from "../auth.service";
+import { AuthService } from "../services/auth.service";
 import { Timestamp } from "firebase/firestore";
 import { FoodPlan } from "../food-plan-detail/foodPlan";
 

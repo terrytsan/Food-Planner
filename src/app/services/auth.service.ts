@@ -11,7 +11,7 @@ import { signOut } from 'firebase/auth';
 import { switchMap } from "rxjs/operators";
 import { doc, docData, DocumentReference, Firestore } from "@angular/fire/firestore";
 import firebase from "firebase/compat";
-import { Group } from "./groups/group";
+import { Group } from "../groups/group";
 import { Observable, of, zip } from "rxjs";
 import User = firebase.User;
 
