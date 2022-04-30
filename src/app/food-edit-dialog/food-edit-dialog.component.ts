@@ -70,11 +70,8 @@ export class FoodEditDialogComponent implements OnInit {
 			this.imgPreviewSrc = this.food.image;
 
 			let fullFileName = this.data.FoodData.imagePath.replace(`${this.foodImagesFolder}`, "");
-			let fileName = fullFileName.split('-')[0];
-			let ext = fullFileName.split('.').pop();
-
-			// Don't re-add extension if file name didn't contain timestamp
-			this.fileName = fullFileName.includes('-') ? `${fileName}.${ext}` : fileName;
+			let timestampRegex = /-\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/;		// Remove ISOString appended on upload
+			this.fileName = fullFileName.replace(timestampRegex, '');
 		}
 	}
 
