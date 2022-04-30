@@ -1,18 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import {
-	collection,
-	collectionData,
-	CollectionReference,
-	doc,
-	Firestore,
-	query,
-	where,
-	writeBatch
-} from "@angular/fire/firestore";
+import { collection, collectionData, CollectionReference, Firestore, query, where } from "@angular/fire/firestore";
 import { BehaviorSubject, combineLatest, Observable, of } from "rxjs";
 import { FoodPlan } from "../food-plan-detail/foodPlan";
 import { Timestamp } from "firebase/firestore";
-import { switchMap, take } from "rxjs/operators";
+import { map, switchMap } from "rxjs/operators";
 import { AuthService, SimpleUser } from "../services/auth.service";
 
 @Component({
@@ -39,7 +30,8 @@ export class WeekPlanComponent implements OnInit {
 			if (user == null) {
 				return of([] as FoodPlan[]);
 			}
-			return collectionData<FoodPlan>(
+
+			let foodPlans = collectionData<FoodPlan>(
 				query<FoodPlan>(
 					collection(afs, 'foodPlans') as CollectionReference<FoodPlan>,
 					where('date', '>=', selectedWeek.startDate),
@@ -47,9 +39,30 @@ export class WeekPlanComponent implements OnInit {
 					where('group', '==', user.selectedGroup)
 				), {idField: 'id'}
 			);
-		}));
 
-		this.addMissingDays();
+			return foodPlans.pipe(
+				map((foodPlans) => {
+					let existingDates = foodPlans.map(t => {
+						return t.date.toDate().setHours(0, 0, 0, 0);
+					});
+
+					// Create dummy foodPlans (don't exist in firebase) for missing days.
+					let i = selectedWeek.startDate.toDate();
+					i.setHours(0, 0, 0, 0);
+					for (; i <= selectedWeek.endDate.toDate();) {
+						if (!existingDates.includes(i.getTime())) {
+							let missingDay = Timestamp.fromDate(i);
+							let dummyFoodPlan: FoodPlan = {id: '', date: missingDay, group: user.selectedGroup};
+							foodPlans.push(dummyFoodPlan);
+						}
+						i.setDate(i.getDate() + 1);
+					}
+
+					foodPlans.sort((a, b) => a.date.toDate().getTime() - b.date.toDate().getTime());
+					return foodPlans;
+				})
+			);
+		}));
 	}
 
 	ngOnInit(): void {
@@ -99,38 +112,6 @@ export class WeekPlanComponent implements OnInit {
 		this.selectedWeek.startDate = Timestamp.fromDate(newStartDate);
 		this.selectedWeek.endDate = Timestamp.fromDate(newEndDate);
 		this.selectedWeek$.next(this.selectedWeek);
-		this.addMissingDays();
-	}
-
-	private addMissingDays() {
-		// Only need this to run once (user can't add/remove foodPlans)
-		combineLatest([
-			this.authService.getSimpleUser().pipe(take(1)),
-			this.foodPlans$.pipe(take(1))
-		]).subscribe(async ([user, foodPlans]) => {
-			if (user == null || !user.canEdit || foodPlans.length >= 7) {
-				return;
-			}
-
-			let existingDates = foodPlans.map(f => f.date.toDate().setHours(0, 0, 0, 0));		// Store as time so it can be compared. Discard hours component
-			let datesToAdd: Timestamp[] = [];
-			let i = this.selectedWeek.startDate.toDate();
-			i.setHours(0, 0, 0, 0);
-			for (; i <= this.selectedWeek.endDate.toDate();) {
-				if (!existingDates.includes(i.getTime())) {
-					datesToAdd.push(Timestamp.fromDate(i));
-				}
-				i.setDate(i.getDate() + 1);
-			}
-
-			// Batch add the missing days
-			const batch = writeBatch(this.afs);
-			datesToAdd.forEach(date => {
-				const newPlanRef = doc(collection(this.afs, 'foodPlans'));
-				batch.set(newPlanRef, {date: date, group: user.selectedGroup});
-			});
-			await batch.commit();
-		});
 	}
 }
 

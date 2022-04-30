@@ -4,16 +4,8 @@ import { Food } from "../food-card/food";
 import { Observable } from "rxjs";
 import { MatDialog } from "@angular/material/dialog";
 import { ChooseFoodDialogComponent } from "../choose-food-dialog/choose-food-dialog.component";
-import {
-	collection,
-	collectionData,
-	CollectionReference,
-	doc,
-	Firestore,
-	query,
-	updateDoc,
-	where
-} from "@angular/fire/firestore";
+import { collection, collectionData, CollectionReference, Firestore, query, where } from "@angular/fire/firestore";
+import { FoodPlanService } from "../services/food-plan.service";
 
 @Component({
 	selector: 'app-food-plan-detail',
@@ -29,7 +21,7 @@ export class FoodPlanDetailComponent implements OnInit {
 	foods$: Observable<Food[]>;
 	showAddFoodsBtn: boolean = true;
 
-	constructor(private afs: Firestore, public dialog: MatDialog) {
+	constructor(private afs: Firestore, private dialog: MatDialog, private foodPlanService: FoodPlanService) {
 	}
 
 	ngOnInit(): void {
@@ -55,11 +47,7 @@ export class FoodPlanDetailComponent implements OnInit {
 
 		dialogRef.afterClosed().subscribe(async result => {
 			if (result) {
-				let foods = this.foodPlan.foods ? this.foodPlan.foods.concat([result.id]) : [result.id];
-				let foodRef = doc(this.afs, 'foodPlans', this.foodPlan.id);
-				await updateDoc(foodRef, {
-					foods: foods
-				});
+				await this.foodPlanService.addFoodToFoodPlan(result.id, this.foodPlan);
 			}
 		});
 	}

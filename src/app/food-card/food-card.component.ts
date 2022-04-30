@@ -4,8 +4,9 @@ import { MatSnackBar } from "@angular/material/snack-bar";
 import { MatDialog } from "@angular/material/dialog";
 import { FoodEditDialogComponent } from "../food-edit-dialog/food-edit-dialog.component";
 import { FoodPlan } from "../food-plan-detail/foodPlan";
-import { deleteDoc, deleteField, doc, Firestore, setDoc, updateDoc } from "@angular/fire/firestore";
+import { deleteDoc, doc, Firestore, setDoc } from "@angular/fire/firestore";
 import { GlobalVariable } from "../global";
+import { FoodPlanService } from "../services/food-plan.service";
 
 @Component({
 	selector: 'app-food-card',
@@ -19,7 +20,12 @@ export class FoodCardComponent implements OnInit {
 	@Input() canEdit: boolean = false;
 	defaultImage: string = GlobalVariable.PLACEHOLDER_IMAGE_URL;
 
-	constructor(private _snackBar: MatSnackBar, public dialog: MatDialog, public afs: Firestore) {
+	constructor(
+		private _snackBar: MatSnackBar,
+		private dialog: MatDialog,
+		private afs: Firestore,
+		private foodPlanService: FoodPlanService
+	) {
 	}
 
 	ngOnInit(): void {
@@ -55,18 +61,8 @@ export class FoodCardComponent implements OnInit {
 	}
 
 	async removeFood() {
-		if (this.foodPlan && this.foodPlan.foods) {
-			const foodPlanRef = doc(this.afs, 'foodPlans', this.foodPlan.id);
-			if (this.foodPlan.foods.length <= 1) {
-				await updateDoc(foodPlanRef, {
-					foods: deleteField()
-				});
-			} else {
-				let updatedFoods = this.foodPlan.foods.filter(food => food != this.food?.id);
-				await updateDoc(foodPlanRef, {
-					foods: updatedFoods
-				});
-			}
+		if (this.food && this.foodPlan) {
+			await this.foodPlanService.removeFoodFromFoodPlan(this.food.id, this.foodPlan);
 		}
 	}
 }
