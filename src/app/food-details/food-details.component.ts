@@ -45,6 +45,7 @@ export class FoodDetailsComponent implements OnInit {
 
 	openEditFoodDialog() {
 		this.dialog.open(FoodEditDialogComponent, {
+			maxWidth: '600px',
 			width: '80%',
 			data: {FoodData: this.food}
 		});

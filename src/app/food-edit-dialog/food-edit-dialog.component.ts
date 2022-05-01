@@ -87,6 +87,7 @@ export class FoodEditDialogComponent implements OnInit {
 
 		const reader = new FileReader();
 		this.file = target.files[0];
+		this.fileName = this.file.name;
 		reader.readAsDataURL(this.file);
 		reader.onload = () => {
 			this.imgPreviewSrc = reader.result as string;

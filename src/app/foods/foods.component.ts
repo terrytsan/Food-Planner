@@ -161,6 +161,7 @@ export class FoodsComponent implements OnInit {
 
 	openAddFoodDialog() {
 		this.dialog.open(FoodEditDialogComponent, {
+			maxWidth: '600px',
 			width: '80%',
 			data: {AllLabels: this.allLabels}
 		});
