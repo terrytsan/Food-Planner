@@ -31,7 +31,7 @@ export class FoodLabelsInputComponent implements OnInit {
 		this.filteredLabelSuggestions = this.labelCtrl.valueChanges.pipe(
 			startWith(null),
 			map((label: string | null) => {
-				return label ? this.filter(label) : this.labelSuggestions.slice();
+				return this.filter(label);
 			})
 		);
 	}
@@ -59,6 +59,7 @@ export class FoodLabelsInputComponent implements OnInit {
 			this.labels.splice(index, 1);
 		}
 		this.labelsChange.emit(this.labels);
+		this.labelCtrl.setValue(null);
 	}
 
 	selected($event: MatAutocompleteSelectedEvent) {
@@ -67,8 +68,19 @@ export class FoodLabelsInputComponent implements OnInit {
 		this.labelCtrl.setValue(null);
 	}
 
-	private filter(value: string): string[] {
+	/**
+	 * Filter to only include labels which haven't already been selected (present in this.labels), then filter by search term
+	 * @param value search term to filter labels
+	 */
+	private filter(value: string | null): string[] {
+		let usedLabels = this.labels.map(l => l.toLowerCase());
+		let unusedLabels = this.labelSuggestions.filter(label => !usedLabels.includes(label.toLowerCase()));
+
+		if (value == null) {
+			return unusedLabels;
+		}
+
 		const filterValue = value.toLowerCase();
-		return this.labelSuggestions.filter(label => label.toLowerCase().includes(filterValue));
+		return unusedLabels.filter(label => label.toLowerCase().includes(filterValue));
 	}
 }
