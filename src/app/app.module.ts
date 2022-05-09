@@ -53,6 +53,7 @@ import { MatSelectModule } from "@angular/material/select";
 import { StringInputDialogComponent } from './generic/string-input-dialog/string-input-dialog.component';
 import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
 import { FoodLabelsInputComponent } from './food-labels-input/food-labels-input.component';
+import { initializeAppCheck, provideAppCheck, ReCaptchaV3Provider } from "@angular/fire/app-check";
 
 @NgModule({
 	declarations: [
@@ -105,6 +106,10 @@ import { FoodLabelsInputComponent } from './food-labels-input/food-labels-input.
 				return storage;
 			}
 			return getStorage();
+		}),
+		provideAppCheck(() => {
+			const provider = new ReCaptchaV3Provider(environment.recaptcha3SiteKey);
+			return initializeAppCheck(undefined, {provider, isTokenAutoRefreshEnabled: true});
 		}),
 		MatToolbarModule,
 		MatIconModule,

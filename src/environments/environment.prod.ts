@@ -9,5 +9,6 @@ export const environment = {
 		measurementId: 'G-LGDQRXFWTV'
 	},
 	production: true,
-	useEmulators: false
+	useEmulators: false,
+	recaptcha3SiteKey: '6LcHRNQfAAAAABJpu0RgCTVcSvVs0Z87COFmFFbX'
 };

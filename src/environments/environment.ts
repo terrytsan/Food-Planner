@@ -13,7 +13,8 @@ export const environment = {
 		measurementId: 'G-LGDQRXFWTV'
 	},
 	production: false,
-	useEmulators: true
+	useEmulators: true,
+	recaptcha3SiteKey: '6LcHRNQfAAAAABJpu0RgCTVcSvVs0Z87COFmFFbX'
 };
 
 /*
