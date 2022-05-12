@@ -34,6 +34,7 @@ export class ChooseFoodDialogComponent implements OnInit {
 	foodSubscription: Subscription;
 
 	// Random Food Configuration
+	foodWeights: number[];
 	recentTimeFrame: number = 14;				// Number of days in the past to be considered recent.
 	recentFoodWeight: number = 1;
 	recentLabelWeightPenalty: number = 5;		// Maximum reduced weighting (from normal). Achieved if all labels of a food matches recent labels.
@@ -115,6 +116,7 @@ export class ChooseFoodDialogComponent implements OnInit {
 
 			this.randomFood = this.getRandomFood(foods, weights);
 			this.foods = foods;
+			this.foodWeights = weights;
 			this.filteredFoods = foods;
 		});
 	}
@@ -131,7 +133,14 @@ export class ChooseFoodDialogComponent implements OnInit {
 	}
 
 	chooseRandomFood() {
-		this.dialogRef.close(this.randomFood);
+		let element = document.getElementById('searchInput') as HTMLInputElement;
+		if (element == null) {
+			return;
+		}
+		element.value = this.randomFood.name;
+		element.dispatchEvent(new KeyboardEvent('keyup'));
+
+		this.randomFood = this.getRandomFood(this.foods, this.foodWeights);
 	}
 
 	search($event: KeyboardEvent) {
@@ -166,14 +175,15 @@ export class ChooseFoodDialogComponent implements OnInit {
 	 */
 	getRandomFood(foods: Food[], weights: number[]): Food {
 		let i;
+		let cumulativeWeights: number[] = new Array(weights.length);
 
 		for (i = 0; i < weights.length; i++)
-			weights[i] += weights[i - 1] || 0;
+			cumulativeWeights[i] = weights[i] + (cumulativeWeights[i - 1] || 0);
 
-		const random = Math.random() * weights[weights.length - 1];
+		const random = Math.random() * cumulativeWeights[cumulativeWeights.length - 1];
 
-		for (i = 0; i < weights.length; i++)
-			if (weights[i] > random)
+		for (i = 0; i < cumulativeWeights.length; i++)
+			if (cumulativeWeights[i] > random)
 				break;
 
 		return foods[i];

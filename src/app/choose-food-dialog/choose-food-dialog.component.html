@@ -6,7 +6,7 @@
 </div>
 <mat-form-field style="width: 100%">
 	<mat-label>Search Foods...</mat-label>
-	<input (keyup)="search($event)" autocomplete="off" matInput type="text">
+	<input id="searchInput" (keyup)="search($event)" autocomplete="off" matInput type="text">
 </mat-form-field>
 <mat-dialog-content>
 	<mat-card *ngFor="let food of filteredFoods" class="food-card">
