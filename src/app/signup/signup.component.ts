@@ -2,6 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { AuthService } from "../services/auth.service";
 import { Router } from "@angular/router";
 import { addDoc, collection, doc, Firestore, setDoc } from "@angular/fire/firestore";
+import { MatDialog } from "@angular/material/dialog";
+import { PrivacyPolicyDialogComponent } from "../privacy-policy-dialog/privacy-policy-dialog.component";
+import { Analytics, logEvent } from "@angular/fire/analytics";
 
 @Component({
 	selector: 'app-signup',
@@ -12,8 +15,15 @@ export class SignupComponent implements OnInit {
 	displayName: string;
 	email: string;
 	password: string;
+	termsAccepted: boolean;
 
-	constructor(private authService: AuthService, private router: Router, private afs: Firestore) {
+	constructor(
+		private authService: AuthService,
+		private router: Router,
+		private afs: Firestore,
+		private dialog: MatDialog,
+		private analytics: Analytics
+	) {
 	}
 
 	ngOnInit(): void {
@@ -35,9 +45,17 @@ export class SignupComponent implements OnInit {
 				selectedGroup: groupRef.id,
 				canEdit: true
 			});
+			logEvent(this.analytics, "sign_up");
 
 			this.router.navigate(['']);
 		});
 
+	}
+
+	openPrivacyPolicyDialog() {
+		this.dialog.open(PrivacyPolicyDialogComponent, {
+			width: '80%',
+			maxWidth: '600px'
+		});
 	}
 }

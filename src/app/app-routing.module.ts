@@ -9,6 +9,7 @@ import { LoginComponent } from "./login/login.component";
 import { AuthGuard, redirectLoggedInTo, redirectUnauthorizedTo } from "@angular/fire/auth-guard";
 import { ProfileComponent } from "./profile/profile.component";
 import { SignupComponent } from "./signup/signup.component";
+import { PrivacyPolicyDialogComponent } from "./privacy-policy-dialog/privacy-policy-dialog.component";
 
 let redirectUnauthorizedToLogin = () => redirectUnauthorizedTo(['login']);
 let redirectLoggedInToHome = () => redirectLoggedInTo(['']);
@@ -19,6 +20,10 @@ const routes: Routes = [
 		component: WeekPlanComponent,
 		canActivate: [AuthGuard],
 		data: {authGuardPipe: redirectUnauthorizedToLogin}
+	},
+	{
+		path: 'privacy',
+		component: PrivacyPolicyDialogComponent
 	},
 	{
 		path: 'signup',

@@ -54,6 +54,9 @@ import { StringInputDialogComponent } from './generic/string-input-dialog/string
 import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
 import { FoodLabelsInputComponent } from './food-labels-input/food-labels-input.component';
 import { initializeAppCheck, provideAppCheck, ReCaptchaV3Provider } from "@angular/fire/app-check";
+import { MatCheckboxModule } from "@angular/material/checkbox";
+import { PrivacyPolicyDialogComponent } from './privacy-policy-dialog/privacy-policy-dialog.component';
+import { getAnalytics, provideAnalytics, ScreenTrackingService, UserTrackingService } from "@angular/fire/analytics";
 
 @NgModule({
 	declarations: [
@@ -76,7 +79,8 @@ import { initializeAppCheck, provideAppCheck, ReCaptchaV3Provider } from "@angul
 		SignupComponent,
 		GroupMemberEditDialogComponent,
 		StringInputDialogComponent,
-		FoodLabelsInputComponent
+		FoodLabelsInputComponent,
+		PrivacyPolicyDialogComponent
 	],
 	imports: [
 		BrowserModule,
@@ -111,6 +115,7 @@ import { initializeAppCheck, provideAppCheck, ReCaptchaV3Provider } from "@angul
 			const provider = new ReCaptchaV3Provider(environment.recaptcha3SiteKey);
 			return initializeAppCheck(undefined, {provider, isTokenAutoRefreshEnabled: true});
 		}),
+		provideAnalytics(() => getAnalytics()),
 		MatToolbarModule,
 		MatIconModule,
 		MatCardModule,
@@ -141,10 +146,13 @@ import { initializeAppCheck, provideAppCheck, ReCaptchaV3Provider } from "@angul
 		MatRadioModule,
 		MatExpansionModule,
 		MatSelectModule,
-		MatProgressSpinnerModule
+		MatProgressSpinnerModule,
+		MatCheckboxModule
 	],
 	providers: [
-		{provide: MAT_DATE_LOCALE, useValue: 'en-GB'}
+		{provide: MAT_DATE_LOCALE, useValue: 'en-GB'},
+		ScreenTrackingService,
+		UserTrackingService
 	],
 	bootstrap: [AppComponent]
 })
