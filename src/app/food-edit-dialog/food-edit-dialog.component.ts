@@ -8,13 +8,17 @@ import {
 	uploadBytesResumable,
 	UploadTask
 } from '@angular/fire/storage';
-import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
+import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from "@angular/material/dialog";
 import { Food } from "../food-card/food";
 import { FormBuilder, Validators } from "@angular/forms";
 import { ImageService } from "../services/image.service";
 import { addDoc, collection, doc, Firestore, updateDoc } from "@angular/fire/firestore";
 import { AuthService } from "../services/auth.service";
 import { take } from "rxjs/operators";
+import {
+	ConfirmationDialogComponent,
+	ConfirmationDialogData
+} from "../generic/confirmation-dialog/confirmation-dialog.component";
 
 @Component({
 	selector: 'app-food-edit-dialog',
@@ -50,7 +54,8 @@ export class FoodEditDialogComponent implements OnInit {
 		private storage: Storage,
 		private afs: Firestore,
 		private imageService: ImageService,
-		private authService: AuthService
+		private authService: AuthService,
+		private dialog: MatDialog
 	) {
 	}
 
@@ -73,6 +78,38 @@ export class FoodEditDialogComponent implements OnInit {
 			let timestampRegex = /-\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/;		// Remove ISOString appended on upload
 			this.fileName = fullFileName.replace(timestampRegex, '');
 		}
+		this.dialogRef.disableClose = true;
+
+		this.dialogRef.backdropClick().subscribe(() => {
+			if (this.foodForm.pristine) {
+				this.dialogRef.close();
+			} else {
+				this.confirmDiscardBeforeClose();
+			}
+		});
+	}
+
+	/**
+	 * Confirm user wants to discard changes before closing this modal.
+	 */
+	private confirmDiscardBeforeClose() {
+		let dialogData = new ConfirmationDialogData({
+			title: "Unsaved Changes",
+			message: "You have unsaved changes. Do you want to discard them?",
+			confirmBtnText: "Discard",
+			confirmBtnColor: "warn"
+		});
+		let dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+			width: '60%',
+			maxWidth: '550px',
+			autoFocus: false,
+			data: dialogData
+		});
+		dialogRef.afterClosed().subscribe(discardChanges => {
+			if (discardChanges) {
+				this.dialogRef.close();
+			}
+		});
 	}
 
 	ngOnDestroy() {
@@ -85,6 +122,7 @@ export class FoodEditDialogComponent implements OnInit {
 		const target = $event.target as HTMLInputElement;
 		if (!target.files) return;
 
+		this.foodForm.markAsDirty();
 		const reader = new FileReader();
 		this.file = target.files[0];
 		this.fileName = this.file.name;

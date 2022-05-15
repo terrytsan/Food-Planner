@@ -1,0 +1,11 @@
+<h2 mat-dialog-title>{{data.title}}</h2>
+<mat-dialog-content>
+	{{data.message}}
+</mat-dialog-content>
+<mat-dialog-actions fxLayoutAlign="flex-end" mat-dialog-actions>
+	<button (click)="cancel()" mat-button>{{data.cancelBtnText}}</button>
+	<button color="{{data.confirmBtnColor}}"
+			mat-raised-button
+			(click)="confirm()">{{data.confirmBtnText}}
+	</button>
+</mat-dialog-actions>

@@ -57,6 +57,7 @@ import { initializeAppCheck, provideAppCheck, ReCaptchaV3Provider } from "@angul
 import { MatCheckboxModule } from "@angular/material/checkbox";
 import { PrivacyPolicyDialogComponent } from './privacy-policy-dialog/privacy-policy-dialog.component';
 import { getAnalytics, provideAnalytics, ScreenTrackingService, UserTrackingService } from "@angular/fire/analytics";
+import { ConfirmationDialogComponent } from './generic/confirmation-dialog/confirmation-dialog.component';
 
 @NgModule({
 	declarations: [
@@ -80,7 +81,8 @@ import { getAnalytics, provideAnalytics, ScreenTrackingService, UserTrackingServ
 		GroupMemberEditDialogComponent,
 		StringInputDialogComponent,
 		FoodLabelsInputComponent,
-		PrivacyPolicyDialogComponent
+		PrivacyPolicyDialogComponent,
+		ConfirmationDialogComponent
 	],
 	imports: [
 		BrowserModule,
