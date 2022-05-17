@@ -31,6 +31,7 @@ export class FoodEditDialogComponent implements OnInit {
 		description: ['']
 	});
 	file?: File;
+	fileDeleted: boolean = false;
 	imgPreviewSrc: string;
 	fileName: string = '';
 	uploadTask: UploadTask;
@@ -176,6 +177,15 @@ export class FoodEditDialogComponent implements OnInit {
 
 			let compressedImage = await this.imageService.compressImage(this.file);
 			await this.uploadFileToFirebase(compressedImage);
+		} else {
+			// No file - this could mean no change or image was deleted
+			if (this.fileDeleted) {
+				if (this.food.imagePath) {
+					this.deleteFirestoreFile(this.food.imagePath);
+				}
+				this.food.image = "";
+				this.food.imagePath = "";
+			}
 		}
 
 		if (this.data.FoodData) {
@@ -205,18 +215,13 @@ export class FoodEditDialogComponent implements OnInit {
 	}
 
 	removeImage() {
+		this.fileDeleted = true;
 		if (this.file) {
 			this.file = undefined;
 		}
 
-		if (this.food.imagePath) {
-			this.deleteFirestoreFile(this.food.imagePath);
-		}
-
 		this.imgPreviewSrc = '';
 		this.fileName = '';
-		this.food.image = '';
-		this.food.imagePath = '';
 	}
 
 	deleteFirestoreFile(path: string) {
