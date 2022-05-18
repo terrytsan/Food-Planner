@@ -1,13 +1,5 @@
-.dialog-content {
-	display: flex;
-	flex-direction: column;
-	width: 100%;
-	justify-content: center;
-	align-items: center;
-}
-
 .food-details-input {
-	width: 95%;
+	width: 100%;
 }
 
 .file-input {
@@ -15,7 +7,8 @@
 }
 
 .file-upload {
-	margin-bottom: 10px;
+	margin: 0 auto 10px;
+	width: fit-content;
 }
 
 .preview-image-container {

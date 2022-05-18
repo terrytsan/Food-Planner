@@ -1,6 +1,6 @@
 <h2 style="margin-bottom: 0;">{{data.FoodData ? 'Edit' : 'Add'}} Food</h2>
 <form (ngSubmit)="onSaveClick()" [formGroup]="foodForm" autocomplete="off">
-	<div class="dialog-content">
+	<mat-dialog-content>
 		<!-- Name -->
 		<mat-form-field appearance="fill" class="food-details-input">
 			<mat-label>Name</mat-label>
@@ -41,7 +41,7 @@
 						  class="progress-bar"
 						  mode="determinate"
 						  value="{{fileUploadProgress}}"></mat-progress-bar>
-	</div>
+	</mat-dialog-content>
 
 	<div mat-dialog-actions>
 		<button (click)="onCancelClick()" mat-button type="button">Cancel</button>
