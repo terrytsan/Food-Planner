@@ -7,7 +7,12 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
 import { environment } from '../environments/environment';
 import { connectAuthEmulator, getAuth, provideAuth } from '@angular/fire/auth';
-import { connectFirestoreEmulator, getFirestore, provideFirestore } from '@angular/fire/firestore';
+import {
+	connectFirestoreEmulator,
+	enableMultiTabIndexedDbPersistence,
+	getFirestore,
+	provideFirestore
+} from '@angular/fire/firestore';
 import { connectStorageEmulator, getStorage, provideStorage } from "@angular/fire/storage";
 import { MatToolbarModule } from "@angular/material/toolbar";
 import { MatIconModule } from "@angular/material/icon";
@@ -98,12 +103,12 @@ import { ConfirmationDialogComponent } from './generic/confirmation-dialog/confi
 			return getAuth();
 		}),
 		provideFirestore(() => {
+			const firestore = getFirestore();
 			if (environment.useEmulators) {
-				const firestore = getFirestore();
 				connectFirestoreEmulator(firestore, 'localhost', 8080);
-				return firestore;
 			}
-			return getFirestore();
+			enableMultiTabIndexedDbPersistence(firestore);
+			return firestore;
 		}),
 		provideStorage(() => {
 			if (environment.useEmulators) {
