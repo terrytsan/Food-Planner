@@ -4,8 +4,8 @@ import { Food } from "../food-card/food";
 import { Observable } from "rxjs";
 import { MatDialog } from "@angular/material/dialog";
 import { ChooseFoodDialogComponent } from "../choose-food-dialog/choose-food-dialog.component";
-import { collection, collectionData, CollectionReference, Firestore, query, where } from "@angular/fire/firestore";
 import { FoodPlanService } from "../services/food-plan.service";
+import { FoodService } from "../services/food.service";
 
 @Component({
 	selector: 'app-food-plan-detail',
@@ -21,18 +21,12 @@ export class FoodPlanDetailComponent implements OnInit {
 	foods$: Observable<Food[]>;
 	showAddFoodsBtn: boolean = true;
 
-	constructor(private afs: Firestore, private dialog: MatDialog, private foodPlanService: FoodPlanService) {
+	constructor(private dialog: MatDialog, private foodPlanService: FoodPlanService, private foodService: FoodService) {
 	}
 
 	ngOnInit(): void {
 		if (this.foodPlan.foods) {
-			// __name__ is document id
-			this.foods$ = collectionData<Food>(
-				query<Food>(
-					collection(this.afs, 'foods') as CollectionReference<Food>,
-					where('__name__', 'in', this.foodPlan.foods)
-				), {idField: 'id'}
-			);
+			this.foods$ = this.foodService.getFoods(this.foodPlan.foods);
 
 			this.showAddFoodsBtn = this.foodPlan.foods.length <= 10;		// "in" query limited to max 10
 		}

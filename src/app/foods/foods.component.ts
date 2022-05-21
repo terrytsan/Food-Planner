@@ -1,13 +1,4 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import {
-	collection,
-	collectionData,
-	CollectionReference,
-	Firestore,
-	orderBy,
-	query,
-	where
-} from "@angular/fire/firestore";
 import { BehaviorSubject, combineLatest, Observable, of, Subject } from "rxjs";
 import { Food } from "../food-card/food";
 import { MatDialog } from "@angular/material/dialog";
@@ -18,6 +9,7 @@ import { MatChipInputEvent } from "@angular/material/chips";
 import { FormControl } from "@angular/forms";
 import { MatAutocompleteSelectedEvent } from "@angular/material/autocomplete";
 import { AuthService, FoodPlannerUser } from "../services/auth.service";
+import { FoodService } from "../services/food.service";
 
 @Component({
 	selector: 'app-foods',
@@ -53,19 +45,13 @@ export class FoodsComponent implements OnInit {
 
 	ngUnsubscribe = new Subject<void>();					// Used for unsubscribing from observables
 
-	constructor(firestore: Firestore, public dialog: MatDialog, authService: AuthService) {
+	constructor(private dialog: MatDialog, private authService: AuthService, private foodService: FoodService) {
 		this.user$ = authService.getExtendedUser().pipe(takeUntil(this.ngUnsubscribe));
 
 		this.foods$ = this.user$.pipe(switchMap(user => {
 				if (user != null) {
 					if (user.selectedGroup) {
-						return collectionData<Food>(
-							query<Food>(
-								collection(firestore, 'foods') as CollectionReference<Food>,
-								where('group', '==', user.selectedGroup.id),
-								orderBy('name')
-							), {idField: 'id'}
-						);
+						return foodService.getFoodsByGroupOrderByName(user.selectedGroup.id);
 					}
 				}
 				return of([] as Food[]);

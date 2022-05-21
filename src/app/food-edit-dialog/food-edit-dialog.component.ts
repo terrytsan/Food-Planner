@@ -12,13 +12,13 @@ import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from "@angular/material/dial
 import { Food } from "../food-card/food";
 import { FormBuilder, Validators } from "@angular/forms";
 import { ImageService } from "../services/image.service";
-import { addDoc, collection, doc, Firestore, updateDoc } from "@angular/fire/firestore";
 import { AuthService } from "../services/auth.service";
 import { take } from "rxjs/operators";
 import {
 	ConfirmationDialogComponent,
 	ConfirmationDialogData
 } from "../generic/confirmation-dialog/confirmation-dialog.component";
+import { FoodService } from "../services/food.service";
 
 @Component({
 	selector: 'app-food-edit-dialog',
@@ -53,9 +53,9 @@ export class FoodEditDialogComponent implements OnInit {
 		private fb: FormBuilder,
 		public dialogRef: MatDialogRef<FoodEditDialogComponent>,
 		private storage: Storage,
-		private afs: Firestore,
 		private imageService: ImageService,
 		private authService: AuthService,
+		private foodService: FoodService,
 		private dialog: MatDialog
 	) {
 	}
@@ -189,8 +189,7 @@ export class FoodEditDialogComponent implements OnInit {
 		}
 
 		if (this.data.FoodData) {
-			let foodRef = doc(this.afs, 'foods', this.food.id);
-			updateDoc(foodRef, {
+			this.foodService.updateFood(this.food.id, {
 				name: this.foodForm.value.name,
 				description: this.foodForm.value.description,
 				image: this.food.image,
@@ -200,7 +199,7 @@ export class FoodEditDialogComponent implements OnInit {
 				this.dialogRef.close();
 			});
 		} else {
-			addDoc(collection(this.afs, 'foods'), {
+			this.foodService.addFood({
 				name: this.foodForm.value.name,
 				description: this.foodForm.value.description,
 				image: this.food.image,

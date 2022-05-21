@@ -1,16 +1,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { combineLatest, Observable, of, Subscription } from "rxjs";
 import { Food } from "../food-card/food";
-import {
-	collection,
-	collectionData,
-	CollectionReference,
-	Firestore,
-	getDocs,
-	orderBy,
-	query,
-	where
-} from "@angular/fire/firestore";
+import { collection, Firestore, getDocs, query, where } from "@angular/fire/firestore";
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 import { FoodEditDialogComponent } from "../food-edit-dialog/food-edit-dialog.component";
 import { switchMap } from "rxjs/operators";
@@ -18,6 +9,7 @@ import { GlobalVariable } from "../global";
 import { AuthService } from "../services/auth.service";
 import { Timestamp } from "firebase/firestore";
 import { FoodPlan } from "../food-plan-detail/foodPlan";
+import { FoodService } from "../services/food.service";
 
 @Component({
 	selector: 'app-choose-food-dialog',
@@ -44,20 +36,15 @@ export class ChooseFoodDialogComponent implements OnInit {
 		private dialogRef: MatDialogRef<FoodEditDialogComponent>,
 		@Inject(MAT_DIALOG_DATA) private selectedEndDate: Date,
 		private firestore: Firestore,
-		private authService: AuthService
+		private authService: AuthService,
+		private foodService: FoodService
 	) {
 		this.foods$ = this.authService.getSimpleUser().pipe(
 			switchMap(user => {
 				if (user == null) {
 					return of([] as Food[]);
 				}
-				return collectionData<Food>(
-					query<Food>(
-						collection(firestore, 'foods') as CollectionReference<Food>,
-						where("group", "==", user.selectedGroup),
-						orderBy("name")
-					), {idField: 'id'}
-				);
+				return foodService.getFoodsByGroupOrderByName(user.selectedGroup);
 			})
 		);
 
