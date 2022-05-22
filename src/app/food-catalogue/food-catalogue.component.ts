@@ -68,7 +68,7 @@ export class FoodCatalogueComponent implements OnInit {
 				if (!currentPriceHistory) {
 					this.priceHistories.set(t.ref.parent.parent?.id, t.data());		// Add if it doesn't exist
 				} else {
-					if (currentPriceHistory.price && (t.data().price < currentPriceHistory.price)) {
+					if (currentPriceHistory.price && (t.data().price < currentPriceHistory.price) && t.data().store != currentPriceHistory.store) {
 						this.priceHistories.set(t.ref.parent.parent?.id, t.data());		// Add if better price is found
 					}
 				}
