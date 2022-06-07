@@ -1,6 +1,19 @@
 import { Injectable } from '@angular/core';
 import { FoodPlan } from "../food-plan-detail/foodPlan";
-import { addDoc, collection, deleteDoc, doc, Firestore, updateDoc } from "@angular/fire/firestore";
+import {
+	addDoc,
+	collection,
+	collectionData,
+	CollectionReference,
+	deleteDoc,
+	doc,
+	Firestore,
+	query,
+	updateDoc,
+	where
+} from "@angular/fire/firestore";
+import { Timestamp } from "firebase/firestore";
+import { Observable } from "rxjs";
 
 @Injectable({
 	providedIn: 'root'
@@ -8,6 +21,17 @@ import { addDoc, collection, deleteDoc, doc, Firestore, updateDoc } from "@angul
 export class FoodPlanService {
 
 	constructor(private afs: Firestore) {
+	}
+
+	getFoodPlansBetweenDates(startDate: Timestamp, endDate: Timestamp, groupId: string): Observable<FoodPlan[]> {
+		return collectionData<FoodPlan>(
+			query<FoodPlan>(
+				collection(this.afs, 'foodPlans') as CollectionReference<FoodPlan>,
+				where('date', '>=', startDate),
+				where('date', '<=', endDate),
+				where('group', '==', groupId)
+			), {idField: 'id'}
+		);
 	}
 
 	/**

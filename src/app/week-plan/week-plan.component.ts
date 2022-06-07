@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { collection, collectionData, CollectionReference, Firestore, query, where } from "@angular/fire/firestore";
 import { BehaviorSubject, combineLatest, Observable, of } from "rxjs";
 import { FoodPlan } from "../food-plan-detail/foodPlan";
 import { Timestamp } from "firebase/firestore";
 import { map, switchMap } from "rxjs/operators";
 import { AuthService, SimpleUser } from "../services/auth.service";
+import { FoodPlanService } from "../services/food-plan.service";
 
 @Component({
 	selector: 'app-week-plan',
@@ -20,7 +20,7 @@ export class WeekPlanComponent implements OnInit {
 	startOfWeek = 'Sunday';
 	earliestStartingWeek = Timestamp.fromDate(new Date("25 October 2021"));		// Prevent weeks earlier than this date from being generated
 
-	constructor(public afs: Firestore, private authService: AuthService) {
+	constructor(private authService: AuthService, private foodPlanService: FoodPlanService) {
 		this.selectedWeek = this.getCurrentWeek();
 		this.selectedWeek$ = new BehaviorSubject<Week>(this.selectedWeek);
 		this.foodPlans$ = combineLatest([
@@ -31,14 +31,7 @@ export class WeekPlanComponent implements OnInit {
 				return of([] as FoodPlan[]);
 			}
 
-			let foodPlans = collectionData<FoodPlan>(
-				query<FoodPlan>(
-					collection(afs, 'foodPlans') as CollectionReference<FoodPlan>,
-					where('date', '>=', selectedWeek.startDate),
-					where('date', '<=', selectedWeek.endDate),
-					where('group', '==', user.selectedGroup)
-				), {idField: 'id'}
-			);
+			let foodPlans = foodPlanService.getFoodPlansBetweenDates(selectedWeek.startDate, selectedWeek.endDate, user.selectedGroup);
 
 			return foodPlans.pipe(
 				map((foodPlans) => {
