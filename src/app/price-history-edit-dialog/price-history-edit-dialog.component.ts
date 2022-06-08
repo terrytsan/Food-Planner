@@ -1,8 +1,8 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 import { PriceHistory } from "../catalogue-item/priceHistory";
-import { doc, Firestore, updateDoc } from "@angular/fire/firestore";
 import { Timestamp } from "firebase/firestore";
+import { CatalogueItemService } from "../services/catalogue-item.service";
 
 @Component({
 	selector: 'app-price-history-edit-dialog',
@@ -20,7 +20,7 @@ export class PriceHistoryEditDialogComponent implements OnInit {
 	constructor(
 		@Inject(MAT_DIALOG_DATA) public data: PriceHistoryEditDialogData,
 		public dialogRef: MatDialogRef<PriceHistoryEditDialogComponent>,
-		private afs: Firestore
+		private catalogueItemService: CatalogueItemService
 	) {
 		this.catalogueItemId = data.CatalogueItemId;
 		this.priceHistoryId = data.PriceHistory.id;
@@ -33,8 +33,7 @@ export class PriceHistoryEditDialogComponent implements OnInit {
 	}
 
 	async updatePriceHistory() {
-		const catalogueItemRef = doc(this.afs, 'catalogueItems', this.catalogueItemId, 'priceHistory', this.priceHistoryId);
-		await updateDoc(catalogueItemRef, {
+		await this.catalogueItemService.updatePriceHistory(this.catalogueItemId, this.priceHistoryId, {
 			date: Timestamp.fromDate(this.date),
 			price: this.price,
 			store: this.store

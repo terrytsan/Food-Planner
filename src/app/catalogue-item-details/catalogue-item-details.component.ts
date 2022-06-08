@@ -1,20 +1,5 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from "@angular/router";
-import {
-	addDoc,
-	collection,
-	collectionData,
-	CollectionReference,
-	deleteDoc,
-	doc,
-	Firestore,
-	onSnapshot,
-	orderBy,
-	query,
-	updateDoc,
-	where,
-	writeBatch
-} from "@angular/fire/firestore";
 import { CatalogueItem } from "../catalogue-item/catalogueItem";
 import { Timestamp } from "firebase/firestore";
 import { MatDialog } from "@angular/material/dialog";
@@ -27,6 +12,7 @@ import { MatSnackBar } from "@angular/material/snack-bar";
 import { AuthService, SimpleUser } from "../services/auth.service";
 import { switchMap, take } from "rxjs/operators";
 import { ScrollService } from "../services/scroll.service";
+import { CatalogueItemService } from "../services/catalogue-item.service";
 
 @Component({
 	selector: 'app-catalogue-item-details',
@@ -67,31 +53,14 @@ export class CatalogueItemDetailsComponent implements OnInit {
 		return this._id;
 	}
 
-	set id(newID: string) {
-		this.priceHistory$ = this.authService.getSimpleUser().pipe(
-			switchMap(user => {
-				if (user == null) {
-					return of([] as PriceHistory[]);
-				}
-				return collectionData<PriceHistory>(
-					query<PriceHistory>(
-						collection(this.afs, "catalogueItems", newID, "priceHistory") as CollectionReference<PriceHistory>,
-						where('group', '==', user.selectedGroup),
-						orderBy("date", "desc")
-					), {idField: "id"});
-			})
-		);
-		this._id = newID;
-	}
-
 	constructor(
 		private route: ActivatedRoute,
-		private afs: Firestore,
 		private router: Router,
 		private dialog: MatDialog,
 		private _snackBar: MatSnackBar,
 		private authService: AuthService,
-		private scrollService: ScrollService
+		private scrollService: ScrollService,
+		private catalogueItemService: CatalogueItemService
 	) {
 		authService.getSimpleUser().pipe(take(1)).subscribe(user => {
 			if (user && user.canEdit) {
@@ -112,10 +81,22 @@ export class CatalogueItemDetailsComponent implements OnInit {
 			};
 			this.isAdding = this.isEditing = true;
 		} else {
-			onSnapshot(doc(this.afs, "catalogueItems", this.id), (doc) => {
-				this.catalogueItem = doc.data() as CatalogueItem;
+			this.catalogueItemService.getCatalogueItem(this.id).subscribe(c => {
+				this.catalogueItem = c;
 			});
 		}
+	}
+
+	set id(newID: string) {
+		this.priceHistory$ = this.authService.getSimpleUser().pipe(
+			switchMap(user => {
+				if (user == null) {
+					return of([] as PriceHistory[]);
+				}
+				return this.catalogueItemService.getPriceHistoriesForCatalogueItem(newID, user.selectedGroup);
+			})
+		);
+		this._id = newID;
 	}
 
 	ngOnInit(): void {
@@ -132,9 +113,7 @@ export class CatalogueItemDetailsComponent implements OnInit {
 	}
 
 	async updateCatalogueItem() {
-		const catalogueItemRef = doc(this.afs, 'catalogueItems', this.id);
-
-		await updateDoc(catalogueItemRef, {
+		await this.catalogueItemService.updateCatalogueItem(this.id, {
 			name: this.catalogueItem.name,
 			description: this.catalogueItem.description,
 			imageUrl: this.catalogueItem.imageUrl,
@@ -159,42 +138,27 @@ export class CatalogueItemDetailsComponent implements OnInit {
 	}
 
 	async toggleLikeCatalogueItem() {
-		const catalogueItemRef = doc(this.afs, 'catalogueItems', this.id);
 		const newStatus = this.catalogueItem.status == "liked" ? "neutral" : "liked";
-		await updateDoc(catalogueItemRef, {
-			status: newStatus
-		});
+		await this.catalogueItemService.updateCatalogueItemStatus(this.catalogueItem.id, newStatus);
 	}
 
 	async toggleDislikeCatalogueItem() {
-		const catalogueItemRef = doc(this.afs, 'catalogueItems', this.id);
 		const newStatus = this.catalogueItem.status == "disliked" ? "neutral" : "disliked";
-		await updateDoc(catalogueItemRef, {
-			status: newStatus
-		});
+		await this.catalogueItemService.updateCatalogueItemStatus(this.catalogueItem.id, newStatus);
 	}
 
 	async deleteCatalogueItem() {
-		// Delete price history first
-		this.priceHistory$.subscribe(async priceHistory => {
-			const batch = writeBatch(this.afs);
-			priceHistory.forEach(pH => {
-				let pHRef = doc(this.afs, 'catalogueItems', this.id, 'priceHistory', pH.id);
-				batch.delete(pHRef);
-			});
-			await batch.commit();
+		this.priceHistory$.pipe(take(1)).subscribe(async (priceHistories: PriceHistory[]) => {
+			await this.catalogueItemService.deleteCatalogueItem(this.id, priceHistories);
+			await this.router.navigate(['/foodCatalogue']);
 		});
-
-		const catalogueItemRef = doc(this.afs, 'catalogueItems', this.id);
-		await deleteDoc(catalogueItemRef);
-		await this.router.navigate(['/foodCatalogue']);
 	}
 
 	async addCatalogueItem() {
 		if (this.user == null) {
 			return;
 		}
-		let newDocRef = await addDoc(collection(this.afs, 'catalogueItems'), {
+		let newDocRef = await this.catalogueItemService.addCatalogueItem({
 			name: this.catalogueItem.name,
 			description: this.catalogueItem.description,
 			imageUrl: this.catalogueItem.imageUrl,
@@ -222,7 +186,7 @@ export class CatalogueItemDetailsComponent implements OnInit {
 		if (this.user == null) {
 			return;
 		}
-		await addDoc(collection(this.afs, 'catalogueItems', this.id, 'priceHistory'), {
+		await this.catalogueItemService.addPriceHistory(this.id, {
 			date: Timestamp.fromDate(this.newPriceHistoryDate),
 			price: this.newPriceHistory.price,
 			store: this.newPriceHistory.store,
@@ -243,18 +207,7 @@ export class CatalogueItemDetailsComponent implements OnInit {
 	}
 
 	async deletePriceHistory(history: PriceHistory) {
-		let priceHistoryRef = doc(this.afs, 'catalogueItems', this.id, 'priceHistory', history.id);
-		await deleteDoc(priceHistoryRef);
-
-		let snackBarRef = this._snackBar.open(`Deleted ${(history.date?.toDate().toLocaleDateString())}.`, 'Undo', {duration: 3000});
-		snackBarRef.onAction().subscribe(async () => {
-			await addDoc(collection(this.afs, 'catalogueItems', this.id, 'priceHistory'), {
-				date: history.date,
-				price: history.price,
-				store: history.store,
-				group: history.group
-			});
-		});
+		await this.catalogueItemService.deletePriceHistoryWithUndo(this.id, history);
 	}
 
 	// Allows mat-table elements to have the correct type

@@ -1,20 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable, of } from "rxjs";
 import { CatalogueItem } from "../catalogue-item/catalogueItem";
-import {
-	collection,
-	collectionData,
-	collectionGroup,
-	CollectionReference,
-	Firestore,
-	getDocs,
-	orderBy,
-	query,
-	where
-} from "@angular/fire/firestore";
 import { PriceHistory } from "../catalogue-item/priceHistory";
 import { AuthService, SimpleUser } from "../services/auth.service";
 import { switchMap, take } from "rxjs/operators";
+import { CatalogueItemService } from "../services/catalogue-item.service";
 
 @Component({
 	selector: 'app-food-catalogue',
@@ -27,17 +17,12 @@ export class FoodCatalogueComponent implements OnInit {
 	catalogueItems$: Observable<CatalogueItem[]>;
 	priceHistories = new Map();
 
-	constructor(private firestore: Firestore, private authService: AuthService) {
+	constructor(private authService: AuthService, private catalogueItemService: CatalogueItemService) {
 		this.catalogueItems$ = this.user$.pipe(switchMap(user => {
 			if (user == null) {
 				return of([] as CatalogueItem[]);
 			}
-			return collectionData<CatalogueItem>(
-				query<CatalogueItem>(
-					collection(firestore, 'catalogueItems') as CollectionReference<CatalogueItem>,
-					where('group', '==', user.selectedGroup)
-				), {idField: 'id'}
-			);
+			return catalogueItemService.getCatalogueItemsByGroup(user.selectedGroup);
 		}));
 
 		this.getPriceHistory();
@@ -51,12 +36,8 @@ export class FoodCatalogueComponent implements OnInit {
 			if (user == null) {
 				return;
 			}
-			let priceHistoryQuery = query(
-				collectionGroup(this.firestore, 'priceHistory'),
-				where('group', '==', user?.selectedGroup),
-				orderBy('date', 'desc'));
-			let allPriceHistories = await getDocs(priceHistoryQuery);
 
+			let allPriceHistories = await this.catalogueItemService.getPriceHistoriesByGroupOrderByDate(user.selectedGroup);
 			allPriceHistories.forEach(t => {
 				// Ensure items in map has valid price
 				if (!t.data().price) {
