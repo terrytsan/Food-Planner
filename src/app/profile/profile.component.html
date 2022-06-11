@@ -1,3 +1,6 @@
+<link href="https://fonts.googleapis.com/css?family=Material+Icons|Material+Icons+Outlined|Material+Icons+Two+Tone|Material+Icons+Round|Material+Icons+Sharp"
+	  rel="stylesheet">
+
 <h1>Profile</h1>
 <div *ngIf="user$ | async as user">
 	<table class="basic-info-table" style="width: 100%;">
@@ -15,7 +18,13 @@
 		</tr>
 		<tr>
 			<td>Selected Group</td>
-			<td>{{user.selectedGroup.name}}</td>
+			<td>{{user.selectedGroup.name || "Invalid Group"}}
+				<span *ngIf="!user.selectedGroup.name"
+					  class="material-icons-outlined invalid-group-hint"
+					  matTooltip="Selected group either no longer exists or rights have been revoked.">
+					help_outline
+				</span>
+			</td>
 		</tr>
 	</table>
 	<mat-divider class="divider"></mat-divider>

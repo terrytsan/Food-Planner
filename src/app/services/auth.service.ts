@@ -8,7 +8,7 @@ import {
 	user
 } from "@angular/fire/auth";
 import { signOut } from 'firebase/auth';
-import { switchMap } from "rxjs/operators";
+import { catchError, switchMap } from "rxjs/operators";
 import { doc, docData, DocumentReference, Firestore } from "@angular/fire/firestore";
 import firebase from "firebase/compat";
 import { Group } from "../groups/group";
@@ -51,6 +51,14 @@ export class AuthService {
 								...currentUser,
 								selectedGroup: selectedGroup,
 								canEdit: simpleUser.canEdit
+							} as FoodPlannerUser);
+						}),
+						catchError(() => {
+							let currentUser = this.auth.currentUser;
+							return of({
+								...currentUser,
+								selectedGroup: {} as Group,
+								canEdit: false
 							} as FoodPlannerUser);
 						})
 					);

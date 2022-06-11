@@ -6,6 +6,11 @@ td {
 	width: 50%;
 }
 
+.invalid-group-hint {
+	vertical-align: middle;
+	color: darkorange;
+}
+
 .divider {
 	margin-top: 15px;
 	margin-bottom: 15px;

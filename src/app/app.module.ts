@@ -63,6 +63,7 @@ import { MatCheckboxModule } from "@angular/material/checkbox";
 import { PrivacyPolicyDialogComponent } from './privacy-policy-dialog/privacy-policy-dialog.component';
 import { getAnalytics, provideAnalytics, ScreenTrackingService, UserTrackingService } from "@angular/fire/analytics";
 import { ConfirmationDialogComponent } from './generic/confirmation-dialog/confirmation-dialog.component';
+import { MatTooltipModule } from "@angular/material/tooltip";
 
 @NgModule({
 	declarations: [
@@ -154,7 +155,8 @@ import { ConfirmationDialogComponent } from './generic/confirmation-dialog/confi
 		MatExpansionModule,
 		MatSelectModule,
 		MatProgressSpinnerModule,
-		MatCheckboxModule
+		MatCheckboxModule,
+		MatTooltipModule
 	],
 	providers: [
 		{provide: MAT_DATE_LOCALE, useValue: 'en-GB'},

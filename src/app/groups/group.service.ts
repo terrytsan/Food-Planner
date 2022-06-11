@@ -7,6 +7,8 @@ import {
 	collection,
 	deleteDoc,
 	doc,
+	docData,
+	DocumentReference,
 	Firestore,
 	getDoc,
 	getDocs,
@@ -15,6 +17,7 @@ import {
 	where
 } from "@angular/fire/firestore";
 import { UserType } from "../profile/profile.component";
+import { Observable } from "rxjs";
 
 @Injectable({
 	providedIn: 'root'
@@ -56,6 +59,11 @@ export class GroupService {
 		return await updateDoc(groupRef, {
 			name: newName
 		});
+	}
+
+	getGroup(id: string): Observable<Group> {
+		let ref = doc(this.afs, 'groups', id) as DocumentReference<Group>;
+		return docData<Group>(ref, {idField: 'id'});
 	}
 
 	async deleteGroup(group: Group, userId: string): Promise<any> {

@@ -3,11 +3,13 @@ import { MatSidenav, MatSidenavContent } from "@angular/material/sidenav";
 import { MediaObserver } from "@angular/flex-layout";
 import { Observable, Subscription } from "rxjs";
 import { NavigationEnd, Router } from "@angular/router";
-import { filter } from "rxjs/operators";
+import { catchError, filter, take } from "rxjs/operators";
 import { Location } from "@angular/common";
 import { ScrollService } from "./services/scroll.service";
 import { AuthService, SimpleUser } from "./services/auth.service";
 import { UpdateService } from "./services/update.service";
+import { GroupService } from "./groups/group.service";
+import { MatSnackBar } from "@angular/material/snack-bar";
 
 @Component({
 	selector: 'app-root',
@@ -35,7 +37,9 @@ export class AppComponent {
 		private location: Location,
 		private scrollService: ScrollService,
 		private authService: AuthService,
-		private updateService: UpdateService
+		private updateService: UpdateService,
+		private groupService: GroupService,
+		private _snackBar: MatSnackBar
 	) {
 		this.loggedInUser$ = authService.getSimpleUser();
 
@@ -54,6 +58,30 @@ export class AppComponent {
 			filter((event): event is NavigationEnd => event instanceof NavigationEnd)
 		).subscribe((event: NavigationEnd) => {
 			this.showBackBtn = event.urlAfterRedirects.startsWith('/catalogueItem') || event.urlAfterRedirects.startsWith('/foods/');
+		});
+
+		this.loggedInUser$.pipe(take(1)).subscribe(user => {
+			if (user == null) {
+				return;
+			}
+			this.groupService.getGroup(user.selectedGroup)
+				.pipe(
+					take(1),
+					catchError(err => {
+						throw err;
+					})
+				)
+				.subscribe({
+					error: err => {
+						if (err.code == 'permission-denied') {
+							console.error("Error loading user's selected group:", user.selectedGroup);
+							let snackBarRef = _snackBar.open(`Error Loading Group`, 'Change Selected Group');
+							snackBarRef.onAction().subscribe(async () => {
+								this.router.navigate(['/profile']);
+							});
+						}
+					}
+				});
 		});
 	}
 

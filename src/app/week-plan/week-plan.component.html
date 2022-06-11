@@ -23,5 +23,6 @@
 </div>
 
 <ng-template #noFoodPlans>
-	<h1 style="text-align: center;">No plans have been created yet 😥</h1>
+	<h1 *ngIf="foodPlansLoadingError$ | async as error" class="center">{{error}}</h1>
+	<h1 *ngIf="!(foodPlansLoadingError$ | async)" class="center">No plans have been created yet 😥</h1>
 </ng-template>
