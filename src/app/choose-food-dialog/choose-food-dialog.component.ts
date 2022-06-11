@@ -1,7 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { combineLatest, Observable, of, Subscription } from "rxjs";
 import { Food } from "../food-card/food";
-import { collection, Firestore, getDocs, query, where } from "@angular/fire/firestore";
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 import { FoodEditDialogComponent } from "../food-edit-dialog/food-edit-dialog.component";
 import { switchMap } from "rxjs/operators";
@@ -10,6 +9,7 @@ import { AuthService } from "../services/auth.service";
 import { Timestamp } from "firebase/firestore";
 import { FoodPlan } from "../food-plan-detail/foodPlan";
 import { FoodService } from "../services/food.service";
+import { FoodPlanService } from "../services/food-plan.service";
 
 @Component({
 	selector: 'app-choose-food-dialog',
@@ -35,9 +35,9 @@ export class ChooseFoodDialogComponent implements OnInit {
 	constructor(
 		private dialogRef: MatDialogRef<FoodEditDialogComponent>,
 		@Inject(MAT_DIALOG_DATA) private selectedEndDate: Date,
-		private firestore: Firestore,
 		private authService: AuthService,
-		private foodService: FoodService
+		private foodService: FoodService,
+		private foodPlanService: FoodPlanService
 	) {
 		this.foods$ = this.authService.getSimpleUser().pipe(
 			switchMap(user => {
@@ -48,34 +48,25 @@ export class ChooseFoodDialogComponent implements OnInit {
 			})
 		);
 
+		let recentFoodPlans$ = this.authService.getSimpleUser().pipe(
+			switchMap(user => {
+				if (user == null) {
+					return of([] as FoodPlan[]);
+				}
+
+				const endDate = new Date(selectedEndDate.getTime());		// Copy to new variable first - setDate() will overwrite
+				const tempDate = new Date(selectedEndDate.getTime());
+				const startDate: Date = new Date(tempDate.setDate(tempDate.getDate() - this.recentTimeFrame));
+				return this.foodPlanService.getFoodPlansBetweenDates(Timestamp.fromDate(startDate), Timestamp.fromDate(endDate), user.selectedGroup);
+			})
+		);
+
 		// Populate list of foods and set randomFood
 		this.foodSubscription = combineLatest([
 			this.foods$,
-			this.authService.getSimpleUser()
-		]).subscribe(async ([foods, user]) => {
-			if (user == null) {
-				return;
-			}
-
-			const endDate = new Date(selectedEndDate.getTime());		// Copy to new variable first - setDate() will overwrite
-			const tempDate = new Date(selectedEndDate.getTime());
-			const startDate: Date = new Date(tempDate.setDate(tempDate.getDate() - this.recentTimeFrame));
-			const foodPlanQuery = await getDocs(
-				query(
-					collection(this.firestore, 'foodPlans'),
-					where("date", ">=", Timestamp.fromDate(startDate)),
-					where("date", "<=", Timestamp.fromDate(endDate)),
-					where('group', '==', user.selectedGroup))
-			);
-
-			let recentFoodIds: string[] = [];
-			foodPlanQuery.forEach(fp => {
-				let foodPlan = fp.data() as FoodPlan;
-
-				if (foodPlan.foods) {
-					recentFoodIds.push(...foodPlan.foods);
-				}
-			});
+			recentFoodPlans$
+		]).subscribe(([foods, foodPlans]) => {
+			let recentFoodIds = foodPlans.flatMap(f => f.foods).filter(i => i != undefined);
 			// Map foodIds to Food objects using existing foods array
 			let recentFoods = recentFoodIds.map(fId => foods.find(f => f.id == fId)).filter(f => f != undefined) as Food[];
 
