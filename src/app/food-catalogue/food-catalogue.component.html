@@ -6,7 +6,7 @@
 							[user]="user"></app-catalogue-item>
 	</div>
 </div>
-<button class="btn-add-catalogueItem" mat-fab routerLink="/catalogueItem/new">
+<button *ngIf=" (user$ | async)?.canEdit" class="btn-add-catalogueItem" mat-fab routerLink="/catalogueItem/new">
 	<mat-icon>add</mat-icon>
 </button>
 <ng-template #noCatalogueItems>
