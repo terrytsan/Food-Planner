@@ -6,4 +6,6 @@ export interface Food {
 	imagePath: string;
 	labels: string[];
 	group: string;
+	coreIngredients: string[];
+	optionalIngredients: string[];
 }

@@ -55,4 +55,52 @@ export class FoodDetailsComponent implements OnInit {
 			labels: labels
 		});
 	}
+
+	async addCoreIngredient($event: Event) {
+		let target = <HTMLInputElement>$event.target;
+		let ingredient = (target.value || '').trim();
+
+		if (ingredient) {
+			(this.food.coreIngredients || (this.food.coreIngredients = [])).push(ingredient);
+			target.value = '';
+			await this.foodService.updateFood(this.id, {
+				coreIngredients: this.food.coreIngredients
+			});
+		}
+	}
+
+	async removeCoreIngredient(ingredient: string) {
+		let index = this.food.coreIngredients.indexOf(ingredient);
+
+		if (index >= 0) {
+			this.food.coreIngredients.splice(index, 1);
+			await this.foodService.updateFood(this.id, {
+				coreIngredients: this.food.coreIngredients
+			});
+		}
+	}
+
+	async addOptionalIngredient($event: Event) {
+		let target = <HTMLInputElement>$event.target;
+		let ingredient = (target.value || '').trim();
+
+		if (ingredient) {
+			(this.food.optionalIngredients || (this.food.optionalIngredients = [])).push(ingredient);
+			target.value = '';
+			await this.foodService.updateFood(this.id, {
+				optionalIngredients: this.food.optionalIngredients
+			});
+		}
+	}
+
+	async removeOptionalIngredient(ingredient: string) {
+		let index = this.food.optionalIngredients.indexOf(ingredient);
+
+		if (index >= 0) {
+			this.food.optionalIngredients.splice(index, 1);
+			await this.foodService.updateFood(this.id, {
+				optionalIngredients: this.food.optionalIngredients
+			});
+		}
+	}
 }

@@ -28,3 +28,28 @@
 .labels-chip-list {
 	width: 100%;
 }
+
+h2 {
+	margin-bottom: 5px;
+}
+
+.ingredient-input {
+	padding: 0;
+	width: 100%;
+}
+
+mat-form-field.mat-form-field {
+	font-size: 12px;
+}
+
+.core-ingredient-chip {
+	background-color: #03a9f4;
+}
+
+.optional-ingredient-chip {
+	background-color: #67d9ff;
+}
+
+.no-ingredients-message {
+	margin: auto;
+}

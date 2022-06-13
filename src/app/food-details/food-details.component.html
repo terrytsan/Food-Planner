@@ -1,4 +1,4 @@
-<mat-card *ngIf="food">
+<mat-card *ngIf="food" style="margin-bottom: 65px;">
 	<!-- Image -->
 	<div class="image-container">
 		<img alt="Photo of {{food.name}}"
@@ -21,6 +21,45 @@
 						   [appearance]="'outline'"
 						   class="labels-chip-list">
 	</app-food-labels-input>
+
+	<!-- Ingredients -->
+	<h2>Core Ingredients</h2>
+	<mat-form-field appearance="fill" class="ingredient-input" color="primary">
+		<mat-label>Core Ingredient</mat-label>
+		<input (keyup.enter)="addCoreIngredient($event)" autocomplete="off" matInput tabindex="-1">
+	</mat-form-field>
+	<mat-chip-list class="mat-chip-list-stacked">
+		<mat-chip *ngFor="let ingredient of food.coreIngredients"
+				  class="core-ingredient-chip"
+				  fxLayoutAlign="space-between">
+			{{ingredient}}
+			<button (click)="removeCoreIngredient(ingredient)" matChipRemove>
+				<mat-icon>cancel</mat-icon>
+			</button>
+		</mat-chip>
+		<div *ngIf="!food.coreIngredients || food.coreIngredients.length == 0" class="no-ingredients-message">
+			No Core Ingredients yet
+		</div>
+	</mat-chip-list>
+
+	<h2 style="padding-top: 15px;">Optional Ingredients</h2>
+	<mat-form-field appearance="fill" class="ingredient-input" color="primary">
+		<mat-label>Optional Ingredient</mat-label>
+		<input (keyup.enter)="addOptionalIngredient($event)" autocomplete="off" matInput tabindex="-1">
+	</mat-form-field>
+	<mat-chip-list class="mat-chip-list-stacked">
+		<mat-chip *ngFor="let ingredient of food.optionalIngredients"
+				  class="optional-ingredient-chip"
+				  fxLayoutAlign="space-between">
+			{{ingredient}}
+			<button (click)="removeOptionalIngredient(ingredient)" matChipRemove>
+				<mat-icon>cancel</mat-icon>
+			</button>
+		</mat-chip>
+		<div *ngIf="!food.optionalIngredients || food.optionalIngredients.length == 0" class="no-ingredients-message">
+			No Optional Ingredients yet
+		</div>
+	</mat-chip-list>
 
 	<!-- Editing fab -->
 	<button (click)="openEditFoodDialog()" class="btn-toggle-edit" mat-fab>
