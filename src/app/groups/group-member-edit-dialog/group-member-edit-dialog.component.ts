@@ -51,10 +51,10 @@ export class GroupMemberEditDialogComponent implements OnInit {
 			return;
 		}
 		if (this.isAdding) {
-			this.groupService.addMember(this.data.group, this.member.value.userId, this.member.value.permission).then(() => this.dialogRef.close());
+			this.groupService.addMember(this.data.group, this.member.value.userId!, this.member.value.permission!).then(() => this.dialogRef.close());
 		} else {
 			// Get raw value as form control will be disabled
-			this.groupService.changePermission(this.data.group, this.member.getRawValue().userId, this.member.value.permission).then(() => this.dialogRef.close());
+			this.groupService.changePermission(this.data.group, this.member.getRawValue().userId!, this.member.value.permission!).then(() => this.dialogRef.close());
 		}
 	}
 
