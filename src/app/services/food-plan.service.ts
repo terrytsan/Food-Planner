@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { FoodPlan } from "../food-plan-detail/foodPlan";
+import { FoodPlan } from "../food-plan-preview/foodPlan";
 import {
 	addDoc,
 	collection,

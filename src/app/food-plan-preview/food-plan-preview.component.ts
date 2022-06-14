@@ -8,11 +8,11 @@ import { FoodPlanService } from "../services/food-plan.service";
 import { FoodService } from "../services/food.service";
 
 @Component({
-	selector: 'app-food-plan-detail',
-	templateUrl: './food-plan-detail.component.html',
-	styleUrls: ['./food-plan-detail.component.css']
+	selector: 'app-food-plan-preview',
+	templateUrl: './food-plan-preview.component.html',
+	styleUrls: ['./food-plan-preview.component.css']
 })
-export class FoodPlanDetailComponent implements OnInit {
+export class FoodPlanPreviewComponent implements OnInit {
 
 	@Input() foodPlan: FoodPlan = {} as FoodPlan;
 	@Input() canEdit: boolean = false;

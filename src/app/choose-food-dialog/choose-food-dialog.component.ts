@@ -7,7 +7,7 @@ import { switchMap } from "rxjs/operators";
 import { GlobalVariable } from "../global";
 import { AuthService } from "../services/auth.service";
 import { Timestamp } from "firebase/firestore";
-import { FoodPlan } from "../food-plan-detail/foodPlan";
+import { FoodPlan } from "../food-plan-preview/foodPlan";
 import { FoodService } from "../services/food.service";
 import { FoodPlanService } from "../services/food-plan.service";
 

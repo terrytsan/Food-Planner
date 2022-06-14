@@ -2,7 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { Food } from "./food";
 import { MatDialog } from "@angular/material/dialog";
 import { FoodEditDialogComponent } from "../food-edit-dialog/food-edit-dialog.component";
-import { FoodPlan } from "../food-plan-detail/foodPlan";
+import { FoodPlan } from "../food-plan-preview/foodPlan";
 import { GlobalVariable } from "../global";
 import { FoodPlanService } from "../services/food-plan.service";
 import { FoodService } from "../services/food.service";

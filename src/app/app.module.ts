@@ -32,7 +32,7 @@ import { MatProgressBarModule } from "@angular/material/progress-bar";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { MatMenuModule } from "@angular/material/menu";
 import { MatSnackBarModule } from "@angular/material/snack-bar";
-import { FoodPlanDetailComponent } from './food-plan-detail/food-plan-detail.component';
+import { FoodPlanPreviewComponent } from './food-plan-preview/food-plan-preview.component';
 import { ChooseFoodDialogComponent } from './choose-food-dialog/choose-food-dialog.component';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { MatGridListModule } from "@angular/material/grid-list";
@@ -73,7 +73,7 @@ import { MatTooltipModule } from "@angular/material/tooltip";
 		FoodsComponent,
 		FoodCardComponent,
 		FoodEditDialogComponent,
-		FoodPlanDetailComponent,
+		FoodPlanPreviewComponent,
 		ChooseFoodDialogComponent,
 		FoodCatalogueComponent,
 		CatalogueItemComponent,
