@@ -7,7 +7,7 @@ import { switchMap } from "rxjs/operators";
 import { GlobalVariable } from "../global";
 import { AuthService } from "../services/auth.service";
 import { Timestamp } from "firebase/firestore";
-import { FoodPlan } from "../food-plan-preview/foodPlan";
+import { FoodPlanDocument } from "../food-plan-preview/foodPlan";
 import { FoodService } from "../services/food.service";
 import { FoodPlanService } from "../services/food-plan.service";
 
@@ -51,13 +51,13 @@ export class ChooseFoodDialogComponent implements OnInit {
 		let recentFoodPlans$ = this.authService.getSimpleUser().pipe(
 			switchMap(user => {
 				if (user == null) {
-					return of([] as FoodPlan[]);
+					return of([] as FoodPlanDocument[]);
 				}
 
 				const endDate = new Date(selectedEndDate.getTime());		// Copy to new variable first - setDate() will overwrite
 				const tempDate = new Date(selectedEndDate.getTime());
 				const startDate: Date = new Date(tempDate.setDate(tempDate.getDate() - this.recentTimeFrame));
-				return this.foodPlanService.getFoodPlansBetweenDates(Timestamp.fromDate(startDate), Timestamp.fromDate(endDate), user.selectedGroup);
+				return this.foodPlanService.getFoodPlanDocumentsBetweenDates(Timestamp.fromDate(startDate), Timestamp.fromDate(endDate), user.selectedGroup);
 			})
 		);
 

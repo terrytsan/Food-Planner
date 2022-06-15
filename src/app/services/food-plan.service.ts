@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { FoodPlan } from "../food-plan-preview/foodPlan";
+import { FoodPlanDocument } from "../food-plan-preview/foodPlan";
 import {
 	addDoc,
 	collection,
@@ -23,10 +23,14 @@ export class FoodPlanService {
 	constructor(private afs: Firestore) {
 	}
 
-	getFoodPlansBetweenDates(startDate: Timestamp, endDate: Timestamp, groupId: string): Observable<FoodPlan[]> {
-		return collectionData<FoodPlan>(
-			query<FoodPlan>(
-				collection(this.afs, 'foodPlans') as CollectionReference<FoodPlan>,
+	getFoodPlanDocumentsBetweenDates(
+		startDate: Timestamp,
+		endDate: Timestamp,
+		groupId: string
+	): Observable<FoodPlanDocument[]> {
+		return collectionData<FoodPlanDocument>(
+			query<FoodPlanDocument>(
+				collection(this.afs, 'foodPlans') as CollectionReference<FoodPlanDocument>,
 				where('date', '>=', startDate),
 				where('date', '<=', endDate),
 				where('group', '==', groupId)
@@ -38,9 +42,9 @@ export class FoodPlanService {
 	 * Add a food to a FoodPlan.
 	 * Supports 'dummy' foodPlans that have id='' indicating a firestore document does not exist for this foodPlan.
 	 * @param foodId {string} {@link Food} to add
-	 * @param foodPlan {FoodPlan} {@link FoodPlan} to add food to. id should be '' to indicate a firestore document needs to be created
+	 * @param foodPlan {FoodPlanDocument} {@link FoodPlanDocument} to add food to. id should be '' to indicate a firestore document needs to be created
 	 */
-	async addFoodToFoodPlan(foodId: string, foodPlan: FoodPlan) {
+	async addFoodToFoodPlan(foodId: string, foodPlan: FoodPlanDocument) {
 		if (foodPlan.id == '') {
 			await addDoc(collection(this.afs, 'foodPlans'), {
 				foods: [foodId],
@@ -59,9 +63,9 @@ export class FoodPlanService {
 	/**
 	 * Remove a food from a FoodPlan. FoodPlan document will be deleted if this is the last food.
 	 * @param foodId {string} {@link Food} to remove
-	 * @param foodPlan {FoodPlan} {@link FoodPlan} to remove food from
+	 * @param foodPlan {FoodPlanDocument} {@link FoodPlanDocument} to remove food from
 	 */
-	async removeFoodFromFoodPlan(foodId: string, foodPlan: FoodPlan) {
+	async removeFoodFromFoodPlan(foodId: string, foodPlan: FoodPlanDocument) {
 		if (!foodPlan.foods) {
 			return;
 		}

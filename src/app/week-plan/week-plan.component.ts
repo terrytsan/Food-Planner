@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { BehaviorSubject, combineLatest, Observable, of } from "rxjs";
-import { FoodPlan } from "../food-plan-preview/foodPlan";
+import { FoodPlanDocument } from "../food-plan-preview/foodPlan";
 import { Timestamp } from "firebase/firestore";
 import { catchError, map, switchMap } from "rxjs/operators";
 import { AuthService, SimpleUser } from "../services/auth.service";
@@ -14,7 +14,7 @@ import { FoodPlanService } from "../services/food-plan.service";
 export class WeekPlanComponent implements OnInit {
 
 	user$: Observable<SimpleUser | null> = this.authService.getSimpleUser();
-	foodPlans$: Observable<FoodPlan[]>;
+	foodPlanDocs$: Observable<FoodPlanDocument[]>;
 	foodPlansLoadingError$ = new BehaviorSubject<string>("");
 	selectedWeek: Week;
 	selectedWeek$: BehaviorSubject<Week>;
@@ -24,15 +24,15 @@ export class WeekPlanComponent implements OnInit {
 	constructor(private authService: AuthService, private foodPlanService: FoodPlanService) {
 		this.selectedWeek = this.getCurrentWeek();
 		this.selectedWeek$ = new BehaviorSubject<Week>(this.selectedWeek);
-		this.foodPlans$ = combineLatest([
+		this.foodPlanDocs$ = combineLatest([
 			this.selectedWeek$,
 			this.user$
 		]).pipe(switchMap(([selectedWeek, user]) => {
 			if (user == null) {
-				return of([] as FoodPlan[]);
+				return of([] as FoodPlanDocument[]);
 			}
 
-			let foodPlans = foodPlanService.getFoodPlansBetweenDates(selectedWeek.startDate, selectedWeek.endDate, user.selectedGroup);
+			let foodPlans = foodPlanService.getFoodPlanDocumentsBetweenDates(selectedWeek.startDate, selectedWeek.endDate, user.selectedGroup);
 
 			return foodPlans.pipe(
 				map((foodPlans) => {
@@ -46,7 +46,7 @@ export class WeekPlanComponent implements OnInit {
 					for (; i <= selectedWeek.endDate.toDate();) {
 						if (!existingDates.includes(i.getTime())) {
 							let missingDay = Timestamp.fromDate(i);
-							let dummyFoodPlan: FoodPlan = {id: '', date: missingDay, group: user.selectedGroup};
+							let dummyFoodPlan: FoodPlanDocument = {id: '', date: missingDay, group: user.selectedGroup};
 							foodPlans.push(dummyFoodPlan);
 						}
 						i.setDate(i.getDate() + 1);

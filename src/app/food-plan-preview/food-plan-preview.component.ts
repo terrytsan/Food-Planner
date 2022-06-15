@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { FoodPlan } from "./foodPlan";
+import { FoodPlanDocument } from "./foodPlan";
 import { Food } from "../food-card/food";
 import { Observable } from "rxjs";
 import { MatDialog } from "@angular/material/dialog";
@@ -14,7 +14,7 @@ import { FoodService } from "../services/food.service";
 })
 export class FoodPlanPreviewComponent implements OnInit {
 
-	@Input() foodPlan: FoodPlan = {} as FoodPlan;
+	@Input() foodPlanDoc: FoodPlanDocument = {} as FoodPlanDocument;
 	@Input() canEdit: boolean = false;
 	@Input() selectedEndDate: Date = new Date();
 
@@ -25,10 +25,10 @@ export class FoodPlanPreviewComponent implements OnInit {
 	}
 
 	ngOnInit(): void {
-		if (this.foodPlan.foods) {
-			this.foods$ = this.foodService.getFoods(this.foodPlan.foods);
+		if (this.foodPlanDoc.foods) {
+			this.foods$ = this.foodService.getFoods(this.foodPlanDoc.foods);
 
-			this.showAddFoodsBtn = this.foodPlan.foods.length <= 10;		// "in" query limited to max 10
+			this.showAddFoodsBtn = this.foodPlanDoc.foods.length <= 10;		// "in" query limited to max 10
 		}
 	}
 
@@ -41,7 +41,7 @@ export class FoodPlanPreviewComponent implements OnInit {
 
 		dialogRef.afterClosed().subscribe(async result => {
 			if (result) {
-				await this.foodPlanService.addFoodToFoodPlan(result.id, this.foodPlan);
+				await this.foodPlanService.addFoodToFoodPlan(result.id, this.foodPlanDoc);
 			}
 		});
 	}

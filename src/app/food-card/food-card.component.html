@@ -1,4 +1,4 @@
-<mat-card *ngIf="food && !foodPlan" class="food-card" [routerLink]="['/foods', food.id]">
+<mat-card *ngIf="food && !foodPlanDoc" [routerLink]="['/foods', food.id]" class="food-card">
 	<div class="food-card-header">
 		<mat-card-title class="food-card-title-small">{{food.name}}</mat-card-title>
 		<button (click)="$event.stopPropagation()" *ngIf="canEdit" [matMenuTriggerFor]="menu" mat-icon-button>
@@ -19,7 +19,7 @@
 </mat-card>
 
 <!-- Simple Food Details -->
-<mat-card *ngIf="food && foodPlan" class="simple-food-card" [routerLink]="['/foods', food.id]">
+<mat-card *ngIf="food && foodPlanDoc" [routerLink]="['/foods', food.id]" class="simple-food-card">
 	<img alt="Photo of {{food.name}}" class="simple-food-image" src="{{food.image || defaultImage}}">
 	<div class="food-card-title-big">{{food.name}}</div>
 	<button (click)="$event.stopPropagation()"

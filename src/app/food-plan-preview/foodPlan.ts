@@ -1,6 +1,7 @@
 import { Timestamp } from "firebase/firestore";
 
-export interface FoodPlan {
+// Representation of firestore document
+export interface FoodPlanDocument {
 	id: string;
 	foods?: string[];
 	date: Timestamp;
