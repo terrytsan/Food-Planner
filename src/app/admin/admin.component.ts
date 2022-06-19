@@ -13,7 +13,7 @@ import {
 import { FoodPlan } from "../food-plan-preview/foodPlan";
 import { map } from "rxjs/operators";
 import { Observable } from "rxjs";
-import { deleteObject, getDownloadURL, getStorage, listAll, ref } from "@angular/fire/storage";
+import { deleteObject, getDownloadURL, listAll, ref, Storage } from "@angular/fire/storage";
 
 @Component({
 	selector: 'app-admin',
@@ -24,11 +24,10 @@ export class AdminComponent implements OnInit {
 
 	duplicateFoodPlans$: Observable<FoodPlan[]>;
 	emptyDuplicateFoodPlans$: Observable<FoodPlan[]>;
-	storage = getStorage();
 	unusedFoodImages: FirebaseImage[] = [];
 	unusedCatalogueItemImages: FirebaseImage[] = [];
 
-	constructor(private afs: Firestore) {
+	constructor(private afs: Firestore, private storage: Storage) {
 		this.initDuplicateFoodPlan();
 		this.initUnusedImages();
 	}
