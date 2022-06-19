@@ -6,6 +6,7 @@ import { MatDialog } from "@angular/material/dialog";
 import { ChooseFoodDialogComponent } from "../choose-food-dialog/choose-food-dialog.component";
 import { FoodPlanService } from "../services/food-plan.service";
 import { FoodService } from "../services/food.service";
+import { Router } from "@angular/router";
 
 @Component({
 	selector: 'app-food-plan-preview',
@@ -20,8 +21,14 @@ export class FoodPlanPreviewComponent implements OnInit {
 
 	foods$: Observable<Food[]>;
 	showAddFoodsBtn: boolean = true;
+	showPointer: boolean = false;
 
-	constructor(private dialog: MatDialog, private foodPlanService: FoodPlanService, private foodService: FoodService) {
+	constructor(
+		private dialog: MatDialog,
+		private foodPlanService: FoodPlanService,
+		private foodService: FoodService,
+		private router: Router
+	) {
 	}
 
 	ngOnInit(): void {
@@ -29,6 +36,9 @@ export class FoodPlanPreviewComponent implements OnInit {
 			this.foods$ = this.foodService.getFoods(this.foodPlanDoc.foods);
 
 			this.showAddFoodsBtn = this.foodPlanDoc.foods.length <= 10;		// "in" query limited to max 10
+		}
+		if (this.foodPlanDoc.id) {
+			this.showPointer = true;
 		}
 	}
 
@@ -44,5 +54,11 @@ export class FoodPlanPreviewComponent implements OnInit {
 				await this.foodPlanService.addFoodToFoodPlan(result.id, this.foodPlanDoc);
 			}
 		});
+	}
+
+	navigateToDetailsPage() {
+		if (this.foodPlanDoc.id) {
+			this.router.navigate(['/foodPlans', this.foodPlanDoc.id]);
+		}
 	}
 }

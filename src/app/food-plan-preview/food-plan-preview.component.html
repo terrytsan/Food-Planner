@@ -1,6 +1,7 @@
 <div>
 	<div class="day-header">
-		<h2>{{foodPlanDoc.date.toMillis() | date: 'EEEE dd/MM/yyyy'}}</h2>
+		<h2 (click)="navigateToDetailsPage()"
+			[class.pointer-on-hover]="showPointer">{{foodPlanDoc.date.toMillis() | date: 'EEEE dd/MM/yyyy'}}</h2>
 		<button (click)="addFood()" *ngIf="showAddFoodsBtn && (canEdit)" mat-button>
 			<mat-icon style="color: green">add_circle</mat-icon>
 		</button>

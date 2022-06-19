@@ -10,6 +10,7 @@ import { AuthGuard, redirectLoggedInTo, redirectUnauthorizedTo } from "@angular/
 import { ProfileComponent } from "./profile/profile.component";
 import { SignupComponent } from "./signup/signup.component";
 import { PrivacyPolicyDialogComponent } from "./privacy-policy-dialog/privacy-policy-dialog.component";
+import { FoodPlanDetailsComponent } from "./food-plan-details/food-plan-details.component";
 
 let redirectUnauthorizedToLogin = () => redirectUnauthorizedTo(['login']);
 let redirectLoggedInToHome = () => redirectLoggedInTo(['']);
@@ -35,6 +36,12 @@ const routes: Routes = [
 	{
 		path: 'profile',
 		component: ProfileComponent,
+		canActivate: [AuthGuard],
+		data: {authGuardPipe: redirectUnauthorizedToLogin}
+	},
+	{
+		path: 'foodPlans/:id',
+		component: FoodPlanDetailsComponent,
 		canActivate: [AuthGuard],
 		data: {authGuardPipe: redirectUnauthorizedToLogin}
 	},

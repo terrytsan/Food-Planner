@@ -46,7 +46,12 @@ export class WeekPlanComponent implements OnInit {
 					for (; i <= selectedWeek.endDate.toDate();) {
 						if (!existingDates.includes(i.getTime())) {
 							let missingDay = Timestamp.fromDate(i);
-							let dummyFoodPlan: FoodPlanDocument = {id: '', date: missingDay, group: user.selectedGroup};
+							let dummyFoodPlan: FoodPlanDocument = {
+								id: '',
+								date: missingDay,
+								group: user.selectedGroup,
+								dishes: []
+							};
 							foodPlans.push(dummyFoodPlan);
 						}
 						i.setDate(i.getDate() + 1);

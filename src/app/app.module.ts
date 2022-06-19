@@ -64,6 +64,7 @@ import { PrivacyPolicyDialogComponent } from './privacy-policy-dialog/privacy-po
 import { getAnalytics, provideAnalytics, ScreenTrackingService, UserTrackingService } from "@angular/fire/analytics";
 import { ConfirmationDialogComponent } from './generic/confirmation-dialog/confirmation-dialog.component';
 import { MatTooltipModule } from "@angular/material/tooltip";
+import { FoodPlanDetailsComponent } from './food-plan-details/food-plan-details.component';
 
 @NgModule({
 	declarations: [
@@ -88,7 +89,8 @@ import { MatTooltipModule } from "@angular/material/tooltip";
 		StringInputDialogComponent,
 		FoodLabelsInputComponent,
 		PrivacyPolicyDialogComponent,
-		ConfirmationDialogComponent
+		ConfirmationDialogComponent,
+		FoodPlanDetailsComponent
 	],
 	imports: [
 		BrowserModule,

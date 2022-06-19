@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { FoodPlanDocument } from "../food-plan-preview/foodPlan";
+import { Dish, FoodPlan, FoodPlanDocument, SimpleDish } from "../food-plan-preview/foodPlan";
 import {
 	addDoc,
 	collection,
@@ -7,13 +7,17 @@ import {
 	CollectionReference,
 	deleteDoc,
 	doc,
+	docData,
+	DocumentReference,
 	Firestore,
 	query,
 	updateDoc,
 	where
 } from "@angular/fire/firestore";
 import { Timestamp } from "firebase/firestore";
-import { Observable } from "rxjs";
+import { forkJoin, Observable, of, zip } from "rxjs";
+import { switchMap, take } from "rxjs/operators";
+import { Food } from "../food-card/food";
 
 @Injectable({
 	providedIn: 'root'
@@ -21,6 +25,68 @@ import { Observable } from "rxjs";
 export class FoodPlanService {
 
 	constructor(private afs: Firestore) {
+	}
+
+	convertDishToSimpleDish(dish: Dish): SimpleDish {
+		return {
+			index: dish.index,
+			foodId: dish.food.id,
+			ingredients: dish.ingredients
+		} as SimpleDish;
+	}
+
+	getFoodPlan(id: string): Observable<FoodPlan> {
+		let ref = doc(this.afs, 'foodPlans', id) as DocumentReference<FoodPlanDocument>;
+		return docData<FoodPlanDocument>(ref, {idField: 'id'}).pipe(
+			switchMap(foodPlanDoc => {
+				// Get food objects
+				let foodIds = foodPlanDoc.dishes?.map(f => f.foodId) ?? [];
+
+				let foods$: Observable<Food[]>[] = [];
+				if (foodIds.length == 0) {
+					foods$.push(of([]));
+				}
+
+				// Batch food queries into 10 (limit of 'in' query)
+				while (foodIds.length > 0) {
+					let batchedFoodIds: string[] = foodIds.splice(0, 10);
+					let batchedFoodsObservable = collectionData<Food>(
+						query<Food>(
+							collection(this.afs, 'foods') as CollectionReference<Food>,
+							where('__name__', 'in', batchedFoodIds)
+						), {idField: 'id'}
+					).pipe(take(1));
+					foods$.push(batchedFoodsObservable);
+				}
+
+				return zip(
+					of(foodPlanDoc),
+					forkJoin(foods$)
+				);
+			}),
+			switchMap(([foodPlanDoc, batchedFoods]) => {
+				let foods = batchedFoods.flat(1);
+
+				let foodPlan = {
+					id: foodPlanDoc.id,
+					foods: foodPlanDoc.foods,
+					date: foodPlanDoc.date,
+					group: foodPlanDoc.group,
+					dishes: []
+				} as FoodPlan;
+
+				foodPlanDoc.dishes?.forEach((s: SimpleDish) => {
+					let dish: Dish = {
+						index: s.index,
+						ingredients: s.ingredients,
+						food: foods.find(f => f.id == s.foodId) || {} as Food
+					} as Dish;
+					foodPlan.dishes.push(dish);
+				});
+
+				return of(foodPlan);
+			})
+		);
 	}
 
 	getFoodPlanDocumentsBetweenDates(
@@ -36,6 +102,10 @@ export class FoodPlanService {
 				where('group', '==', groupId)
 			), {idField: 'id'}
 		);
+	}
+
+	updateFoodPlan(id: string, data: any) {
+		return updateDoc(doc(this.afs, 'foodPlans', id), data);
 	}
 
 	/**
