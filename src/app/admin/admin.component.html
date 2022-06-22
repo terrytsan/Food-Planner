@@ -35,3 +35,18 @@
 		</div>
 	</div>
 </mat-card>
+
+<!-- Empty FoodPlans -->
+<mat-card *ngIf="emptyFoodPlans$ | async as foodPlans" class="category">
+	<h2>Empty FoodPlans</h2>
+	<h4>{{foodPlans.length}} total unused FoodPlans</h4>
+
+	<mat-divider *ngIf="foodPlans.length > 0"></mat-divider>
+
+	<div *ngFor="let foodPlan of foodPlans" style="padding-top: 10px;">
+		<div fxLayout="row" fxLayoutAlign="space-between center" style="padding-bottom: 12px;">
+			<div>{{foodPlan.date.toMillis() | date: 'EEEE dd/MM/yyyy h:mm:ss a zzzz'}}{{foodPlan.id}}</div>
+			<mat-icon (click)="deleteFoodPlan(foodPlan.id)">delete</mat-icon>
+		</div>
+	</div>
+</mat-card>

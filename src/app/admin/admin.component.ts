@@ -8,7 +8,8 @@ import {
 	Firestore,
 	getDocs,
 	orderBy,
-	query
+	query,
+	where
 } from "@angular/fire/firestore";
 import { FoodPlan } from "../food-plan-preview/foodPlan";
 import { map } from "rxjs/operators";
@@ -24,12 +25,16 @@ export class AdminComponent implements OnInit {
 
 	duplicateFoodPlans$: Observable<FoodPlan[]>;
 	emptyDuplicateFoodPlans$: Observable<FoodPlan[]>;
+
 	unusedFoodImages: FirebaseImage[] = [];
 	unusedCatalogueItemImages: FirebaseImage[] = [];
 
+	emptyFoodPlans$: Observable<FoodPlan[]>;
+
 	constructor(private afs: Firestore, private storage: Storage) {
-		this.initDuplicateFoodPlan();
-		this.initUnusedImages();
+		// this.initDuplicateFoodPlan();
+		// this.initUnusedImages();
+		// this.initEmptyFoodPlans();
 	}
 
 	ngOnInit(): void {
@@ -106,6 +111,18 @@ export class AdminComponent implements OnInit {
 		}).catch(error => {
 			console.error(`Error deleting image at: ${path}. ${error}`);
 		});
+	}
+
+	initEmptyFoodPlans() {
+		this.emptyFoodPlans$ = collectionData<FoodPlan>(
+			query<FoodPlan>(
+				collection(this.afs, 'foodPlans') as CollectionReference<FoodPlan>,
+				where('group', '==', ''),
+				orderBy('date')
+			), {idField: 'id'}
+		).pipe(map(foodPlans => {
+			return foodPlans.filter(f => (f.foods == undefined || f.foods.length <= 0));
+		}));
 	}
 }
 
