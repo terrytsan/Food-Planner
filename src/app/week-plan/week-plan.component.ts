@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { BehaviorSubject, combineLatest, Observable, of } from "rxjs";
-import { FoodPlanDocument } from "../food-plan-preview/foodPlan";
+import { FoodPlan } from "../food-plan-preview/foodPlan";
 import { Timestamp } from "firebase/firestore";
 import { catchError, map, switchMap } from "rxjs/operators";
 import { AuthService, SimpleUser } from "../services/auth.service";
@@ -14,7 +14,7 @@ import { FoodPlanService } from "../services/food-plan.service";
 export class WeekPlanComponent implements OnInit {
 
 	user$: Observable<SimpleUser | null> = this.authService.getSimpleUser();
-	foodPlanDocs$: Observable<FoodPlanDocument[]>;
+	foodPlans$: Observable<FoodPlan[]>;
 	foodPlansLoadingError$ = new BehaviorSubject<string>("");
 	selectedWeek: Week;
 	selectedWeek$: BehaviorSubject<Week>;
@@ -24,15 +24,15 @@ export class WeekPlanComponent implements OnInit {
 	constructor(private authService: AuthService, private foodPlanService: FoodPlanService) {
 		this.selectedWeek = this.getCurrentWeek();
 		this.selectedWeek$ = new BehaviorSubject<Week>(this.selectedWeek);
-		this.foodPlanDocs$ = combineLatest([
+		this.foodPlans$ = combineLatest([
 			this.selectedWeek$,
 			this.user$
 		]).pipe(switchMap(([selectedWeek, user]) => {
 			if (user == null) {
-				return of([] as FoodPlanDocument[]);
+				return of([] as FoodPlan[]);
 			}
 
-			let foodPlans = foodPlanService.getFoodPlanDocumentsBetweenDates(selectedWeek.startDate, selectedWeek.endDate, user.selectedGroup);
+			let foodPlans = foodPlanService.getFoodPlansBetweenDates(selectedWeek.startDate, selectedWeek.endDate, user.selectedGroup);
 
 			return foodPlans.pipe(
 				map((foodPlans) => {
@@ -46,7 +46,7 @@ export class WeekPlanComponent implements OnInit {
 					for (; i <= selectedWeek.endDate.toDate();) {
 						if (!existingDates.includes(i.getTime())) {
 							let missingDay = Timestamp.fromDate(i);
-							let dummyFoodPlan: FoodPlanDocument = {
+							let dummyFoodPlan: FoodPlan = {
 								id: '',
 								date: missingDay,
 								group: user.selectedGroup,
@@ -60,8 +60,8 @@ export class WeekPlanComponent implements OnInit {
 					foodPlans.sort((a, b) => a.date.toDate().getTime() - b.date.toDate().getTime());
 					return foodPlans;
 				}),
-				catchError(() => {
-					console.error("Error loading food plans");
+				catchError((err) => {
+					console.error("Error loading food plans.", err);
 					this.foodPlansLoadingError$.next("Error loading food plans. 😥");
 					return of([]);
 				})

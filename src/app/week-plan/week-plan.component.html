@@ -11,11 +11,11 @@
 	</div>
 
 </div>
-<div *ngIf="foodPlanDocs$ | async as foodPlans">
+<div *ngIf="foodPlans$ | async as foodPlans">
 	<div *ngIf="foodPlans.length > 0; else noFoodPlans">
 		<div *ngIf="{user: user$ | async} as userWrapper">
 			<app-food-plan-preview *ngFor="let foodPlan of foodPlans; trackBy: trackById"
-								   [foodPlanDoc]="foodPlan"
+								   [foodPlan]="foodPlan"
 								   [canEdit]="(userWrapper.user) ? userWrapper.user.canEdit : false"
 								   [selectedEndDate]="selectedWeek.endDate.toDate()"></app-food-plan-preview>
 		</div>

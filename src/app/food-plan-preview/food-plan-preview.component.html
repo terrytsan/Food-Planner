@@ -1,19 +1,20 @@
 <div>
 	<div class="day-header">
 		<h2 (click)="navigateToDetailsPage()"
-			[class.pointer-on-hover]="showPointer">{{foodPlanDoc.date.toMillis() | date: 'EEEE dd/MM/yyyy'}}</h2>
+			[class.pointer-on-hover]="showPointer">{{foodPlan.date.toMillis() | date: 'EEEE dd/MM/yyyy'}}</h2>
 		<button (click)="addFood()" *ngIf="showAddFoodsBtn && (canEdit)" mat-button>
 			<mat-icon style="color: green">add_circle</mat-icon>
 		</button>
 	</div>
 	<mat-card-content>
-		<div *ngIf="foods$ | async as foodsList">
-			<app-food-card *ngFor="let food of foodsList"
-						   [foodPlanDoc]="foodPlanDoc"
-						   [food]="food"
-						   [canEdit]="canEdit">{{food}}</app-food-card>
+		<div *ngIf="foodPlan.dishes as dishes">
+			<app-food-card *ngFor="let dish of dishes"
+						   [canEdit]="canEdit"
+						   [dish]="dish"
+						   [foodPlan]="foodPlan"
+						   [food]="dish.food">{{dish.food.name}}</app-food-card>
 		</div>
-		<div *ngIf="!(foods$ | async)">
+		<div *ngIf="foodPlan.dishes && foodPlan.dishes.length == 0">
 			<mat-card class="empty-list-card">
 				Nothing here yet 😞
 			</mat-card>

@@ -16,8 +16,9 @@ import {
 	where
 } from "@angular/fire/firestore";
 import { Food } from "../food-card/food";
-import { Observable } from "rxjs";
+import { combineLatest, Observable, of } from "rxjs";
 import { MatSnackBar } from "@angular/material/snack-bar";
+import { map } from "rxjs/operators";
 
 @Injectable({
 	providedIn: 'root'
@@ -34,17 +35,30 @@ export class FoodService {
 
 	/**
 	 * Get all foods with IDs.
-	 * Note: "in" query is currently limited to 10.
+	 * Uses batching internally to supports >10IDs.
 	 * @param ids Food IDs
 	 */
 	getFoods(ids: string[]): Observable<Food[]> {
-		// __name__ is document id
-		return collectionData<Food>(
-			query<Food>(
-				collection(this.afs, 'foods') as CollectionReference<Food>,
-				where('__name__', 'in', ids)
-			), {idField: 'id'}
-		);
+		let foods$: Observable<Food[]>[] = [];
+		let foodIds: string[] = [...new Set(ids)];		// Keep unique ids only
+
+		if (foodIds.length == 0) {
+			return of([]);
+		}
+
+		// Batch food queries into 10 (current limit of 'in' query)
+		while (foodIds.length > 0) {
+			let batchedFoodIds: string[] = foodIds.splice(0, 10);
+			let batchedFoodsObservable = collectionData<Food>(
+				query<Food>(
+					collection(this.afs, 'foods') as CollectionReference<Food>,
+					where('__name__', 'in', batchedFoodIds)				// __name__ is document id
+				), {idField: 'id'}
+			);
+			foods$.push(batchedFoodsObservable);
+		}
+
+		return combineLatest(foods$).pipe(map(batchedFoods => batchedFoods.flat(1)));
 	}
 
 	getFoodsByGroupOrderByName(groupId: string): Observable<Food[]> {

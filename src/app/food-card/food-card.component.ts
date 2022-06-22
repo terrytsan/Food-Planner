@@ -2,7 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { Food } from "./food";
 import { MatDialog } from "@angular/material/dialog";
 import { FoodEditDialogComponent } from "../food-edit-dialog/food-edit-dialog.component";
-import { FoodPlanDocument } from "../food-plan-preview/foodPlan";
+import { Dish, FoodPlan } from "../food-plan-preview/foodPlan";
 import { GlobalVariable } from "../global";
 import { FoodPlanService } from "../services/food-plan.service";
 import { FoodService } from "../services/food.service";
@@ -15,7 +15,8 @@ import { FoodService } from "../services/food.service";
 export class FoodCardComponent implements OnInit {
 
 	@Input() food: Food | null = null;
-	@Input() foodPlanDoc: FoodPlanDocument | null = null;
+	@Input() foodPlan: FoodPlan | null = null;
+	@Input() dish: Dish | null = null;
 	@Input() canEdit: boolean = false;
 	defaultImage: string = GlobalVariable.PLACEHOLDER_IMAGE_URL;
 
@@ -47,8 +48,8 @@ export class FoodCardComponent implements OnInit {
 
 
 	async removeFood() {
-		if (this.food && this.foodPlanDoc) {
-			await this.foodPlanService.removeFoodFromFoodPlan(this.food.id, this.foodPlanDoc);
+		if (this.dish && this.foodPlan) {
+			await this.foodPlanService.removeDishFromFoodPlan(this.foodPlanService.convertDishToSimpleDish(this.dish), this.foodPlan);
 		}
 	}
 }

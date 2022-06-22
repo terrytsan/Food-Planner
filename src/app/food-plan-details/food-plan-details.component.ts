@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FoodPlanService } from "../services/food-plan.service";
 import { Dish, FoodPlan, SimpleDish } from "../food-plan-preview/foodPlan";
-import { Subject } from "rxjs";
-import { takeUntil } from "rxjs/operators";
+import { EMPTY, Subject } from "rxjs";
+import { catchError, takeUntil } from "rxjs/operators";
 import { ActivatedRoute } from "@angular/router";
 import { Food } from "../food-card/food";
 import { UtilsService } from "../services/utils.service";
@@ -16,6 +16,7 @@ export class FoodPlanDetailsComponent implements OnInit {
 
 	id: string;
 	foodPlan: FoodPlanDetails;
+	foodPlanLoadError: boolean = false;
 
 	ngUnsubscribe = new Subject<void>();					// Used for unsubscribing from observable
 
@@ -23,7 +24,13 @@ export class FoodPlanDetailsComponent implements OnInit {
 		this.id = this.route.snapshot.params['id'];
 
 		let foodPlan$ = foodPlanService.getFoodPlan(this.id);
-		foodPlan$.pipe(takeUntil(this.ngUnsubscribe)).subscribe(t => {
+		foodPlan$.pipe(
+			takeUntil(this.ngUnsubscribe),
+			catchError(() => {
+				this.foodPlanLoadError = true;
+				return EMPTY;
+			})
+		).subscribe(t => {
 			t.dishes = t.dishes.sort((a, b) => a.index - b.index);
 
 			// Map to local modal to avoid function calls in template

@@ -1,7 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { FoodPlanDocument } from "./foodPlan";
+import { FoodPlan, SimpleDish } from "./foodPlan";
 import { Food } from "../food-card/food";
-import { Observable } from "rxjs";
 import { MatDialog } from "@angular/material/dialog";
 import { ChooseFoodDialogComponent } from "../choose-food-dialog/choose-food-dialog.component";
 import { FoodPlanService } from "../services/food-plan.service";
@@ -15,11 +14,10 @@ import { Router } from "@angular/router";
 })
 export class FoodPlanPreviewComponent implements OnInit {
 
-	@Input() foodPlanDoc: FoodPlanDocument = {} as FoodPlanDocument;
+	@Input() foodPlan: FoodPlan = {} as FoodPlan;
 	@Input() canEdit: boolean = false;
 	@Input() selectedEndDate: Date = new Date();
 
-	foods$: Observable<Food[]>;
 	showAddFoodsBtn: boolean = true;
 	showPointer: boolean = false;
 
@@ -32,12 +30,10 @@ export class FoodPlanPreviewComponent implements OnInit {
 	}
 
 	ngOnInit(): void {
-		if (this.foodPlanDoc.foods) {
-			this.foods$ = this.foodService.getFoods(this.foodPlanDoc.foods);
-
-			this.showAddFoodsBtn = this.foodPlanDoc.foods.length <= 10;		// "in" query limited to max 10
+		if (this.foodPlan.dishes && this.foodPlan.dishes.length > 0) {
+			this.showAddFoodsBtn = this.foodPlan.dishes.length <= 10;		// Arbitrary limit of 10 foods
 		}
-		if (this.foodPlanDoc.id) {
+		if (this.foodPlan.id) {
 			this.showPointer = true;
 		}
 	}
@@ -49,16 +45,21 @@ export class FoodPlanPreviewComponent implements OnInit {
 			data: this.selectedEndDate
 		});
 
-		dialogRef.afterClosed().subscribe(async result => {
+		dialogRef.afterClosed().subscribe(async (result: Food) => {
 			if (result) {
-				await this.foodPlanService.addFoodToFoodPlan(result.id, this.foodPlanDoc);
+				let dish: SimpleDish = {
+					foodId: result.id,
+					ingredients: result.coreIngredients || [],
+					index: (this.foodPlan.dishes.map(d => d.index).sort().pop() ?? 0) + 1
+				} as SimpleDish;
+				await this.foodPlanService.addDishToFoodPlan(dish, this.foodPlanService.convertFoodPlanToFoodPlanDoc(this.foodPlan));
 			}
 		});
 	}
 
 	navigateToDetailsPage() {
-		if (this.foodPlanDoc.id) {
-			this.router.navigate(['/foodPlans', this.foodPlanDoc.id]);
+		if (this.foodPlan.id) {
+			this.router.navigate(['/foodPlans', this.foodPlan.id]);
 		}
 	}
 }
