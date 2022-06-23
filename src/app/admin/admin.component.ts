@@ -11,10 +11,11 @@ import {
 	query,
 	where
 } from "@angular/fire/firestore";
-import { FoodPlan } from "../food-plan-preview/foodPlan";
+import { FoodPlan, FoodPlanDocument, SimpleDish } from "../food-plan-preview/foodPlan";
 import { map } from "rxjs/operators";
 import { Observable } from "rxjs";
 import { deleteObject, getDownloadURL, listAll, ref, Storage } from "@angular/fire/storage";
+import { FoodPlanService } from "../services/food-plan.service";
 
 @Component({
 	selector: 'app-admin',
@@ -31,10 +32,13 @@ export class AdminComponent implements OnInit {
 
 	emptyFoodPlans$: Observable<FoodPlan[]>;
 
-	constructor(private afs: Firestore, private storage: Storage) {
+	foodPlansNotUsingDishes$: Observable<FoodPlanDocument[]>;
+
+	constructor(private afs: Firestore, private storage: Storage, private foodPlanService: FoodPlanService) {
 		// this.initDuplicateFoodPlan();
 		// this.initUnusedImages();
 		// this.initEmptyFoodPlans();
+		// this.initFoodPlansNotUsingDishes();
 	}
 
 	ngOnInit(): void {
@@ -123,6 +127,51 @@ export class AdminComponent implements OnInit {
 		).pipe(map(foodPlans => {
 			return foodPlans.filter(f => (f.foods == undefined || f.foods.length <= 0));
 		}));
+	}
+
+	/**
+	 * Any FoodPlans that have foods and not dishes. Foods should be migrated to dishes.
+	 */
+	initFoodPlansNotUsingDishes() {
+		this.foodPlansNotUsingDishes$ = collectionData<FoodPlanDocument>(
+			query<FoodPlanDocument>(
+				collection(this.afs, 'foodPlans') as CollectionReference<FoodPlanDocument>,
+				where('group', '==', 'mP7yE8Gu3qpcySMUxBdL'),
+				orderBy('date')
+			), {idField: 'id'}
+		).pipe(map(foodPlans => {
+			// Only keep foodIds that don't exist in dish form
+			let foodPlansNotUsingDishes = [] as FoodPlanDocument[];
+			foodPlans.forEach(f => {
+				let filteredFoodPlan = {...f} as FoodPlanDocument;
+				if (f.dishes && f.foods) {
+					let existingDishFoodIds = f.dishes.map(d => d.foodId);
+					let foodIdsToAddToDishes = f.foods.filter(f => !existingDishFoodIds.includes(f));
+
+					if (foodIdsToAddToDishes.length == 0) {
+						// no need to add if foodPlan has no foods to add
+						return;
+					}
+
+					filteredFoodPlan.foods = foodIdsToAddToDishes;
+				}
+
+				if (!f.foods) {
+					return;
+				}
+				foodPlansNotUsingDishes.push(filteredFoodPlan);
+			});
+			return foodPlansNotUsingDishes;
+		}));
+	}
+
+	addDishToFoodPlan(foodId: string, foodPlan: FoodPlanDocument) {
+		let highestIndex = 0;
+		if (foodPlan.dishes && foodPlan.dishes.length > 0) {
+			highestIndex = Math.max(...foodPlan.dishes.map(f => f.index));
+		}
+		let dishToAdd = {foodId: foodId, index: highestIndex++, ingredients: []} as SimpleDish;
+		this.foodPlanService.addDishToFoodPlan(dishToAdd, foodPlan);
 	}
 }
 
