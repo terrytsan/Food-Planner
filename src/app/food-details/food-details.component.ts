@@ -7,6 +7,10 @@ import { MatDialog } from "@angular/material/dialog";
 import { COMMA, ENTER } from "@angular/cdk/keycodes";
 import { FoodService } from "../services/food.service";
 import { AuthService } from "../services/auth.service";
+import {
+	StringInputDialogComponent,
+	StringInputDialogData
+} from "../generic/string-input-dialog/string-input-dialog.component";
 
 @Component({
 	selector: 'app-food-details',
@@ -113,5 +117,36 @@ export class FoodDetailsComponent implements OnInit {
 				optionalIngredients: this.food.optionalIngredients
 			});
 		}
+	}
+
+	async editIngredient(ingredient: string, type: string, index: number) {
+		let dialogData = new StringInputDialogData();
+		dialogData.title = 'Edit Ingredient';
+		dialogData.inputLabel = 'Ingredient';
+		dialogData.initialValue = ingredient;
+		dialogData.confirmBtnText = 'Save';
+
+		let dialogRef = this.dialog.open(StringInputDialogComponent, {
+			width: '80%',
+			maxWidth: '600px',
+			autoFocus: true,
+			data: dialogData
+		});
+
+		dialogRef.afterClosed().subscribe(async newIngredientName => {
+			if (!newIngredientName) return;
+
+			if (type === 'core') {
+				this.food.coreIngredients[index] = newIngredientName;
+				await this.foodService.updateFood(this.id, {
+					coreIngredients: this.food.coreIngredients
+				});
+			} else if (type === 'optional') {
+				this.food.optionalIngredients[index] = newIngredientName;
+				await this.foodService.updateFood(this.id, {
+					optionalIngredients: this.food.optionalIngredients
+				});
+			}
+		});
 	}
 }

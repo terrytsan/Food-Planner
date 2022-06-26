@@ -30,8 +30,9 @@
 		<input (keyup.enter)="addCoreIngredient($event)" autocomplete="off" matInput tabindex="-1">
 	</mat-form-field>
 	<mat-chip-list class="mat-chip-list-stacked">
-		<mat-chip *ngFor="let ingredient of food.coreIngredients"
+		<mat-chip (click)="editIngredient(ingredient, 'core', i)"
 				  class="core-ingredient-chip"
+				  *ngFor="let ingredient of food.coreIngredients; let i = index"
 				  fxLayoutAlign="space-between">
 			{{ingredient}}
 			<button (click)="removeCoreIngredient(ingredient)" *ngIf="canEdit" matChipRemove>
@@ -49,8 +50,9 @@
 		<input (keyup.enter)="addOptionalIngredient($event)" autocomplete="off" matInput tabindex="-1">
 	</mat-form-field>
 	<mat-chip-list class="mat-chip-list-stacked">
-		<mat-chip *ngFor="let ingredient of food.optionalIngredients"
+		<mat-chip (click)="editIngredient(ingredient, 'optional', i)"
 				  class="optional-ingredient-chip"
+				  *ngFor="let ingredient of food.optionalIngredients; let i = index"
 				  fxLayoutAlign="space-between">
 			{{ingredient}}
 			<button (click)="removeOptionalIngredient(ingredient)" *ngIf="canEdit" matChipRemove>
