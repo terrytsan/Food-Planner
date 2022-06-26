@@ -7,16 +7,18 @@
 
 	<mat-card *ngFor="let dish of foodPlan.dishes" class="dish-card">
 		<h2>{{dish.food.name}}</h2>
-		<h3>Ingredients:</h3>
-		<!-- Not using ngModel as this was causing flashing when (un)checking boxes -->
-		<mat-selection-list>
-			<mat-list-option (click)="ingredientClicked(dish, ingredient)"
-							 *ngFor="let ingredient of dish.food.allIngredients"
-							 [value]="ingredient"
-							 selected="{{isIngredientChecked(dish,ingredient)}}">
-				{{ingredient}}
-			</mat-list-option>
-		</mat-selection-list>
+		<div *ngIf="dish.food.allIngredients.length > 0">
+			<h3>Ingredients:</h3>
+			<!-- Not using ngModel as this was causing flashing when (un)checking boxes -->
+			<mat-selection-list [disabled]="!canEdit">
+				<mat-list-option (click)="ingredientClicked(dish, ingredient)"
+								 *ngFor="let ingredient of dish.food.allIngredients"
+								 [value]="ingredient"
+								 selected="{{isIngredientChecked(dish,ingredient)}}">
+					{{ingredient}}
+				</mat-list-option>
+			</mat-selection-list>
+		</div>
 
 		<div *ngIf="dish.additionalIngredients.length > 0">
 			<h3>Additional Ingredients:</h3>

@@ -6,6 +6,7 @@ import { FoodEditDialogComponent } from "../food-edit-dialog/food-edit-dialog.co
 import { MatDialog } from "@angular/material/dialog";
 import { COMMA, ENTER } from "@angular/cdk/keycodes";
 import { FoodService } from "../services/food.service";
+import { AuthService } from "../services/auth.service";
 
 @Component({
 	selector: 'app-food-details',
@@ -18,13 +19,19 @@ export class FoodDetailsComponent implements OnInit {
 	food: Food;
 	defaultImage: string = GlobalVariable.PLACEHOLDER_IMAGE_URL;
 	food$: any;
+	canEdit: boolean = false;
 
 	// Labels
 	readonly separatorKeysCodes = [ENTER, COMMA] as const;
 	addOnBlur: boolean = true;
 
 
-	constructor(private route: ActivatedRoute, private dialog: MatDialog, private foodService: FoodService) {
+	constructor(
+		private route: ActivatedRoute,
+		private dialog: MatDialog,
+		private foodService: FoodService,
+		private authService: AuthService
+	) {
 		this.id = this.route.snapshot.params['id'];
 
 		this.food$ = this.foodService.getFood(this.id).subscribe(food => {
@@ -32,6 +39,10 @@ export class FoodDetailsComponent implements OnInit {
 			if (this.food.labels) {
 				this.food.labels.sort();
 			}
+		});
+
+		authService.getSimpleUser().subscribe(u => {
+			this.canEdit = u?.canEdit ?? false;
 		});
 	}
 

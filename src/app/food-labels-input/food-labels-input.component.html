@@ -1,9 +1,9 @@
 <mat-form-field [appearance]="appearance" class="labels-chip-list">
 	<mat-label>Labels</mat-label>
-	<mat-chip-list #chipList aria-label="Label selection">
+	<mat-chip-list #chipList [disabled]="!editable" aria-label="Label selection">
 		<mat-chip (removed)="remove(label)" *ngFor="let label of labels">
 			{{label}}
-			<button matChipRemove>
+			<button *ngIf="editable" matChipRemove>
 				<mat-icon>cancel</mat-icon>
 			</button>
 		</mat-chip>

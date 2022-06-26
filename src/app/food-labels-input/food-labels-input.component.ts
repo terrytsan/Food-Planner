@@ -21,6 +21,7 @@ export class FoodLabelsInputComponent implements OnInit {
 	@Input() labelSuggestions: string[] = [];
 	@Input() addOnBlur: boolean = false;		// Clicking out of input triggers add
 	@Input() appearance: MatFormFieldAppearance = 'fill';
+	@Input() editable: boolean = true;
 
 	labelCtrl = new FormControl();
 	filteredLabelSuggestions: Observable<string[]>;

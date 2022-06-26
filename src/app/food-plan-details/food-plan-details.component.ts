@@ -6,6 +6,7 @@ import { catchError, takeUntil } from "rxjs/operators";
 import { ActivatedRoute } from "@angular/router";
 import { Food } from "../food-card/food";
 import { UtilsService } from "../services/utils.service";
+import { AuthService } from "../services/auth.service";
 
 @Component({
 	selector: 'app-food-plan-details',
@@ -17,10 +18,15 @@ export class FoodPlanDetailsComponent implements OnInit {
 	id: string;
 	foodPlan: FoodPlanDetails;
 	foodPlanLoadError: boolean = false;
+	canEdit: boolean = false;
 
 	ngUnsubscribe = new Subject<void>();					// Used for unsubscribing from observable
 
-	constructor(private route: ActivatedRoute, private foodPlanService: FoodPlanService) {
+	constructor(
+		private route: ActivatedRoute,
+		private foodPlanService: FoodPlanService,
+		private authService: AuthService
+	) {
 		this.id = this.route.snapshot.params['id'];
 
 		let foodPlan$ = foodPlanService.getFoodPlan(this.id);
@@ -47,6 +53,10 @@ export class FoodPlanDetailsComponent implements OnInit {
 					} as FoodPlanDetailsDish;
 				})
 			};
+		});
+
+		authService.getSimpleUser().subscribe(u => {
+			this.canEdit = u?.canEdit ?? false;
 		});
 	}
 

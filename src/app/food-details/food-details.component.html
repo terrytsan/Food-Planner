@@ -19,12 +19,13 @@
 						   [(labels)]="food.labels"
 						   [addOnBlur]="true"
 						   [appearance]="'outline'"
+						   [editable]="canEdit"
 						   class="labels-chip-list">
 	</app-food-labels-input>
 
 	<!-- Ingredients -->
 	<h2>Core Ingredients</h2>
-	<mat-form-field appearance="fill" class="ingredient-input" color="primary">
+	<mat-form-field *ngIf="canEdit" appearance="fill" class="ingredient-input" color="primary">
 		<mat-label>Core Ingredient</mat-label>
 		<input (keyup.enter)="addCoreIngredient($event)" autocomplete="off" matInput tabindex="-1">
 	</mat-form-field>
@@ -33,7 +34,7 @@
 				  class="core-ingredient-chip"
 				  fxLayoutAlign="space-between">
 			{{ingredient}}
-			<button (click)="removeCoreIngredient(ingredient)" matChipRemove>
+			<button (click)="removeCoreIngredient(ingredient)" *ngIf="canEdit" matChipRemove>
 				<mat-icon>cancel</mat-icon>
 			</button>
 		</mat-chip>
@@ -43,7 +44,7 @@
 	</mat-chip-list>
 
 	<h2 style="padding-top: 15px;">Optional Ingredients</h2>
-	<mat-form-field appearance="fill" class="ingredient-input" color="primary">
+	<mat-form-field *ngIf="canEdit" appearance="fill" class="ingredient-input" color="primary">
 		<mat-label>Optional Ingredient</mat-label>
 		<input (keyup.enter)="addOptionalIngredient($event)" autocomplete="off" matInput tabindex="-1">
 	</mat-form-field>
@@ -52,7 +53,7 @@
 				  class="optional-ingredient-chip"
 				  fxLayoutAlign="space-between">
 			{{ingredient}}
-			<button (click)="removeOptionalIngredient(ingredient)" matChipRemove>
+			<button (click)="removeOptionalIngredient(ingredient)" *ngIf="canEdit" matChipRemove>
 				<mat-icon>cancel</mat-icon>
 			</button>
 		</mat-chip>
@@ -62,7 +63,7 @@
 	</mat-chip-list>
 
 	<!-- Editing fab -->
-	<button (click)="openEditFoodDialog()" class="btn-toggle-edit" mat-fab>
+	<button (click)="openEditFoodDialog()" *ngIf="canEdit" class="btn-toggle-edit" mat-fab>
 		<mat-icon>edit</mat-icon>
 	</button>
 </mat-card>
