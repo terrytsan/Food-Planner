@@ -5,6 +5,8 @@ import { Timestamp } from "firebase/firestore";
 import { catchError, map, switchMap } from "rxjs/operators";
 import { AuthService, SimpleUser } from "../services/auth.service";
 import { FoodPlanService } from "../services/food-plan.service";
+import { MatDialog } from "@angular/material/dialog";
+import { ShoppingListComponent } from "../shopping-list/shopping-list.component";
 
 @Component({
 	selector: 'app-week-plan',
@@ -21,7 +23,7 @@ export class WeekPlanComponent implements OnInit {
 	startOfWeek = 'Sunday';
 	earliestStartingWeek = Timestamp.fromDate(new Date("25 October 2021"));		// Prevent weeks earlier than this date from being generated
 
-	constructor(private authService: AuthService, private foodPlanService: FoodPlanService) {
+	constructor(private authService: AuthService, private foodPlanService: FoodPlanService, private dialog: MatDialog) {
 		this.selectedWeek = this.getCurrentWeek();
 		this.selectedWeek$ = new BehaviorSubject<Week>(this.selectedWeek);
 		this.foodPlans$ = combineLatest([
@@ -116,6 +118,18 @@ export class WeekPlanComponent implements OnInit {
 		this.selectedWeek.startDate = Timestamp.fromDate(newStartDate);
 		this.selectedWeek.endDate = Timestamp.fromDate(newEndDate);
 		this.selectedWeek$.next(this.selectedWeek);
+	}
+
+	openShoppingList(foodPlans: FoodPlan[]) {
+		this.dialog.open(ShoppingListComponent, {
+			maxWidth: '600px',
+			width: '80%',
+			data: {
+				FoodPlans: foodPlans,
+				startDate: this.selectedWeek.startDate,
+				endDate: this.selectedWeek.endDate
+			}
+		});
 	}
 }
 

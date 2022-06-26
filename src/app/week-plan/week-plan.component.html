@@ -20,6 +20,14 @@
 								   [selectedEndDate]="selectedWeek.endDate.toDate()"></app-food-plan-preview>
 		</div>
 	</div>
+
+	<div *ngIf="{user: user$ | async} as userWrapper">
+		<button (click)="openShoppingList(foodPlans)"
+				class="btn-open-shopping-list"
+				mat-fab>
+			<mat-icon>checklist_rtl</mat-icon>
+		</button>
+	</div>
 </div>
 
 <ng-template #noFoodPlans>

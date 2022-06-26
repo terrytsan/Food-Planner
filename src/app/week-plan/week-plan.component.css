@@ -8,3 +8,10 @@
 .center {
 	text-align: center;
 }
+
+.btn-open-shopping-list {
+	position: fixed;
+	right: 20px;
+	left: auto;
+	bottom: 20px;
+}

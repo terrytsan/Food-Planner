@@ -65,6 +65,7 @@ import { getAnalytics, provideAnalytics, ScreenTrackingService, UserTrackingServ
 import { ConfirmationDialogComponent } from './generic/confirmation-dialog/confirmation-dialog.component';
 import { MatTooltipModule } from "@angular/material/tooltip";
 import { FoodPlanDetailsComponent } from './food-plan-details/food-plan-details.component';
+import { ShoppingListComponent } from './shopping-list/shopping-list.component';
 
 @NgModule({
 	declarations: [
@@ -90,7 +91,8 @@ import { FoodPlanDetailsComponent } from './food-plan-details/food-plan-details.
 		FoodLabelsInputComponent,
 		PrivacyPolicyDialogComponent,
 		ConfirmationDialogComponent,
-		FoodPlanDetailsComponent
+		FoodPlanDetailsComponent,
+		ShoppingListComponent
 	],
 	imports: [
 		BrowserModule,
