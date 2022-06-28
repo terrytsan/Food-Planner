@@ -6,12 +6,15 @@
 			<mat-label>User ID</mat-label>
 			<input autocomplete="off" formControlName="userId" matInput required>
 			<mat-error *ngIf="member.controls.userId.hasError('invalidUser')">User not found</mat-error>
+			<mat-error *ngIf="member.controls.userId.hasError('userExistsInGroup')">
+				User already exists in this group
+			</mat-error>
 		</mat-form-field>
 		<mat-form-field>
 			<mat-label>Permission</mat-label>
 			<mat-select formControlName="permission">
-				<mat-option value="viewer">Viewer</mat-option>
-				<mat-option value="editor">Editor</mat-option>
+				<mat-option [value]="'viewer'">Viewer</mat-option>
+				<mat-option [value]="'editor'">Editor</mat-option>
 			</mat-select>
 		</mat-form-field>
 		<button (click)="removeMember()"

@@ -1,6 +1,14 @@
 import { Component, Inject, Injectable, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
-import { AbstractControl, AsyncValidator, FormControl, FormGroup, ValidationErrors, Validators } from "@angular/forms";
+import {
+	AbstractControl,
+	AsyncValidator,
+	FormControl,
+	FormGroup,
+	ValidationErrors,
+	ValidatorFn,
+	Validators
+} from "@angular/forms";
 import { doc, Firestore, getDoc } from "@angular/fire/firestore";
 import { from, Observable } from "rxjs";
 import { map } from "rxjs/operators";
@@ -15,7 +23,7 @@ import { GroupService } from "../group.service";
 export class GroupMemberEditDialogComponent implements OnInit {
 	member = new FormGroup({
 		userId: new FormControl('', {
-			validators: [Validators.required],
+			validators: [Validators.required, existingMemberValidator(this.data.group)],
 			asyncValidators: [this.userExistsValidator.validate.bind(this.userExistsValidator)],
 			updateOn: "blur"
 		}),
@@ -79,6 +87,18 @@ export class UserExistsValidator implements AsyncValidator {
 			}
 		}));
 	}
+}
+
+export function existingMemberValidator(group: Group): ValidatorFn {
+	let existingIds = [group.owner, ...group.viewers, ...group.editors].map(t => t.id);
+
+	return (control: AbstractControl): ValidationErrors | null => {
+		if (existingIds.includes(control.value)) {
+			return {userExistsInGroup: true};
+		} else {
+			return null;
+		}
+	};
 }
 
 export interface GroupMemberEditDialogData {
