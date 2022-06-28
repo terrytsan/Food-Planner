@@ -3,7 +3,10 @@
  'neutral-colour': catalogueItem.status  == 'neutral'}"
 		  class="catalogue-item-card"
 		  [routerLink]="['/catalogueItem', catalogueItem.id]">
-	<img alt="Photo of {{catalogueItem.name}}" mat-card-image src="{{catalogueItem.imageUrl || defaultImage}}">
+	<img alt="Photo of {{catalogueItem.name}}"
+		 loading="lazy"
+		 mat-card-image
+		 src="{{catalogueItem.imageUrl || defaultImage}}">
 	<div>
 		<mat-card-title>{{catalogueItem.name}}</mat-card-title>
 		<mat-card-content *ngIf="lowestPrice">

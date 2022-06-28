@@ -10,7 +10,7 @@
 </mat-form-field>
 <mat-dialog-content>
 	<mat-card *ngFor="let food of filteredFoods" class="food-card">
-		<img alt="Photo of {{food.name}}" class="food-image" src="{{food.image || defaultImage}}">
+		<img alt="Photo of {{food.name}}" class="food-image" loading="lazy" src="{{food.image || defaultImage}}">
 		<div>{{food.name}}</div>
 		<button (click)="chooseFood(food)" mat-button style="margin-left: auto; padding-right: 0;">
 			<mat-icon style="color: green">add_circle</mat-icon>

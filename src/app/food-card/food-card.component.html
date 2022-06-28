@@ -15,12 +15,16 @@
 			</button>
 		</mat-menu>
 	</div>
-	<img alt="Photo of {{food.name}}" class="food-image" mat-card-image src="{{food.image || defaultImage}}">
+	<img alt="Photo of {{food.name}}"
+		 class="food-image"
+		 loading="lazy"
+		 mat-card-image
+		 src="{{food.image || defaultImage}}">
 </mat-card>
 
 <!-- Simple Food Details -->
 <mat-card *ngIf="food && foodPlan" [routerLink]="['/foods', food.id]" class="simple-food-card">
-	<img alt="Photo of {{food.name}}" class="simple-food-image" src="{{food.image || defaultImage}}">
+	<img alt="Photo of {{food.name}}" class="simple-food-image" loading="lazy" src="{{food.image || defaultImage}}">
 	<div class="food-card-title-big">{{food.name}}</div>
 	<button (click)="$event.stopPropagation()"
 			*ngIf="canEdit"
