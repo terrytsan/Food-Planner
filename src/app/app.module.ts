@@ -66,6 +66,7 @@ import { ConfirmationDialogComponent } from './generic/confirmation-dialog/confi
 import { MatTooltipModule } from "@angular/material/tooltip";
 import { FoodPlanDetailsComponent } from './food-plan-details/food-plan-details.component';
 import { ShoppingListComponent } from './shopping-list/shopping-list.component';
+import { DragDropModule } from "@angular/cdk/drag-drop";
 
 @NgModule({
 	declarations: [
@@ -160,7 +161,8 @@ import { ShoppingListComponent } from './shopping-list/shopping-list.component';
 		MatSelectModule,
 		MatProgressSpinnerModule,
 		MatCheckboxModule,
-		MatTooltipModule
+		MatTooltipModule,
+		DragDropModule
 	],
 	providers: [
 		{provide: MAT_DATE_LOCALE, useValue: 'en-GB'},

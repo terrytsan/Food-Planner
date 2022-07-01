@@ -11,6 +11,7 @@ import {
 	StringInputDialogComponent,
 	StringInputDialogData
 } from "../generic/string-input-dialog/string-input-dialog.component";
+import { CdkDragDrop, moveItemInArray } from "@angular/cdk/drag-drop";
 
 @Component({
 	selector: 'app-food-details',
@@ -148,5 +149,22 @@ export class FoodDetailsComponent implements OnInit {
 				});
 			}
 		});
+	}
+
+	async dropIngredient($event: CdkDragDrop<string>) {
+		if ($event.previousIndex === $event.currentIndex) {
+			return;
+		}
+		if ($event.container.id == 'coreIngredientsList') {
+			moveItemInArray(this.food.coreIngredients, $event.previousIndex, $event.currentIndex);
+			await this.foodService.updateFood(this.id, {
+				coreIngredients: this.food.coreIngredients
+			});
+		} else if ($event.container.id == 'optionalIngredientsList') {
+			moveItemInArray(this.food.optionalIngredients, $event.previousIndex, $event.currentIndex);
+			await this.foodService.updateFood(this.id, {
+				optionalIngredients: this.food.optionalIngredients
+			});
+		}
 	}
 }
