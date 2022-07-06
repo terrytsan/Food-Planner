@@ -11,7 +11,7 @@ import {
 	StringInputDialogComponent,
 	StringInputDialogData
 } from "../generic/string-input-dialog/string-input-dialog.component";
-import { CdkDragDrop, moveItemInArray } from "@angular/cdk/drag-drop";
+import { CdkDragDrop, DragStartDelay, moveItemInArray } from "@angular/cdk/drag-drop";
 
 @Component({
 	selector: 'app-food-details',
@@ -30,6 +30,7 @@ export class FoodDetailsComponent implements OnInit {
 	readonly separatorKeysCodes = [ENTER, COMMA] as const;
 	addOnBlur: boolean = true;
 
+	dragStartDelay: DragStartDelay = {mouse: 0, touch: 400};
 
 	constructor(
 		private route: ActivatedRoute,

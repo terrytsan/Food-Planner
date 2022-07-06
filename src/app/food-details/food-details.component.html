@@ -37,6 +37,7 @@
 				  class="core-ingredient-chip"
 				  *ngFor="let ingredient of food.coreIngredients; let i = index"
 				  cdkDrag
+				  [cdkDragStartDelay]="dragStartDelay"
 				  fxLayoutAlign="space-between">
 			{{ingredient}}
 			<button (click)="removeCoreIngredient(ingredient)" *ngIf="canEdit" matChipRemove>
@@ -61,6 +62,7 @@
 				  class="optional-ingredient-chip"
 				  *ngFor="let ingredient of food.optionalIngredients; let i = index"
 				  cdkDrag
+				  [cdkDragStartDelay]="dragStartDelay"
 				  fxLayoutAlign="space-between">
 			{{ingredient}}
 			<button (click)="removeOptionalIngredient(ingredient)" *ngIf="canEdit" matChipRemove>
