@@ -26,6 +26,8 @@ export class AppComponent {
 	public scrollContainer: MatSidenavContent;
 
 	mobileDisplay = this.media.isActive('xs');
+	// urls where back button is shown
+	backButtonUrls = ['/catalogueItem/', '/foods/', '/profile', '/foodPlans/'];
 	showBackBtn = false;
 	loggedInUser$: Observable<SimpleUser | null>;
 	private mediaSubscription: Subscription;
@@ -57,7 +59,7 @@ export class AppComponent {
 		this.routerSubscription = this.router.events.pipe(
 			filter((event): event is NavigationEnd => event instanceof NavigationEnd)
 		).subscribe((event: NavigationEnd) => {
-			this.showBackBtn = event.urlAfterRedirects.startsWith('/catalogueItem') || event.urlAfterRedirects.startsWith('/foods/');
+			this.showBackBtn = this.backButtonUrls.some(url => event.urlAfterRedirects.startsWith(url));
 		});
 
 		this.loggedInUser$.pipe(take(1)).subscribe(user => {
