@@ -208,9 +208,9 @@ export class FoodEditDialogComponent implements OnInit {
 				imagePath: this.food.imagePath,
 				group: this.food.group,
 				labels: this.food.labels
-			}).then(() => {
+			}).then((addedFood) => {
 				this.saving = false;
-				this.dialogRef.close();
+				this.dialogRef.close(addedFood.id);
 			});
 		}
 	}

@@ -10,6 +10,7 @@ import { FormControl } from "@angular/forms";
 import { MatAutocompleteSelectedEvent } from "@angular/material/autocomplete";
 import { AuthService, FoodPlannerUser } from "../services/auth.service";
 import { FoodService } from "../services/food.service";
+import { Router } from "@angular/router";
 
 @Component({
 	selector: 'app-foods',
@@ -45,7 +46,12 @@ export class FoodsComponent implements OnInit {
 
 	ngUnsubscribe = new Subject<void>();					// Used for unsubscribing from observables
 
-	constructor(private dialog: MatDialog, private authService: AuthService, private foodService: FoodService) {
+	constructor(
+		private dialog: MatDialog,
+		private authService: AuthService,
+		private foodService: FoodService,
+		private router: Router
+	) {
 		this.user$ = authService.getExtendedUser().pipe(takeUntil(this.ngUnsubscribe));
 
 		this.foods$ = this.user$.pipe(switchMap(user => {
@@ -146,10 +152,14 @@ export class FoodsComponent implements OnInit {
 	}
 
 	openAddFoodDialog() {
-		this.dialog.open(FoodEditDialogComponent, {
+		let dialogRef = this.dialog.open(FoodEditDialogComponent, {
 			maxWidth: '600px',
 			width: '80%',
 			data: {AllLabels: this.allLabels}
+		});
+
+		dialogRef.afterClosed().subscribe(newFoodId => {
+			this.router.navigateByUrl(`/foods/${newFoodId}`);
 		});
 	}
 
