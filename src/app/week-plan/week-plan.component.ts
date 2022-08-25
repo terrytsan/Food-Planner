@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { BehaviorSubject, combineLatest, Observable, of } from "rxjs";
 import { FoodPlan } from "../food-plan-preview/foodPlan";
 import { Timestamp } from "firebase/firestore";
@@ -7,13 +7,14 @@ import { AuthService, SimpleUser } from "../services/auth.service";
 import { FoodPlanService } from "../services/food-plan.service";
 import { MatDialog } from "@angular/material/dialog";
 import { ShoppingListComponent } from "../shopping-list/shopping-list.component";
+import { StateService } from "../services/state.service";
 
 @Component({
 	selector: 'app-week-plan',
 	templateUrl: './week-plan.component.html',
 	styleUrls: ['./week-plan.component.css']
 })
-export class WeekPlanComponent implements OnInit {
+export class WeekPlanComponent implements OnInit, OnDestroy {
 
 	user$: Observable<SimpleUser | null> = this.authService.getSimpleUser();
 	foodPlans$: Observable<FoodPlan[]>;
@@ -23,8 +24,18 @@ export class WeekPlanComponent implements OnInit {
 	startOfWeek = 'Sunday';
 	earliestStartingWeek = Timestamp.fromDate(new Date("25 October 2021"));		// Prevent weeks earlier than this date from being generated
 
-	constructor(private authService: AuthService, private foodPlanService: FoodPlanService, private dialog: MatDialog) {
-		this.selectedWeek = this.getCurrentWeek();
+	constructor(
+		private authService: AuthService,
+		private foodPlanService: FoodPlanService,
+		private dialog: MatDialog,
+		private stateService: StateService
+	) {
+		let savedState = stateService.getWeekPlanState();
+		if (savedState != null) {
+			this.selectedWeek = savedState.selectedWeek;
+		} else {
+			this.selectedWeek = this.getCurrentWeek();
+		}
 		this.selectedWeek$ = new BehaviorSubject<Week>(this.selectedWeek);
 		this.foodPlans$ = combineLatest([
 			this.selectedWeek$,
@@ -72,6 +83,10 @@ export class WeekPlanComponent implements OnInit {
 	}
 
 	ngOnInit(): void {
+	}
+
+	ngOnDestroy() {
+		this.stateService.setWeekPlanState(this.selectedWeek);
 	}
 
 	getCurrentWeek(): Week {
@@ -133,7 +148,7 @@ export class WeekPlanComponent implements OnInit {
 	}
 }
 
-interface Week {
+export interface Week {
 	// Date of Monday/Sunday	(depends on value of startOfWeek)
 	startDate: Timestamp;
 	// Date of Sunday/Saturday
