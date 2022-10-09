@@ -23,7 +23,7 @@
 </mat-card>
 
 <!-- Simple Food Details -->
-<mat-card *ngIf="food && foodPlan" [routerLink]="['/foods', food.id]" class="simple-food-card">
+<mat-card *ngIf="food && foodPlan" @fade [routerLink]="['/foods', food.id]" class="simple-food-card">
 	<img alt="Photo of {{food.name}}" class="simple-food-image" loading="lazy" src="{{food.image || defaultImage}}">
 	<div class="food-card-title-big">{{food.name}}</div>
 	<button (click)="$event.stopPropagation()"

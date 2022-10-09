@@ -8,11 +8,17 @@ import { FoodPlanService } from "../services/food-plan.service";
 import { MatDialog } from "@angular/material/dialog";
 import { ShoppingListComponent } from "../shopping-list/shopping-list.component";
 import { StateService } from "../services/state.service";
+import { animateChild, query, stagger, transition, trigger } from "@angular/animations";
 
 @Component({
 	selector: 'app-week-plan',
 	templateUrl: './week-plan.component.html',
-	styleUrls: ['./week-plan.component.css']
+	styleUrls: ['./week-plan.component.css'],
+	animations: [
+		trigger('foodPlans', [
+			transition(":enter", [query('@fade', stagger(50, animateChild()))])
+		])
+	]
 })
 export class WeekPlanComponent implements OnInit, OnDestroy {
 
@@ -120,7 +126,7 @@ export class WeekPlanComponent implements OnInit, OnDestroy {
 	}
 
 	trackById(index: number, item: any) {
-		return JSON.stringify(item);
+		return item.id;
 	}
 
 	advanceWeek(advanceDays: number) {

@@ -8,7 +8,7 @@
 	</div>
 	<mat-card-content>
 		<div *ngIf="foodPlan.dishes as dishes">
-			<app-food-card *ngFor="let dish of dishes"
+			<app-food-card *ngFor="let dish of dishes trackBy: trackByIndex"
 						   [canEdit]="canEdit"
 						   [dish]="dish"
 						   [foodPlan]="foodPlan"

@@ -62,4 +62,8 @@ export class FoodPlanPreviewComponent implements OnInit {
 			this.router.navigate(['/foodPlans', this.foodPlan.id]);
 		}
 	}
+
+	trackByIndex(index: number, item: any) {
+		return item.index;
+	}
 }

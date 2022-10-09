@@ -6,11 +6,20 @@ import { Dish, FoodPlan } from "../food-plan-preview/foodPlan";
 import { GlobalVariable } from "../global";
 import { FoodPlanService } from "../services/food-plan.service";
 import { FoodService } from "../services/food.service";
+import { animate, style, transition, trigger } from "@angular/animations";
 
 @Component({
 	selector: 'app-food-card',
 	templateUrl: './food-card.component.html',
-	styleUrls: ['./food-card.component.css']
+	styleUrls: ['./food-card.component.css'],
+	animations: [
+		trigger('fade', [
+			transition(':enter', [
+				style({ opacity: 0, transform: "translateY(50px)" }),
+				animate('150ms ease-in-out', style({ opacity: 1, transform: "translateY(0px)" }))
+			])
+		])
+	]
 })
 export class FoodCardComponent implements OnInit {
 
