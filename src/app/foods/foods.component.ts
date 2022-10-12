@@ -11,11 +11,34 @@ import { MatAutocompleteSelectedEvent } from "@angular/material/autocomplete";
 import { AuthService, FoodPlannerUser } from "../services/auth.service";
 import { FoodService } from "../services/food.service";
 import { Router } from "@angular/router";
+import { animate, style, transition, trigger } from "@angular/animations";
 
 @Component({
 	selector: 'app-foods',
 	templateUrl: './foods.component.html',
-	styleUrls: ['./foods.component.css']
+	styleUrls: ['./foods.component.css'],
+	animations: [
+		trigger('searchButtonAnimation', [
+			transition(':enter', [
+				style({ opacity: 0, transform: 'translateX(50px)' }),
+				animate('250ms ease-in-out', style({ opacity: 1, transform: 'translateX(0px)' }))
+			]),
+			transition(':leave', [
+				style({ opacity: 1, transform: 'translateX(0)' }),
+				animate('250ms ease-in-out', style({ opacity: 0, transform: 'translateX(50px)' }))
+			])
+		]),
+		trigger('searchBoxAnimation', [
+			transition(':enter', [
+				style({ opacity: 0, width: 0 }),
+				animate('300ms ease-in-out', style({ opacity: 1, width: '*' }))
+			]),
+			transition(':leave', [
+				style({ opacity: 1, width: '*' }),
+				animate('200ms ease-in-out', style({ opacity: 0, width: 0 }))
+			])
+		])
+	]
 })
 export class FoodsComponent implements OnInit {
 
@@ -34,6 +57,11 @@ export class FoodsComponent implements OnInit {
 	unusedLabels: string[];							// Autocomplete for input box. Shows only the labels that haven't been selected and input box can filter these.
 	private _lblFilterOp: Operator = Operator.OR;
 	private _lblFilterOp$ = new BehaviorSubject<Operator>(this._lblFilterOp);	// Allows food filtering when changing operator
+
+	// Food search box
+	@ViewChild('searchBox') searchBox: ElementRef<HTMLInputElement>;
+	isSearchBoxVisible: boolean = false;
+	private _foodSearchInput$ = new BehaviorSubject<string>('');
 
 	get lblFilterOp(): Operator {
 		return this._lblFilterOp;
@@ -117,25 +145,34 @@ export class FoodsComponent implements OnInit {
 			// startWith required as combineLatest requires both sources to emit before emitting itself
 			this.foods$.pipe(startWith(<Food[]>[]), takeUntil(this.ngUnsubscribe)),
 			this.selectedLabels$.pipe(startWith(<string[]>[]), takeUntil(this.ngUnsubscribe)),
-			this._lblFilterOp$.pipe(startWith(Operator.OR))
-		]).pipe(map(([foods, filterLabels]) => {
+			this._lblFilterOp$.pipe(startWith(Operator.OR), takeUntil(this.ngUnsubscribe)),
+			this._foodSearchInput$.pipe(startWith(''), takeUntil(this.ngUnsubscribe))
+		]).pipe(map(([foods, filterLabels, filterOp, foodSearch]) => {
 				filterLabels = filterLabels.map(label => label.toLowerCase());
-				let filtered = <Food[]>[];
-				if (!filterLabels || filterLabels.length == 0) {
-					return foods;
-				} else if (filterLabels && foods) {
+				let filtered: Food[] = foods;
+
+				// Filter by label
+				if (filterLabels.length > 0 && foods) {
 					filtered = foods.filter(food => {
 						if (!food.labels) {
 							return false;
 						}
 
-						switch (this._lblFilterOp) {
+						switch (filterOp) {
 							case Operator.OR:
 								return food.labels.some(l => filterLabels.includes(l.toLowerCase()));
 							case Operator.AND:
 								food.labels = food.labels.map(l => l.toLowerCase());
 								return filterLabels.every(l => food.labels.includes(l));
 						}
+					});
+				}
+
+				// Filter by search input
+				const foodSearchPopulated = !!foodSearch.trim();
+				if (foodSearchPopulated) {
+					filtered = filtered.filter(food => {
+						return food.name.toLowerCase().includes(foodSearch.toLowerCase());
 					});
 				}
 				return filtered;
@@ -155,7 +192,7 @@ export class FoodsComponent implements OnInit {
 		let dialogRef = this.dialog.open(FoodEditDialogComponent, {
 			maxWidth: '600px',
 			width: '80%',
-			data: {AllLabels: this.allLabels}
+			data: { AllLabels: this.allLabels }
 		});
 
 		dialogRef.afterClosed().subscribe(newFoodId => {
@@ -193,6 +230,38 @@ export class FoodsComponent implements OnInit {
 		this.labelInput.nativeElement.value = '';
 		this.labelCtrl.setValue(null);
 	}
+
+	// Food search box
+	showSearchBox() {
+		this.isSearchBoxVisible = true;
+	}
+
+	/**
+	 * Update search observable everytime text is entered
+	 * @param $event KeyboardEvent
+	 */
+	onSearchBoxKeyUp($event: KeyboardEvent) {
+		const value = ((<HTMLInputElement>$event.target).value || '').trim();
+		this._foodSearchInput$.next(value);
+	}
+
+	clearSearchBox() {
+		this.searchBox.nativeElement.value = '';
+		this._foodSearchInput$.next('');
+	}
+
+	/**
+	 * Clicking out of the search box when it is blank will hide the search box and reveal the search button
+	 * @param $event FocusEvent
+	 */
+	unFocusSearchBox($event: FocusEvent) {
+		const value = (<HTMLInputElement>$event.target).value || '';
+		if (value == '') {
+			this.isSearchBoxVisible = false;
+		}
+	}
+
+	// End Food search box
 }
 
 enum Operator {

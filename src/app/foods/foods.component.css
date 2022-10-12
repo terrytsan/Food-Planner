@@ -1,3 +1,37 @@
+.header-wrapper {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	margin-bottom: 16px;
+}
+
+.food-search-wrapper {
+	height: 34px;
+	max-height: 34px;
+	position: relative;
+	font-size: 10px; /* Makes input box font smaller */
+}
+
+:host ::ng-deep .food-search-wrapper .mat-form-field-wrapper {
+	padding-bottom: 0;
+}
+
+:host ::ng-deep .food-search-wrapper .mat-form-field-infix {
+	border: 0; /* Makes input box height more even */
+}
+
+.food-search-button {
+	padding-left: 0;
+	padding-right: 0;
+	z-index: 1
+}
+
+.food-search-input {
+	position: absolute;
+	z-index: 1;
+	left: 29px
+}
+
 .btn-add-foods {
 	position: fixed;
 	right: 20px;

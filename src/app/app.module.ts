@@ -67,6 +67,7 @@ import { MatTooltipModule } from "@angular/material/tooltip";
 import { FoodPlanDetailsComponent } from './food-plan-details/food-plan-details.component';
 import { ShoppingListComponent } from './shopping-list/shopping-list.component';
 import { DragDropModule } from "@angular/cdk/drag-drop";
+import { AutoFocusDirective } from './directives/auto-focus.directive';
 
 @NgModule({
 	declarations: [
@@ -93,7 +94,8 @@ import { DragDropModule } from "@angular/cdk/drag-drop";
 		PrivacyPolicyDialogComponent,
 		ConfirmationDialogComponent,
 		FoodPlanDetailsComponent,
-		ShoppingListComponent
+		ShoppingListComponent,
+		AutoFocusDirective
 	],
 	imports: [
 		BrowserModule,
@@ -126,7 +128,7 @@ import { DragDropModule } from "@angular/cdk/drag-drop";
 		}),
 		provideAppCheck(() => {
 			const provider = new ReCaptchaV3Provider(environment.recaptcha3SiteKey);
-			return initializeAppCheck(undefined, {provider, isTokenAutoRefreshEnabled: true});
+			return initializeAppCheck(undefined, { provider, isTokenAutoRefreshEnabled: true });
 		}),
 		provideAnalytics(() => getAnalytics()),
 		MatToolbarModule,
@@ -165,7 +167,7 @@ import { DragDropModule } from "@angular/cdk/drag-drop";
 		DragDropModule
 	],
 	providers: [
-		{provide: MAT_DATE_LOCALE, useValue: 'en-GB'},
+		{ provide: MAT_DATE_LOCALE, useValue: 'en-GB' },
 		ScreenTrackingService,
 		UserTrackingService
 	],

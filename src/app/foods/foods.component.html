@@ -1,4 +1,27 @@
-<h1>Foods</h1>
+<div class="header-wrapper">
+	<h1 style="margin: 0;">Foods</h1>
+	<div class="food-search-wrapper">
+		<button (click)="showSearchBox()"
+				*ngIf="!isSearchBoxVisible"
+				@searchButtonAnimation
+				class="food-search-button"
+				mat-button>
+			<mat-icon>search</mat-icon>
+		</button>
+		<mat-form-field *ngIf="isSearchBoxVisible" @searchBoxAnimation appearance="outline" class="food-search-input">
+			<input #searchBox
+				   (blur)="unFocusSearchBox($event)"
+				   (keyup)="onSearchBoxKeyUp($event)"
+				   autoFocus
+				   matInput
+				   placeholder="Search Foods..."
+				   type="text">
+			<button (click)="clearSearchBox()" *ngIf="searchBox.value" mat-icon-button matSuffix>
+				<mat-icon>close</mat-icon>
+			</button>
+		</mat-form-field>
+	</div>
+</div>
 <div fxLayout="row" fxLayoutAlign="flex-start center">
 	<mat-form-field class="labels-filter-input" appearance="fill">
 		<mat-label>Filter Labels</mat-label>
