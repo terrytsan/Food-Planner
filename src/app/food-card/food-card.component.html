@@ -15,6 +15,9 @@
 			</button>
 		</mat-menu>
 	</div>
+	<mat-chip-list style="padding-bottom: 5px;">
+		<mat-chip *ngFor="let label of food.labels | slice:0:2" style="font-size: 11px;">{{label}}</mat-chip>
+	</mat-chip-list>
 	<img alt="Photo of {{food.name}}"
 		 class="food-image"
 		 loading="lazy"
