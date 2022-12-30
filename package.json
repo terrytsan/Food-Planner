@@ -6,6 +6,9 @@
 		"start": "ng serve",
 		"build": "ng build",
 		"watch": "ng build --watch --configuration development",
+		"deploy": "npm run build ng deploy",
+		"deploy-preview": "npm run build && firebase hosting:channel:deploy feature_preview",
+		"start-emulator": "firebase emulators:start --import=./firebase-emulator-data --export-on-exit",
 		"test": "ng test"
 	},
 	"private": true,

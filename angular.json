@@ -118,5 +118,8 @@
       }
     }
   },
-  "defaultProject": "FoodPlanner"
+  "defaultProject": "FoodPlanner",
+  "cli": {
+    "analytics": false
+  }
 }
