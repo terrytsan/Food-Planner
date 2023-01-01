@@ -99,7 +99,7 @@ export class FoodPlanService {
 	}
 
 	/**
-	 * Restart indexing of dishes from 0
+	 * Restart indexing of dishes from 0, following array's order
 	 * @param dishes {Dish} {@link Dish}es to re-index
 	 */
 	reIndexSimpleDishes(dishes: SimpleDish[]): SimpleDish[] {

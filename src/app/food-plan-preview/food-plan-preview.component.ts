@@ -50,7 +50,7 @@ export class FoodPlanPreviewComponent implements OnInit {
 				let dish: SimpleDish = {
 					foodId: result.id,
 					ingredients: result.coreIngredients || [],
-					index: (this.foodPlan.dishes.map(d => d.index).sort().pop() ?? 0) + 1
+					index: (this.foodPlan.dishes.map(d => d.index).sort().pop() ?? -1) + 1
 				} as SimpleDish;
 				await this.foodPlanService.addDishToFoodPlan(dish, this.foodPlanService.convertFoodPlanToFoodPlanDoc(this.foodPlan));
 			}
