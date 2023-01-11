@@ -1,14 +1,15 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { BehaviorSubject, combineLatest, Observable, of } from "rxjs";
-import { FoodPlan } from "../food-plan-preview/foodPlan";
+import { Dish, FoodPlan, SimpleDish } from "../food-plan-preview/foodPlan";
 import { Timestamp } from "firebase/firestore";
-import { catchError, map, switchMap } from "rxjs/operators";
+import { catchError, map, switchMap, take } from "rxjs/operators";
 import { AuthService, SimpleUser } from "../services/auth.service";
 import { FoodPlanService } from "../services/food-plan.service";
 import { MatDialog } from "@angular/material/dialog";
 import { ShoppingListComponent } from "../shopping-list/shopping-list.component";
 import { StateService } from "../services/state.service";
 import { animateChild, query, stagger, transition, trigger } from "@angular/animations";
+import { CdkDragDrop, moveItemInArray } from "@angular/cdk/drag-drop";
 
 @Component({
 	selector: 'app-week-plan',
@@ -151,6 +152,41 @@ export class WeekPlanComponent implements OnInit, OnDestroy {
 				endDate: this.selectedWeek.endDate
 			}
 		});
+	}
+
+	/**
+	 * Handle when a dish is dropped (could be in the same or different FoodPlan)
+	 */
+	dishDropped($event: CdkDragDrop<Dish[]>) {
+		let prevFoodPlan = $event.previousContainer.id;
+		let newFoodPlan = $event.container.id;
+		console.log(`moving from ${prevFoodPlan} ${$event.previousIndex} to ${newFoodPlan} ${$event.currentIndex}`);
+
+		if (prevFoodPlan === newFoodPlan) {
+			this.foodPlans$.pipe(take(1)).subscribe(f => {
+				let foodPlan = f.find(fp => fp.id === newFoodPlan);
+				if (foodPlan === undefined) return;
+
+				this.foodPlanService.moveDishWithinFoodPlan(foodPlan, $event.previousIndex, $event.currentIndex);
+			});
+			// Optimistically update local array before firestore - prevents flickering
+			moveItemInArray($event.container.data, $event.previousIndex, $event.currentIndex);
+		} else {
+			let dish: Dish = $event.previousContainer.data[$event.previousIndex];
+			let dishToMove: SimpleDish = this.foodPlanService.convertDishToSimpleDish(dish);
+
+			this.foodPlans$.pipe(take(1)).subscribe(f => {
+				// Search by id or date - might be moving to a dummy foodPlan
+				let foodPlan = f.find(fp => fp.id === newFoodPlan || fp.date.toString() === newFoodPlan);
+				let oldFoodPlan = f.find(fp => fp.id === prevFoodPlan);
+				if (foodPlan === undefined || oldFoodPlan === undefined) return;
+
+				this.foodPlanService.addDishToFoodPlan(dishToMove, this.foodPlanService.convertFoodPlanToFoodPlanDoc(foodPlan), $event.currentIndex);
+
+				this.foodPlanService.removeDishFromFoodPlan(dishToMove, oldFoodPlan);
+			});
+			// transferArrayItem($event.previousContainer.data, $event.container.data, $event.previousIndex, $event.currentIndex)
+		}
 	}
 }
 

@@ -7,14 +7,14 @@
 		</button>
 	</div>
 	<mat-card-content>
-		<div *ngIf="foodPlan.dishes as dishes">
+		<div class="dishes-list" *ngIf="foodPlan.dishes as dishes" cdkDropList [cdkDropListData]="foodPlan.dishes" [id]="foodPlan.id" (cdkDropListDropped)="drop($event)">
 			<app-food-card *ngFor="let dish of dishes trackBy: trackByIndex"
 						   [canEdit]="canEdit"
 						   [dish]="dish"
 						   [foodPlan]="foodPlan"
 						   [food]="dish.food">{{dish.food.name}}</app-food-card>
 		</div>
-		<div *ngIf="foodPlan.dishes && foodPlan.dishes.length == 0">
+		<div *ngIf="foodPlan.dishes && foodPlan.dishes.length == 0" cdkDropList [id]="foodPlan.date.toString()" (cdkDropListDropped)="drop($event)">
 			<mat-card class="empty-list-card">
 				Nothing here yet 😞
 			</mat-card>

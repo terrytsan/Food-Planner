@@ -1,11 +1,12 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { FoodPlan, SimpleDish } from "./foodPlan";
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Dish, FoodPlan, SimpleDish } from "./foodPlan";
 import { Food } from "../food-card/food";
 import { MatDialog } from "@angular/material/dialog";
 import { ChooseFoodDialogComponent } from "../choose-food-dialog/choose-food-dialog.component";
 import { FoodPlanService } from "../services/food-plan.service";
 import { FoodService } from "../services/food.service";
 import { Router } from "@angular/router";
+import { CdkDragDrop } from "@angular/cdk/drag-drop";
 
 @Component({
 	selector: 'app-food-plan-preview',
@@ -17,6 +18,7 @@ export class FoodPlanPreviewComponent implements OnInit {
 	@Input() foodPlan: FoodPlan = {} as FoodPlan;
 	@Input() canEdit: boolean = false;
 	@Input() selectedEndDate: Date = new Date();
+	@Output() dishDropped = new EventEmitter<CdkDragDrop<Dish[]>>();
 
 	showAddFoodsBtn: boolean = true;
 	showPointer: boolean = false;
@@ -65,5 +67,9 @@ export class FoodPlanPreviewComponent implements OnInit {
 
 	trackByIndex(index: number, item: any) {
 		return item.index;
+	}
+
+	drop($event: CdkDragDrop<Dish[]>) {
+		this.dishDropped.next($event);
 	}
 }

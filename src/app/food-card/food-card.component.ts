@@ -7,6 +7,7 @@ import { GlobalVariable } from "../global";
 import { FoodPlanService } from "../services/food-plan.service";
 import { FoodService } from "../services/food.service";
 import { animate, style, transition, trigger } from "@angular/animations";
+import { DragStartDelay } from "@angular/cdk/drag-drop";
 
 @Component({
 	selector: 'app-food-card',
@@ -28,6 +29,7 @@ export class FoodCardComponent implements OnInit {
 	@Input() dish: Dish | null = null;
 	@Input() canEdit: boolean = false;
 	defaultImage: string = GlobalVariable.PLACEHOLDER_IMAGE_URL;
+	dragStartDelay: DragStartDelay = { mouse: 0, touch: 500 };
 
 	constructor(
 		private dialog: MatDialog,
