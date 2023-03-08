@@ -69,6 +69,17 @@ import { ShoppingListComponent } from './shopping-list/shopping-list.component';
 import { DragDropModule } from "@angular/cdk/drag-drop";
 import { AutoFocusDirective } from './directives/auto-focus.directive';
 
+let prodImports = [
+	provideAppCheck(() => {
+		const provider = new ReCaptchaV3Provider(environment.recaptcha3SiteKey);
+		return initializeAppCheck(undefined, { provider, isTokenAutoRefreshEnabled: true });
+	})
+];
+
+if (environment.useEmulators) {
+	prodImports.length = 0;
+}
+
 @NgModule({
 	declarations: [
 		AppComponent,
@@ -126,10 +137,7 @@ import { AutoFocusDirective } from './directives/auto-focus.directive';
 			}
 			return getStorage();
 		}),
-		provideAppCheck(() => {
-			const provider = new ReCaptchaV3Provider(environment.recaptcha3SiteKey);
-			return initializeAppCheck(undefined, { provider, isTokenAutoRefreshEnabled: true });
-		}),
+		...prodImports,
 		provideAnalytics(() => getAnalytics()),
 		MatToolbarModule,
 		MatIconModule,
