@@ -54,6 +54,13 @@
 
 /* CONFIRMED */
 .cdk-drag-placeholder {
+	/*opacity: 0;*/
+	background-color: #e2e8f0;
+	border: dashed 3px #3b82f6;
+	margin-top: 15px;
+}
+
+.cdk-drag-placeholder:first-child {
 	opacity: 0;
 }
 
