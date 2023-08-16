@@ -22,7 +22,7 @@
 		</mat-form-field>
 	</div>
 </div>
-<div fxLayout="row" fxLayoutAlign="flex-start center">
+<div class="flex flex-row justify-start items-center">
 	<mat-form-field class="labels-filter-input" appearance="fill">
 		<mat-label>Filter Labels</mat-label>
 		<mat-chip-list #chipList aria-label="Label Selection">
@@ -49,16 +49,15 @@
 			</mat-option>
 		</mat-autocomplete>
 	</mat-form-field>
-	<mat-radio-group fxLayout="column"
-					 class="mat-form-field-wrapper"
+	<mat-radio-group class="flex flex-col mat-form-field-wrapper"
 					 style="margin-left:15px;"
 					 [(ngModel)]="lblFilterOp">
 		<mat-radio-button style="margin:2px;" [value]="0">OR</mat-radio-button>
 		<mat-radio-button style="margin:2px;" [value]="1">AND</mat-radio-button>
 	</mat-radio-group>
 </div>
-<div fxLayout="row wrap" fxLayoutGap="10px grid">
-	<div *ngFor="let food of filteredFoods$ | async" fxFlex="25%" fxFlex.sm="33%" fxFlex.xs="50%">
+<div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2.5">
+	<div *ngFor="let food of filteredFoods$ | async">
 		<div *ngIf="{user: user$ | async} as userWrapper" style="height: 100%;">
 			<app-food-card [canEdit]="(userWrapper.user) ? userWrapper.user.canEdit : false"
 						   [food]="food"></app-food-card>

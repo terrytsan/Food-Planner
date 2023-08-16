@@ -36,7 +36,6 @@ import { FoodPlanPreviewComponent } from './food-plan-preview/food-plan-preview.
 import { ChooseFoodDialogComponent } from './choose-food-dialog/choose-food-dialog.component';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { MatGridListModule } from "@angular/material/grid-list";
-import { FlexLayoutModule } from "@angular/flex-layout";
 import { FoodCatalogueComponent } from './food-catalogue/food-catalogue.component';
 import { CatalogueItemComponent } from './catalogue-item/catalogue-item.component';
 import { CatalogueItemDetailsComponent } from './catalogue-item-details/catalogue-item-details.component';
@@ -160,7 +159,6 @@ if (environment.useEmulators) {
 			registrationStrategy: 'registerWhenStable:30000'
 		}),
 		MatGridListModule,
-		FlexLayoutModule,
 		MatDatepickerModule,
 		MatNativeDateModule,
 		MatTableModule,

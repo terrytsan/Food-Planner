@@ -1,60 +1,47 @@
-import { Component, ViewChild } from '@angular/core';
+import { AfterContentInit, AfterViewInit, Component, OnDestroy, ViewChild } from '@angular/core';
 import { MatSidenav, MatSidenavContent } from "@angular/material/sidenav";
-import { MediaObserver } from "@angular/flex-layout";
 import { Observable, Subscription } from "rxjs";
 import { NavigationEnd, Router } from "@angular/router";
 import { catchError, filter, take } from "rxjs/operators";
 import { Location } from "@angular/common";
 import { ScrollService } from "./services/scroll.service";
 import { AuthService, SimpleUser } from "./services/auth.service";
-import { UpdateService } from "./services/update.service";
 import { GroupService } from "./groups/group.service";
 import { MatSnackBar } from "@angular/material/snack-bar";
+import { BreakpointObserver } from "@angular/cdk/layout";
 
 @Component({
 	selector: 'app-root',
 	templateUrl: './app.component.html',
 	styleUrls: ['./app.component.css']
 })
-export class AppComponent {
+export class AppComponent implements AfterViewInit, AfterContentInit, OnDestroy {
 	title = 'FoodPlanner';
 
-	@ViewChild(MatSidenav)
+	@ViewChild(MatSidenav, { static: true })
 	sidenav!: MatSidenav;
 
 	@ViewChild('scrollingContainer')
 	public scrollContainer: MatSidenavContent;
 
-	mobileDisplay = this.media.isActive('xs');
+	mobileDisplay: boolean = false;
 	// urls where back button is shown
 	backButtonUrls = ['/catalogueItem/', '/foods/', '/profile', '/foodPlans/'];
 	showBackBtn = false;
 	loggedInUser$: Observable<SimpleUser | null>;
-	private mediaSubscription: Subscription;
+	private breakpointSubscription: Subscription;
 	private routerSubscription: Subscription;
 
 	constructor(
-		private media: MediaObserver,
 		private router: Router,
 		private location: Location,
 		private scrollService: ScrollService,
 		private authService: AuthService,
-		private updateService: UpdateService,
 		private groupService: GroupService,
-		private _snackBar: MatSnackBar
+		private _snackBar: MatSnackBar,
+		private breakpointObserver: BreakpointObserver
 	) {
 		this.loggedInUser$ = authService.getSimpleUser();
-
-		this.mediaSubscription = this.media.asObservable().subscribe(() => {
-			// Triggered when display size changes
-			if (this.media.isActive('xs')) {
-				this.sidenav.mode = 'over';
-				this.mobileDisplay = true;
-			} else {
-				this.sidenav.mode = 'side';
-				this.mobileDisplay = false;
-			}
-		});
 
 		this.routerSubscription = this.router.events.pipe(
 			filter((event): event is NavigationEnd => event instanceof NavigationEnd)
@@ -87,6 +74,18 @@ export class AppComponent {
 		});
 	}
 
+	ngAfterContentInit(): void {
+		this.breakpointSubscription = this.breakpointObserver.observe(`(max-width: 600px)`).subscribe(result => {
+			if (result.matches) {
+				this.sidenav.mode = 'over';
+				this.mobileDisplay = true;
+			} else {
+				this.sidenav.mode = 'side';
+				this.mobileDisplay = false;
+			}
+		});
+	}
+
 	ngAfterViewInit() {
 		this.scrollService.setScrollingContainer(this.scrollContainer.getElementRef());
 	}
@@ -96,7 +95,7 @@ export class AppComponent {
 	}
 
 	ngOnDestroy(): void {
-		this.mediaSubscription.unsubscribe();
+		this.breakpointSubscription.unsubscribe();
 		this.routerSubscription.unsubscribe();
 	}
 }

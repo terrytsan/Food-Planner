@@ -29,7 +29,7 @@
 	</table>
 	<mat-divider class="divider"></mat-divider>
 
-	<div fxLayout="row" fxLayoutAlign="space-between center" style="margin-bottom: 10px;">
+	<div class="flex flex-row justify-between items-center" style="margin-bottom: 10px;">
 		<h2 style="margin: 0;">Groups</h2>
 		<button (click)="createGroup(user.uid)" color="primary" mat-raised-button>Create Group</button>
 	</div>
@@ -104,9 +104,7 @@
 <ng-template #userTemplate let-canEdit="canEdit" let-group="group" let-user="user" let-userType="type">
 	<div (click)="(userType != UserType.Owner && canEdit) && editMember(user.id, userType, group)"
 		 [class.userRow]="userType!=UserType.Owner && canEdit"
-		 fxFlex="grow"
-		 fxLayout="row"
-		 fxLayoutAlign="space-between center">
+		 class="flex flex-row flex-grow justify-between items-center">
 		{{user.name}}
 		<mat-basic-chip *ngIf="userType == UserType.Owner" class="permissions-chip owner-colors" disableRipple>
 			Owner

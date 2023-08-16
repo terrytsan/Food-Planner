@@ -1,7 +1,7 @@
 <h2 style="margin-bottom: 0;">{{isAdding ? 'Add' : 'Edit'}} Member</h2>
 <p>{{data.group.name}}</p>
-<form (ngSubmit)="onSubmit()" [formGroup]="member" fxLayout="column">
-	<mat-dialog-content fxFlex="grow" fxLayout="column" fxLayoutAlign="center center">
+<form (ngSubmit)="onSubmit()" [formGroup]="member" class="flex flex-col">
+	<mat-dialog-content class="!flex flex-col flex-grow justify-center items-center">
 		<mat-form-field>
 			<mat-label>User ID</mat-label>
 			<input autocomplete="off" formControlName="userId" matInput required>
@@ -26,7 +26,7 @@
 		</button>
 	</mat-dialog-content>
 
-	<div fxLayoutAlign="flex-end" mat-dialog-actions>
+	<div class="flex justify-end" mat-dialog-actions>
 		<button (click)="onCancelClick()" mat-button type="button">Cancel</button>
 		<button color="primary" mat-button mat-raised-button type="submit">Save</button>
 	</div>

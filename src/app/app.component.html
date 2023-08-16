@@ -1,6 +1,6 @@
 <div class="main-container">
-	<mat-toolbar color="primary" fxLayoutAlign="space-between">
-		<div fxLayoutAlign="flex-start center">
+	<mat-toolbar class="flex justify-between" color="primary">
+		<div class="flex justify-start items-center">
 			<button (click)="navigateBack()" *ngIf="showBackBtn" mat-icon-button>
 				<mat-icon class="nav-btn-icon">arrow_back</mat-icon>
 			</button>
@@ -10,7 +10,7 @@
 			<mat-icon>restaurant_menu</mat-icon>
 			<span>Food Planner</span>
 		</div>
-		<div fxLayoutAlign="center center">
+		<div class="flex justify-center items-center">
 			<button *ngIf="loggedInUser$ | async" mat-icon-button routerLink="/profile">
 				<mat-icon class="nav-btn-icon">account_circle</mat-icon>
 			</button>

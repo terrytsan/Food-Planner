@@ -13,7 +13,7 @@
 			<strong>Price: </strong>{{lowestPrice.price | currency: 'GBP'}} ({{lowestPrice.store}})
 		</mat-card-content>
 	</div>
-	<mat-card-footer class="catalogue-item-thumbs" fxLayout="row" fxLayoutAlign="space-around">
+	<mat-card-footer class="catalogue-item-thumbs !flex flex-row justify-around">
 		<button [disabled]="!user.canEdit"
 				(click)="toggleLikeCatalogueItem(); $event.stopPropagation();"
 				mat-icon-button>

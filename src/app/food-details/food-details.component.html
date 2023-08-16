@@ -7,7 +7,7 @@
 	</div>
 
 	<!-- Name -->
-	<div fxLayout="row" fxLayoutAlign="flex-start center">
+	<div class="flex flex-row justify-start items-center">
 		<h1 style="margin-bottom: 12px;">{{food.name}}</h1>
 	</div>
 
@@ -34,11 +34,10 @@
 				   class="mat-chip-list-stacked"
 				   id="coreIngredientsList">
 		<mat-chip (click)="editIngredient(ingredient, 'core', i)"
-				  class="core-ingredient-chip"
+				  class="core-ingredient-chip flex justify-between"
 				  *ngFor="let ingredient of food.coreIngredients; let i = index"
 				  cdkDrag
-				  [cdkDragStartDelay]="dragStartDelay"
-				  fxLayoutAlign="space-between">
+				  [cdkDragStartDelay]="dragStartDelay">
 			{{ingredient}}
 			<button (click)="removeCoreIngredient(ingredient)" *ngIf="canEdit" matChipRemove>
 				<mat-icon>cancel</mat-icon>
@@ -59,11 +58,10 @@
 				   class="mat-chip-list-stacked"
 				   id="optionalIngredientsList">
 		<mat-chip (click)="editIngredient(ingredient, 'optional', i)"
-				  class="optional-ingredient-chip"
+				  class="optional-ingredient-chip flex justify-between"
 				  *ngFor="let ingredient of food.optionalIngredients; let i = index"
 				  cdkDrag
-				  [cdkDragStartDelay]="dragStartDelay"
-				  fxLayoutAlign="space-between">
+				  [cdkDragStartDelay]="dragStartDelay">
 			{{ingredient}}
 			<button (click)="removeOptionalIngredient(ingredient)" *ngIf="canEdit" matChipRemove>
 				<mat-icon>cancel</mat-icon>

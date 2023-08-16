@@ -1,12 +1,12 @@
 <h2>{{data.title}}</h2>
 <form (ngSubmit)="close()">
-	<mat-dialog-content fxLayoutAlign="center center">
+	<mat-dialog-content class="!flex justify-center items-center">
 		<mat-form-field>
 			<mat-label>{{data.inputLabel}}</mat-label>
 			<input [formControl]="stringInput" autocomplete="off" matInput name="stringInput" required>
 		</mat-form-field>
 	</mat-dialog-content>
-	<div fxLayoutAlign="flex-end" mat-dialog-actions>
+	<div class="flex justify-end" mat-dialog-actions>
 		<button (click)="cancel()" mat-button>{{data.cancelBtnText}}</button>
 		<button color="primary"
 				mat-button

@@ -13,7 +13,7 @@
 	</div>
 
 	<!-- Name -->
-	<div fxLayout="row" fxLayoutAlign="flex-start center" style="margin-bottom: 12px;">
+	<div class="flex flex-row justify-start items-center " style="margin-bottom: 12px;">
 		<h1 *ngIf="!isEditing" style="margin: 0;">{{catalogueItem.name}}</h1>
 		<mat-form-field *ngIf="isEditing" appearance="fill">
 			<mat-label>Name</mat-label>
@@ -35,7 +35,7 @@
 	<!-- Price History -->
 	<div *ngIf="!isEditing" style="margin-bottom: 20px;">
 		<mat-divider style="margin-bottom: 10px;"></mat-divider>
-		<div fxLayout="row" fxLayoutAlign="space-between center">
+		<div class="flex flex-row justify-between items-center">
 			<h2 style="margin: 0;">Price History</h2>
 			<button *ngIf="user && user.canEdit" (click)="toggleNewPriceHistoryForm()" mat-button>
 				<mat-icon *ngIf="!isAddingPriceHistory" style="color: green">add_circle</mat-icon>
@@ -78,7 +78,7 @@
 			<h3 style="text-align: center;">No Price History yet</h3>
 		</ng-template>
 
-		<div #addPriceHistoryForm *ngIf="isAddingPriceHistory" fxLayout="row" fxLayoutAlign="space-around center">
+		<div #addPriceHistoryForm *ngIf="isAddingPriceHistory" class="flex flex-row justify-around items-center">
 			<mat-form-field style="width: 100px;">
 				<mat-label>Date</mat-label>
 				<input [(ngModel)]="newPriceHistoryDate" [matDatepicker]="picker" matInput autocomplete="off">
@@ -99,7 +99,7 @@
 	</div>
 
 	<!-- Thumbs buttons -->
-	<div *ngIf="!isEditing && (user && user.canEdit)" fxLayout="row" fxLayoutAlign="space-evenly">
+	<div *ngIf="!isEditing && (user && user.canEdit)" class="flex flex-row justify-evenly">
 		<button mat-button>
 			<mat-icon (click)="toggleLikeCatalogueItem()"
 					  [ngClass]="{'liked-colour': catalogueItem.status === 'liked'}">
