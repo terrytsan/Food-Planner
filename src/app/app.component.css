@@ -9,6 +9,7 @@
 }
 
 .container {
+	box-sizing: border-box; /* Prevent padding from overflowing */
 	padding: 16px;
 	max-width: 1000px;
 	margin: auto;
@@ -16,10 +17,6 @@
 
 mat-icon {
 	padding-right: 10px;
-}
-
-.nav-btn-icon {
-	padding: 0 5px;
 }
 
 mat-sidenav {
@@ -32,4 +29,8 @@ mat-sidenav {
 
 .mat-sidenav-item-is-active {
 	background-color: cornflowerblue;
+}
+
+mat-sidenav mat-nav-list a mat-icon {
+	vertical-align: middle;
 }

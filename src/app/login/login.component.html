@@ -1,8 +1,8 @@
-<mat-card @flyIn class="login-card">
+<mat-card appearance="outlined" @flyIn class="login-card">
 	<mat-card-content>
 		<form #loginForm="ngForm" (ngSubmit)="onSubmit()">
 			<h1 class="flex justify-center">Log In</h1>
-			<div class="flex flex-col" style="padding-bottom: 10px;">
+			<div class="flex flex-col gap-6" style="padding-bottom: 10px;">
 				<mat-form-field>
 					<input [(ngModel)]="email" matInput name="email" placeholder="Email" required>
 					<mat-error>Please provide a valid email address</mat-error>
@@ -17,7 +17,7 @@
 					<mat-error>Please provide a valid password</mat-error>
 				</mat-form-field>
 			</div>
-			<div class="flex justify-end">
+			<div class="flex justify-end pt-5">
 				<button [disabled]="!loginForm.form.valid" color="primary" mat-raised-button type="submit">
 					Login
 				</button>

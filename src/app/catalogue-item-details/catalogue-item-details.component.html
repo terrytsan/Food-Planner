@@ -1,133 +1,140 @@
-<link href="https://fonts.googleapis.com/css?family=Material+Icons|Material+Icons+Outlined|Material+Icons+Two+Tone|Material+Icons+Round|Material+Icons+Sharp"
-	  rel="stylesheet">
+<link
+	href="https://fonts.googleapis.com/css?family=Material+Icons|Material+Icons+Outlined|Material+Icons+Two+Tone|Material+Icons+Round|Material+Icons+Sharp"
+	rel="stylesheet">
 
-<mat-card *ngIf="catalogueItem || isAdding">
-	<!-- Image -->
-	<div class="image-container">
-		<img alt="Photo of {{catalogueItem.name}}"
-			 class="catalogueItem-image"
-			 src="{{catalogueItem.imageUrl || defaultImage}}">
-		<button (click)="openUploadImageDialog()" *ngIf="isEditing" class="btn-edit-image" color="primary" mat-fab>
-			<mat-icon class="material-icons-outlined" color="secondary">edit</mat-icon>
-		</button>
-	</div>
-
-	<!-- Name -->
-	<div class="flex flex-row justify-start items-center " style="margin-bottom: 12px;">
-		<h1 *ngIf="!isEditing" style="margin: 0;">{{catalogueItem.name}}</h1>
-		<mat-form-field *ngIf="isEditing" appearance="fill">
-			<mat-label>Name</mat-label>
-			<input [(ngModel)]="catalogueItem.name" matInput>
-		</mat-form-field>
-	</div>
-
-	<!-- Description -->
-	<p *ngIf="!isEditing" class="catalogueItem-description">{{catalogueItem.description}}</p>
-	<mat-form-field *ngIf="isEditing" appearance="fill">
-		<mat-label>Description</mat-label>
-		<textarea [(ngModel)]="catalogueItem.description"
-				  cdkAutosizeMaxRows="6"
-				  cdkAutosizeMinRows="3"
-				  cdkTextareaAutosize
-				  matInput></textarea>
-	</mat-form-field>
-
-	<!-- Price History -->
-	<div *ngIf="!isEditing" style="margin-bottom: 20px;">
-		<mat-divider style="margin-bottom: 10px;"></mat-divider>
-		<div class="flex flex-row justify-between items-center">
-			<h2 style="margin: 0;">Price History</h2>
-			<button *ngIf="user && user.canEdit" (click)="toggleNewPriceHistoryForm()" mat-button>
-				<mat-icon *ngIf="!isAddingPriceHistory" style="color: green">add_circle</mat-icon>
-				<mat-icon *ngIf="isAddingPriceHistory" style="color: red">cancel</mat-icon>
+<mat-card appearance="outlined" *ngIf="catalogueItem || isAdding">
+	<mat-card-content>
+		<!-- Image -->
+		<div class="image-container">
+			<img alt="Photo of {{catalogueItem.name}}"
+				 class="catalogueItem-image"
+				 src="{{catalogueItem.imageUrl || defaultImage}}">
+			<button (click)="openUploadImageDialog()" *ngIf="isEditing" class="btn-edit-image" color="primary" mat-fab>
+				<mat-icon class="material-icons-outlined" color="secondary">edit</mat-icon>
 			</button>
 		</div>
 
-		<table mat-table [dataSource]="priceHistory$" *ngIf="(priceHistory$ | async)?.length; else noPriceHistory">
-			<ng-container matColumnDef="date">
-				<th mat-header-cell *matHeaderCellDef>Date</th>
-				<td mat-cell *matCellDef="let element">
-					<ng-container *ngIf="assertItemType(element) as history">
-						{{(history.date?.toMillis() || '') | date: 'dd/MM/yyyy'}}
-					</ng-container>
-				</td>
-			</ng-container>
-			<ng-container matColumnDef="price">
-				<th mat-header-cell *matHeaderCellDef>Price</th>
-				<td mat-cell *matCellDef="let element">
-					<ng-container *ngIf="assertItemType(element) as history">
-						{{history.price | currency: 'GBP'}}
-					</ng-container>
-				</td>
-			</ng-container>
-			<ng-container matColumnDef="store">
-				<th mat-header-cell *matHeaderCellDef>Store</th>
-				<td mat-cell *matCellDef="let element">{{element.store}}</td>
-			</ng-container>
-			<ng-container *ngIf="user && user.canEdit" matColumnDef="actions">
-				<th mat-header-cell *matHeaderCellDef></th>
-				<td mat-cell *matCellDef="let element">
-					<mat-icon (click)="openEditPriceHistoryDialog(element)">edit</mat-icon>
-					<mat-icon (click)="deletePriceHistory(element)" class="material-icons-outlined">delete</mat-icon>
-				</td>
-			</ng-container>
-			<tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-			<tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-		</table>
-		<ng-template #noPriceHistory>
-			<h3 style="text-align: center;">No Price History yet</h3>
-		</ng-template>
-
-		<div #addPriceHistoryForm *ngIf="isAddingPriceHistory" class="flex flex-row justify-around items-center">
-			<mat-form-field style="width: 100px;">
-				<mat-label>Date</mat-label>
-				<input [(ngModel)]="newPriceHistoryDate" [matDatepicker]="picker" matInput autocomplete="off">
-				<mat-datepicker-toggle [for]="picker" matSuffix></mat-datepicker-toggle>
-				<mat-datepicker #picker></mat-datepicker>
+		<!-- Name -->
+		<div class="flex flex-row items-center justify-start" style="margin-bottom: 12px;">
+			<h1 *ngIf="!isEditing" style="margin: 0;">{{catalogueItem.name}}</h1>
+			<mat-form-field *ngIf="isEditing" appearance="fill">
+				<mat-label>Name</mat-label>
+				<input [(ngModel)]="catalogueItem.name" matInput>
 			</mat-form-field>
-			<mat-form-field style="width: 70px;">
-				<mat-label>Price</mat-label>
-				<input [(ngModel)]="newPriceHistory.price" matInput type="number" autocomplete="off">
-				<span matPrefix>£&nbsp;</span>
-			</mat-form-field>
-			<mat-form-field style="width: 80px;">
-				<mat-label>Store</mat-label>
-				<input [(ngModel)]="newPriceHistory.store" matInput autocomplete="off">
-			</mat-form-field>
-			<mat-icon (click)="createPriceHistory()">done</mat-icon>
 		</div>
-	</div>
 
-	<!-- Thumbs buttons -->
-	<div *ngIf="!isEditing && (user && user.canEdit)" class="flex flex-row justify-evenly">
-		<button mat-button>
-			<mat-icon (click)="toggleLikeCatalogueItem()"
-					  [ngClass]="{'liked-colour': catalogueItem.status === 'liked'}">
-				thumb_up
-			</mat-icon>
+		<!-- Description -->
+		<p *ngIf="!isEditing" class="catalogueItem-description">{{catalogueItem.description}}</p>
+		<mat-form-field *ngIf="isEditing" appearance="fill">
+			<mat-label>Description</mat-label>
+			<textarea [(ngModel)]="catalogueItem.description"
+					  cdkAutosizeMaxRows="6"
+					  cdkAutosizeMinRows="3"
+					  cdkTextareaAutosize
+					  matInput></textarea>
+		</mat-form-field>
+
+		<!-- Price History -->
+		<div *ngIf="!isEditing" style="margin-bottom: 20px;">
+			<mat-divider style="margin-bottom: 10px;"></mat-divider>
+			<div class="flex flex-row items-center justify-between">
+				<h2 style="margin: 0;">Price History</h2>
+				<button *ngIf="user && user.canEdit" (click)="toggleNewPriceHistoryForm()" mat-icon-button>
+					<mat-icon *ngIf="!isAddingPriceHistory" style="color: green">add_circle</mat-icon>
+					<mat-icon *ngIf="isAddingPriceHistory" style="color: red">cancel</mat-icon>
+				</button>
+			</div>
+
+			<table mat-table [dataSource]="priceHistory$" *ngIf="(priceHistory$ | async)?.length; else noPriceHistory">
+				<ng-container matColumnDef="date">
+					<th mat-header-cell *matHeaderCellDef>Date</th>
+					<td mat-cell *matCellDef="let element">
+						<ng-container *ngIf="assertItemType(element) as history">
+							{{(history.date?.toMillis() || '') | date: 'dd/MM/yyyy'}}
+						</ng-container>
+					</td>
+				</ng-container>
+				<ng-container matColumnDef="price">
+					<th mat-header-cell *matHeaderCellDef>Price</th>
+					<td mat-cell *matCellDef="let element">
+						<ng-container *ngIf="assertItemType(element) as history">
+							{{history.price | currency: 'GBP'}}
+						</ng-container>
+					</td>
+				</ng-container>
+				<ng-container matColumnDef="store">
+					<th mat-header-cell *matHeaderCellDef>Store</th>
+					<td mat-cell *matCellDef="let element">{{element.store}}</td>
+				</ng-container>
+				<ng-container *ngIf="user && user.canEdit" matColumnDef="actions">
+					<th mat-header-cell *matHeaderCellDef></th>
+					<td mat-cell *matCellDef="let element">
+						<div class="flex h-full w-full flex-row items-center justify-center">
+							<mat-icon (click)="openEditPriceHistoryDialog(element)">edit</mat-icon>
+							<mat-icon (click)="deletePriceHistory(element)" class="material-icons-outlined">delete
+							</mat-icon>
+						</div>
+					</td>
+				</ng-container>
+				<tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+				<tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+			</table>
+			<ng-template #noPriceHistory>
+				<h3 style="text-align: center;">No Price History yet</h3>
+			</ng-template>
+
+			<div #addPriceHistoryForm *ngIf="isAddingPriceHistory"
+				 class="flex flex-row items-center justify-around gap-4 md:gap-8">
+				<mat-form-field style="flex: 10;">
+					<mat-label>Date</mat-label>
+					<input [(ngModel)]="newPriceHistoryDate" [matDatepicker]="picker" matInput autocomplete="off">
+					<mat-datepicker-toggle [for]="picker" matSuffix></mat-datepicker-toggle>
+					<mat-datepicker #picker></mat-datepicker>
+				</mat-form-field>
+				<mat-form-field style="flex: 7;">
+					<mat-label>Price</mat-label>
+					<input [(ngModel)]="newPriceHistory.price" matInput type="number" autocomplete="off">
+					<span matPrefix>£&nbsp;</span>
+				</mat-form-field>
+				<mat-form-field style="flex: 8;">
+					<mat-label>Store</mat-label>
+					<input [(ngModel)]="newPriceHistory.store" matInput autocomplete="off">
+				</mat-form-field>
+				<mat-icon (click)="createPriceHistory()">done</mat-icon>
+			</div>
+		</div>
+
+		<!-- Thumbs buttons -->
+		<div *ngIf="!isEditing && (user && user.canEdit)" class="flex flex-row justify-evenly">
+			<button mat-icon-button>
+				<mat-icon (click)="toggleLikeCatalogueItem()"
+						  [ngClass]="{'liked-colour': catalogueItem.status === 'liked'}">
+					thumb_up
+				</mat-icon>
+			</button>
+			<button mat-icon-button>
+				<mat-icon (click)="toggleDislikeCatalogueItem()"
+						  [ngClass]="{'disliked-colour': catalogueItem.status === 'disliked'}">
+					thumb_down
+				</mat-icon>
+			</button>
+		</div>
+
+		<!-- Delete btn -->
+		<button (click)="deleteCatalogueItem()"
+				*ngIf="isEditing && !isAdding"
+				class="delete-btn"
+				color="warn"
+				mat-flat-button>
+			Delete
 		</button>
-		<button mat-button>
-			<mat-icon (click)="toggleDislikeCatalogueItem()"
-					  [ngClass]="{'disliked-colour': catalogueItem.status === 'disliked'}">
-				thumb_down
-			</mat-icon>
+
+		<!-- Editing fab -->
+		<button *ngIf="user && user.canEdit" (click)="toggleEditing()" class="btn-toggle-edit" mat-fab>
+			<mat-icon *ngIf="!isEditing">edit</mat-icon>
+			<mat-icon *ngIf="isEditing">done</mat-icon>
 		</button>
-	</div>
-
-	<!-- Delete btn -->
-	<button (click)="deleteCatalogueItem()"
-			*ngIf="isEditing && !isAdding"
-			class="delete-btn"
-			color="warn"
-			mat-flat-button>
-		Delete
-	</button>
-
-	<!-- Editing fab -->
-	<button *ngIf="user && user.canEdit" (click)="toggleEditing()" class="btn-toggle-edit" mat-fab>
-		<mat-icon *ngIf="!isEditing">edit</mat-icon>
-		<mat-icon *ngIf="isEditing">done</mat-icon>
-	</button>
+	</mat-card-content>
 </mat-card>
 
 <div *ngIf="!catalogueItem && !isAdding" style="text-align: center;">

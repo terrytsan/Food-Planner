@@ -1,25 +1,27 @@
 <h1 mat-dialog-title>Edit Price History</h1>
 
-<div class="flex flex-col justify-start">
-	<mat-form-field>
-		<mat-label>Date</mat-label>
-		<input [(ngModel)]="date" [matDatepicker]="picker" matInput autocomplete="off">
-		<mat-datepicker-toggle [for]="picker" matSuffix></mat-datepicker-toggle>
-		<mat-datepicker #picker></mat-datepicker>
-	</mat-form-field>
-	<mat-form-field>
-		<mat-label>Price</mat-label>
-		<input [(ngModel)]="price" autocomplete="off" matInput type="number">
-		<span matPrefix>£&nbsp;</span>
-	</mat-form-field>
-	<mat-form-field>
-		<mat-label>Store</mat-label>
-		<input [(ngModel)]="store" matInput autocomplete="off">
-	</mat-form-field>
+<div mat-dialog-content>
+	<div class="flex flex-col justify-start gap-3">
+		<mat-form-field>
+			<mat-label>Date</mat-label>
+			<input [(ngModel)]="date" [matDatepicker]="picker" matInput autocomplete="off">
+			<mat-datepicker-toggle [for]="picker" matSuffix></mat-datepicker-toggle>
+			<mat-datepicker #picker></mat-datepicker>
+		</mat-form-field>
+		<mat-form-field>
+			<mat-label>Price</mat-label>
+			<input [(ngModel)]="price" autocomplete="off" matInput type="number">
+			<span matTextPrefix>£&nbsp;</span>
+		</mat-form-field>
+		<mat-form-field>
+			<mat-label>Store</mat-label>
+			<input [(ngModel)]="store" matInput autocomplete="off">
+		</mat-form-field>
+	</div>
 </div>
 
-<div mat-dialog-actions>
+<mat-dialog-actions [align]="'end'">
 	<button (click)="onCancelClick()" mat-button type="button">Cancel</button>
 	<button (click)="updatePriceHistory()" color="primary" mat-button mat-raised-button>Save
 	</button>
-</div>
+</mat-dialog-actions>

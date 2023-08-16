@@ -36,10 +36,6 @@
 	margin: 10px 0;
 }
 
-.mat-dialog-actions {
-	justify-content: flex-end;
-}
-
 [hidden] {
 	display: none !important;
 }

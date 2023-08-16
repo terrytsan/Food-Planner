@@ -25,15 +25,15 @@
 <div class="flex flex-row justify-start items-center">
 	<mat-form-field class="labels-filter-input" appearance="fill">
 		<mat-label>Filter Labels</mat-label>
-		<mat-chip-list #chipList aria-label="Label Selection">
-			<mat-chip
+		<mat-chip-grid #chipList aria-label="Label Selection">
+			<mat-chip-option
 				*ngFor="let label of selectedLabels$|async"
 				(removed)="removeLabel(label)">
 				{{label}}
 				<button matChipRemove>
 					<mat-icon>cancel</mat-icon>
 				</button>
-			</mat-chip>
+			</mat-chip-option>
 			<input
 				placeholder="Enter label..."
 				#labelInput
@@ -42,7 +42,7 @@
 				[matChipInputFor]="chipList"
 				[matChipInputSeparatorKeyCodes]="separatorKeysCodes"
 				(matChipInputTokenEnd)="addLabel($event)">
-		</mat-chip-list>
+		</mat-chip-grid>
 		<mat-autocomplete #auto="matAutocomplete" (optionSelected)="autocompleteItemSelected($event)">
 			<mat-option *ngFor="let label of unusedLabels" [value]="label">
 				{{label}}

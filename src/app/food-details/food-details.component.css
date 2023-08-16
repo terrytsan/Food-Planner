@@ -27,6 +27,7 @@
 
 .labels-chip-list {
 	width: 100%;
+	margin-bottom: 10px;
 }
 
 h2 {
@@ -34,19 +35,18 @@ h2 {
 }
 
 .ingredient-input {
-	padding: 0;
 	width: 100%;
 }
 
-mat-form-field.mat-form-field {
+mat-form-field.mat-mdc-form-field {
 	font-size: 12px;
 }
 
-.core-ingredient-chip {
+#coreIngredientsList .core-ingredient-chip {
 	background-color: #03a9f4;
 }
 
-.optional-ingredient-chip {
+#optionalIngredientsList .optional-ingredient-chip {
 	background-color: #67d9ff;
 }
 

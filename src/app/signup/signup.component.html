@@ -1,8 +1,8 @@
-<mat-card class="signup-card">
+<mat-card appearance="outlined" class="signup-card">
 	<mat-card-content>
 		<form #loginForm="ngForm" (ngSubmit)="onSubmit()">
 			<h1 class="flex justify-center">Sign Up</h1>
-			<div class="flex flex-col" style="padding-bottom: 10px;">
+			<div class="flex flex-col gap-6" style="padding-bottom: 10px;">
 				<mat-form-field>
 					<input [(ngModel)]="displayName" matInput name="new-name" placeholder="Name" required>
 					<mat-error>Please provide a valid name</mat-error>
@@ -28,7 +28,7 @@
 					</span>
 				</mat-checkbox>
 			</div>
-			<div class="flex justify-end">
+			<div class="flex justify-end pt-5">
 				<button [disabled]="!loginForm.form.valid" color="primary" mat-raised-button type="submit">
 					Sign Up
 				</button>

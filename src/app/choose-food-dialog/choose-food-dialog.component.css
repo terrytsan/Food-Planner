@@ -2,6 +2,7 @@
 	display: flex;
 	align-items: baseline;
 	justify-content: space-between;
+	padding-top: 10px;
 }
 
 .food-card {
@@ -9,11 +10,12 @@
 	flex-direction: row;
 	align-items: center;
 	justify-content: flex-start;
-	margin-bottom: 5px;
+	margin-bottom: 15px;
+	width: 100%;
 }
 
 .food-image {
-	width: 56px;
-	height: 56px;
+	width: 70px;
+	height: 70px;
 	margin-right: 10px;
 }

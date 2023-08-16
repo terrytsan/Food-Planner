@@ -1,18 +1,21 @@
-<div class="dialog-header">
-	<h2>Choose a Food</h2>
-	<button (click)="chooseRandomFood()" mat-button style="padding-right: 0;">
-		<mat-icon>shuffle</mat-icon>
-	</button>
+<div class="flex flex-col px-5">
+	<div class="flex w-full flex-row items-baseline justify-between">
+		<h2>Choose a Food</h2>
+		<button (click)="chooseRandomFood()" mat-icon-button>
+			<mat-icon>shuffle</mat-icon>
+		</button>
+	</div>
+	<mat-form-field class="mb-4 w-full" appearance="outline">
+		<mat-label>Search Foods...</mat-label>
+		<input id="searchInput" (keyup)="search($event)" autocomplete="off" matInput type="text">
+	</mat-form-field>
 </div>
-<mat-form-field style="width: 100%">
-	<mat-label>Search Foods...</mat-label>
-	<input id="searchInput" (keyup)="search($event)" autocomplete="off" matInput type="text">
-</mat-form-field>
+
 <mat-dialog-content>
-	<mat-card *ngFor="let food of filteredFoods" class="food-card">
+	<mat-card appearance="raised" *ngFor="let food of filteredFoods" class="food-card">
 		<img alt="Photo of {{food.name}}" class="food-image" loading="lazy" src="{{food.image || defaultImage}}">
 		<div>{{food.name}}</div>
-		<button (click)="chooseFood(food)" mat-button style="margin-left: auto; padding-right: 0;">
+		<button (click)="chooseFood(food)" mat-icon-button style="margin-left: auto;">
 			<mat-icon style="color: green">add_circle</mat-icon>
 		</button>
 	</mat-card>

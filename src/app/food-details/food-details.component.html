@@ -1,79 +1,82 @@
-<mat-card *ngIf="food" style="margin-bottom: 65px;">
-	<!-- Image -->
-	<div class="image-container">
-		<img alt="Photo of {{food.name}}"
-			 class="food-details-image"
-			 src="{{food.image || defaultImage}}">
-	</div>
-
-	<!-- Name -->
-	<div class="flex flex-row justify-start items-center">
-		<h1 style="margin-bottom: 12px;">{{food.name}}</h1>
-	</div>
-
-	<!-- Description -->
-	<p class="description">{{food.description}}</p>
-
-	<!-- Labels -->
-	<app-food-labels-input (labelsChange)="labelChanged($event)"
-						   [(labels)]="food.labels"
-						   [addOnBlur]="true"
-						   [appearance]="'outline'"
-						   [editable]="canEdit"
-						   class="labels-chip-list">
-	</app-food-labels-input>
-
-	<!-- Ingredients -->
-	<h2>Core Ingredients</h2>
-	<mat-form-field *ngIf="canEdit" appearance="fill" class="ingredient-input" color="primary">
-		<mat-label>Core Ingredient</mat-label>
-		<input (keyup.enter)="addCoreIngredient($event)" autocomplete="off" matInput tabindex="-1">
-	</mat-form-field>
-	<mat-chip-list (cdkDropListDropped)="dropIngredient($event)"
-				   cdkDropList
-				   class="mat-chip-list-stacked"
-				   id="coreIngredientsList">
-		<mat-chip (click)="editIngredient(ingredient, 'core', i)"
-				  class="core-ingredient-chip flex justify-between"
-				  *ngFor="let ingredient of food.coreIngredients; let i = index"
-				  cdkDrag
-				  [cdkDragStartDelay]="dragStartDelay">
-			{{ingredient}}
-			<button (click)="removeCoreIngredient(ingredient)" *ngIf="canEdit" matChipRemove>
-				<mat-icon>cancel</mat-icon>
-			</button>
-		</mat-chip>
-		<div *ngIf="!food.coreIngredients || food.coreIngredients.length == 0" class="no-ingredients-message">
-			No Core Ingredients yet
+<mat-card appearance="outlined" *ngIf="food" style="margin-bottom: 65px;">
+	<mat-card-content>
+		<!-- Image -->
+		<div class="image-container">
+			<img alt="Photo of {{food.name}}"
+				 class="food-details-image"
+				 src="{{food.image || defaultImage}}">
 		</div>
-	</mat-chip-list>
 
-	<h2 style="padding-top: 15px;">Optional Ingredients</h2>
-	<mat-form-field *ngIf="canEdit" appearance="fill" class="ingredient-input" color="primary">
-		<mat-label>Optional Ingredient</mat-label>
-		<input (keyup.enter)="addOptionalIngredient($event)" autocomplete="off" matInput tabindex="-1">
-	</mat-form-field>
-	<mat-chip-list (cdkDropListDropped)="dropIngredient($event)"
-				   cdkDropList
-				   class="mat-chip-list-stacked"
-				   id="optionalIngredientsList">
-		<mat-chip (click)="editIngredient(ingredient, 'optional', i)"
-				  class="optional-ingredient-chip flex justify-between"
-				  *ngFor="let ingredient of food.optionalIngredients; let i = index"
-				  cdkDrag
-				  [cdkDragStartDelay]="dragStartDelay">
-			{{ingredient}}
-			<button (click)="removeOptionalIngredient(ingredient)" *ngIf="canEdit" matChipRemove>
-				<mat-icon>cancel</mat-icon>
-			</button>
-		</mat-chip>
-		<div *ngIf="!food.optionalIngredients || food.optionalIngredients.length == 0" class="no-ingredients-message">
-			No Optional Ingredients yet
+		<!-- Name -->
+		<div class="flex flex-row items-center justify-start">
+			<h1 style="margin-bottom: 12px;">{{food.name}}</h1>
 		</div>
-	</mat-chip-list>
 
-	<!-- Editing fab -->
-	<button (click)="openEditFoodDialog()" *ngIf="canEdit" class="btn-toggle-edit" mat-fab>
-		<mat-icon>edit</mat-icon>
-	</button>
+		<!-- Description -->
+		<p class="description">{{food.description}}</p>
+
+		<!-- Labels -->
+		<app-food-labels-input (labelsChange)="labelChanged($event)"
+							   [(labels)]="food.labels"
+							   [addOnBlur]="true"
+							   [appearance]="'outline'"
+							   [editable]="canEdit"
+							   class="labels-chip-list">
+		</app-food-labels-input>
+
+		<!-- Ingredients -->
+		<h2 class="pt-4">Core Ingredients</h2>
+		<mat-form-field *ngIf="canEdit" appearance="fill" class="pb-4 ingredient-input" color="primary">
+			<mat-label>Core Ingredient</mat-label>
+			<input (keyup.enter)="addCoreIngredient($event)" autocomplete="off" matInput tabindex="-1">
+		</mat-form-field>
+		<mat-chip-set (cdkDropListDropped)="dropIngredient($event)"
+					  cdkDropList
+					  class="mat-mdc-chip-set-stacked"
+					  id="coreIngredientsList">
+			<mat-chip (click)="editIngredient(ingredient, 'core', i)"
+					  class="flex justify-between core-ingredient-chip"
+					  *ngFor="let ingredient of food.coreIngredients; let i = index"
+					  cdkDrag
+					  [cdkDragStartDelay]="dragStartDelay">
+				{{ingredient}}
+				<button (click)="removeCoreIngredient(ingredient)" *ngIf="canEdit" matChipRemove>
+					<mat-icon>cancel</mat-icon>
+				</button>
+			</mat-chip>
+			<div *ngIf="!food.coreIngredients || food.coreIngredients.length == 0" class="no-ingredients-message">
+				No Core Ingredients yet
+			</div>
+		</mat-chip-set>
+
+		<h2 class="pt-4">Optional Ingredients</h2>
+		<mat-form-field *ngIf="canEdit" appearance="fill" class="pb-4 ingredient-input" color="primary">
+			<mat-label>Optional Ingredient</mat-label>
+			<input (keyup.enter)="addOptionalIngredient($event)" autocomplete="off" matInput tabindex="-1">
+		</mat-form-field>
+		<mat-chip-set (cdkDropListDropped)="dropIngredient($event)"
+					  cdkDropList
+					  class="mat-mdc-chip-set-stacked"
+					  id="optionalIngredientsList">
+			<mat-chip-option (click)="editIngredient(ingredient, 'optional', i)"
+							 class="flex justify-between optional-ingredient-chip"
+							 *ngFor="let ingredient of food.optionalIngredients; let i = index"
+							 cdkDrag
+							 [cdkDragStartDelay]="dragStartDelay">
+				{{ingredient}}
+				<button (click)="removeOptionalIngredient(ingredient)" *ngIf="canEdit" matChipRemove>
+					<mat-icon>cancel</mat-icon>
+				</button>
+			</mat-chip-option>
+			<div *ngIf="!food.optionalIngredients || food.optionalIngredients.length == 0"
+				 class="no-ingredients-message">
+				No Optional Ingredients yet
+			</div>
+		</mat-chip-set>
+
+		<!-- Editing fab -->
+		<button (click)="openEditFoodDialog()" *ngIf="canEdit" class="btn-toggle-edit" mat-fab>
+			<mat-icon>edit</mat-icon>
+		</button>
+	</mat-card-content>
 </mat-card>

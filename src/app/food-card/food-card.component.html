@@ -1,4 +1,4 @@
-<mat-card *ngIf="food && !foodPlan" [routerLink]="['/foods', food.id]" class="food-card">
+<mat-card appearance="outlined" *ngIf="food && !foodPlan" [routerLink]="['/foods', food.id]" class="food-card">
 	<div class="food-card-header">
 		<mat-card-title class="food-card-title-small">{{food.name}}</mat-card-title>
 		<button (click)="$event.stopPropagation()" *ngIf="canEdit" [matMenuTriggerFor]="menu" mat-icon-button>
@@ -23,14 +23,18 @@
 </mat-card>
 
 <!-- Simple Food Details -->
-<mat-card *ngIf="food && foodPlan" @fade [routerLink]="['/foods', food.id]" class="simple-food-card">
-	<img alt="Photo of {{food.name}}" class="simple-food-image" loading="lazy" src="{{food.image || defaultImage}}">
-	<div class="food-card-title-big">{{food.name}}</div>
-	<button (click)="$event.stopPropagation()"
-			*ngIf="canEdit"
-			[matMenuTriggerFor]="menu"
-			class="simple-food-card-menu-btn"
-			mat-icon-button>
+<mat-card appearance="outlined"
+		  *ngIf="food && foodPlan"
+		  @fade
+		  [routerLink]="['/foods', food.id]"
+		  class="simple-food-card"
+>
+	<div class="flex flex-row items-center">
+		<img alt="Photo of {{food.name}}" class="simple-food-image" loading="lazy"
+			 src="{{food.image || defaultImage}}">
+		<div class="food-card-title-big">{{food.name}}</div>
+	</div>
+	<button (click)="$event.stopPropagation()" *ngIf="canEdit" [matMenuTriggerFor]="menu" mat-icon-button>
 		<mat-icon>more_vert</mat-icon>
 	</button>
 	<mat-menu #menu>

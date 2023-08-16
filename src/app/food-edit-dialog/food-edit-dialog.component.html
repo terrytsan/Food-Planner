@@ -1,49 +1,55 @@
-<h2 style="margin-bottom: 0;">{{data.FoodData ? 'Edit' : 'Add'}} Food</h2>
+<h2 mat-dialog-title style="margin-bottom: 0;">{{data.FoodData ? 'Edit' : 'Add'}} Food</h2>
 <form (ngSubmit)="onSaveClick()" [formGroup]="foodForm" autocomplete="off">
 	<mat-dialog-content>
-		<!-- Name -->
-		<mat-form-field appearance="fill" class="food-details-input">
-			<mat-label>Name</mat-label>
-			<input formControlName="name" id="name" matInput required>
-		</mat-form-field>
+		<div class="flex flex-col gap-3">
+			<!-- Name -->
+			<mat-form-field appearance="fill" class="food-details-input">
+				<mat-label>Name</mat-label>
+				<input formControlName="name" id="name" matInput required>
+			</mat-form-field>
 
-		<!-- Description -->
-		<mat-form-field appearance="fill" class="food-details-input">
-			<mat-label>Description</mat-label>
-			<textarea cdkTextareaAutosize formControlName="description" id="description" matInput></textarea>
-		</mat-form-field>
+			<!-- Description -->
+			<mat-form-field appearance="fill" class="food-details-input">
+				<mat-label>Description</mat-label>
+				<textarea cdkTextareaAutosize formControlName="description" id="description" matInput></textarea>
+			</mat-form-field>
 
-		<!-- Labels -->
-		<app-food-labels-input *ngIf="!data.FoodData"
-							   [(labels)]="food.labels"
-							   [addOnBlur]="false"
-							   [labelSuggestions]="data.AllLabels"
-							   class="food-details-input">
-		</app-food-labels-input>
+			<!-- Labels -->
+			<app-food-labels-input *ngIf="!data.FoodData"
+								   [(labels)]="food.labels"
+								   [addOnBlur]="false"
+								   [labelSuggestions]="data.AllLabels"
+								   class="food-details-input">
+			</app-food-labels-input>
 
-		<!-- Image -->
-		<input #fileUpload
-			   (change)="onFileSelected($event)"
-			   accept="image/*"
-			   class="file-input"
-			   type="file">
-		<div class="file-upload">
-			{{fileName || "Upload an image."}}
-			<button (click)="fileUpload.click()" class="mat-elevation-z0" color="primary" mat-mini-fab type="button">
-				<mat-icon>add_photo_alternate</mat-icon>
-			</button>
+			<!-- Image -->
+			<input #fileUpload
+				   (change)="onFileSelected($event)"
+				   accept="image/*"
+				   class="file-input"
+				   type="file">
+			<div class="file-upload">
+				{{fileName || "Upload an image."}}
+				<button (click)="fileUpload.click()"
+						class="mat-elevation-z0"
+						color="primary"
+						mat-mini-fab
+						type="button">
+					<mat-icon>add_photo_alternate</mat-icon>
+				</button>
+			</div>
+			<div class="preview-image-container">
+				<img *ngIf="imgPreviewSrc" [src]="imgPreviewSrc" alt="Preview image" class="preview-image">
+				<mat-icon *ngIf="imgPreviewSrc" (click)="removeImage()" class="btn-delete-image">delete</mat-icon>
+			</div>
+			<mat-progress-bar [hidden]="!fileUploadProgress"
+							  class="progress-bar"
+							  mode="determinate"
+							  value="{{fileUploadProgress}}"></mat-progress-bar>
 		</div>
-		<div class="preview-image-container">
-			<img *ngIf="imgPreviewSrc" [src]="imgPreviewSrc" alt="Preview image" class="preview-image">
-			<mat-icon *ngIf="imgPreviewSrc" (click)="removeImage()" class="btn-delete-image">delete</mat-icon>
-		</div>
-		<mat-progress-bar [hidden]="!fileUploadProgress"
-						  class="progress-bar"
-						  mode="determinate"
-						  value="{{fileUploadProgress}}"></mat-progress-bar>
 	</mat-dialog-content>
 
-	<div mat-dialog-actions>
+	<mat-dialog-actions [align]="'end'">
 		<button (click)="onCancelClick()" mat-button type="button">Cancel</button>
 		<button [disabled]="!foodForm.valid || saving"
 				color="primary"
@@ -51,5 +57,5 @@
 				mat-raised-button
 				type="submit">Save
 		</button>
-	</div>
+	</mat-dialog-actions>
 </form>

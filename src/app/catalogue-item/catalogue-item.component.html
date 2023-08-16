@@ -1,4 +1,4 @@
-<mat-card [ngClass]="{'liked-colour' : catalogueItem.status == 'liked',
+<mat-card appearance="raised" [ngClass]="{'liked-colour' : catalogueItem.status == 'liked',
  'disliked-colour' : catalogueItem.status == 'disliked',
  'neutral-colour': catalogueItem.status  == 'neutral'}"
 		  class="catalogue-item-card"
@@ -6,10 +6,11 @@
 	<img alt="Photo of {{catalogueItem.name}}"
 		 loading="lazy"
 		 mat-card-image
+		 class="h-auto max-w-full"
 		 src="{{catalogueItem.imageUrl || defaultImage}}">
 	<div>
-		<mat-card-title>{{catalogueItem.name}}</mat-card-title>
 		<mat-card-content *ngIf="lowestPrice">
+			<mat-card-title>{{catalogueItem.name}}</mat-card-title>
 			<strong>Price: </strong>{{lowestPrice.price | currency: 'GBP'}} ({{lowestPrice.store}})
 		</mat-card-content>
 	</div>

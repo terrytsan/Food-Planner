@@ -36,7 +36,7 @@ td {
 	margin-right: 0;
 }
 
-.align-headers .mat-form-field + .mat-form-field {
+.align-headers .mat-mdc-form-field + .mat-form-field {
 	margin-left: 8px;
 }
 

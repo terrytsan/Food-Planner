@@ -2,11 +2,11 @@
 	<h1>Week Plan</h1>
 	<div *ngIf="selectedWeek">
 		<button (click)="advanceWeek(-7)" *ngIf="selectedWeek.startDate > earliestStartingWeek" mat-raised-button>
-			<mat-icon>navigate_before</mat-icon>
+			<mat-icon style="margin: 0;">navigate_before</mat-icon>
 		</button>
 		&nbsp;
 		<button (click)="advanceWeek(7)" mat-raised-button>
-			<mat-icon>navigate_next</mat-icon>
+			<mat-icon style="margin: 0;">navigate_next</mat-icon>
 		</button>
 	</div>
 

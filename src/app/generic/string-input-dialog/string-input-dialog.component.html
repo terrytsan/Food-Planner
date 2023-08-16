@@ -1,4 +1,4 @@
-<h2>{{data.title}}</h2>
+<h2 mat-dialog-title>{{data.title}}</h2>
 <form (ngSubmit)="close()">
 	<mat-dialog-content class="!flex justify-center items-center">
 		<mat-form-field>
@@ -6,11 +6,11 @@
 			<input [formControl]="stringInput" autocomplete="off" matInput name="stringInput" required>
 		</mat-form-field>
 	</mat-dialog-content>
-	<div class="flex justify-end" mat-dialog-actions>
+	<mat-dialog-actions [align]="'end'">
 		<button (click)="cancel()" mat-button>{{data.cancelBtnText}}</button>
 		<button color="primary"
 				mat-button
 				mat-raised-button
 				type="submit">{{data.confirmBtnText}}</button>
-	</div>
+	</mat-dialog-actions>
 </form>
