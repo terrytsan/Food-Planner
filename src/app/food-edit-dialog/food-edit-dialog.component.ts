@@ -23,7 +23,7 @@ import { FoodService } from "../services/food.service";
 @Component({
 	selector: 'app-food-edit-dialog',
 	templateUrl: './food-edit-dialog.component.html',
-	styleUrls: ['./food-edit-dialog.component.css']
+	styleUrls: ['./food-edit-dialog.component.scss']
 })
 export class FoodEditDialogComponent implements OnInit {
 	foodForm = this.fb.group({

@@ -9,7 +9,7 @@ import { CatalogueItemService } from "../services/catalogue-item.service";
 @Component({
 	selector: 'app-food-catalogue',
 	templateUrl: './food-catalogue.component.html',
-	styleUrls: ['./food-catalogue.component.css']
+	styleUrls: ['./food-catalogue.component.scss']
 })
 export class FoodCatalogueComponent implements OnInit {
 

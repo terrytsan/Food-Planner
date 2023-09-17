@@ -10,7 +10,7 @@ import { MatFormFieldAppearance } from "@angular/material/form-field";
 @Component({
 	selector: 'app-food-labels-input',
 	templateUrl: './food-labels-input.component.html',
-	styleUrls: ['./food-labels-input.component.css']
+	styleUrls: ['./food-labels-input.component.scss']
 })
 export class FoodLabelsInputComponent implements OnInit {
 

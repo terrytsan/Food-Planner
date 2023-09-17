@@ -14,7 +14,7 @@ import { FoodPlanService } from "../services/food-plan.service";
 @Component({
 	selector: 'app-choose-food-dialog',
 	templateUrl: './choose-food-dialog.component.html',
-	styleUrls: ['./choose-food-dialog.component.css']
+	styleUrls: ['./choose-food-dialog.component.scss']
 })
 export class ChooseFoodDialogComponent implements OnInit {
 

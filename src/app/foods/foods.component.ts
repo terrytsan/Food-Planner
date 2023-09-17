@@ -16,7 +16,7 @@ import { animate, style, transition, trigger } from "@angular/animations";
 @Component({
 	selector: 'app-foods',
 	templateUrl: './foods.component.html',
-	styleUrls: ['./foods.component.css'],
+	styleUrls: ['./foods.component.scss'],
 	animations: [
 		trigger('searchButtonAnimation', [
 			transition(':enter', [

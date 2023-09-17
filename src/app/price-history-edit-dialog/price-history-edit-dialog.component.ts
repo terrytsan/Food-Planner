@@ -7,7 +7,7 @@ import { CatalogueItemService } from "../services/catalogue-item.service";
 @Component({
 	selector: 'app-price-history-edit-dialog',
 	templateUrl: './price-history-edit-dialog.component.html',
-	styleUrls: ['./price-history-edit-dialog.component.css']
+	styleUrls: ['./price-history-edit-dialog.component.scss']
 })
 export class PriceHistoryEditDialogComponent implements OnInit {
 

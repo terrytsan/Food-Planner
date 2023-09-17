@@ -18,7 +18,7 @@ import { GroupService } from "../group.service";
 @Component({
 	selector: 'app-group-member-edit-dialog',
 	templateUrl: './group-member-edit-dialog.component.html',
-	styleUrls: ['./group-member-edit-dialog.component.css']
+	styleUrls: ['./group-member-edit-dialog.component.scss']
 })
 export class GroupMemberEditDialogComponent implements OnInit {
 	member = new FormGroup({

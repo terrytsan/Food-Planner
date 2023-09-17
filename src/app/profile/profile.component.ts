@@ -21,7 +21,7 @@ import { animate, query as animationQuery, stagger, style, transition, trigger }
 @Component({
 	selector: 'app-profile',
 	templateUrl: './profile.component.html',
-	styleUrls: ['./profile.component.css'],
+	styleUrls: ['./profile.component.scss'],
 	animations: [
 		trigger('fadeInStagger', [
 			transition(':enter', [

@@ -8,7 +8,7 @@ import { CatalogueItemService } from "../services/catalogue-item.service";
 @Component({
 	selector: 'app-catalogue-item',
 	templateUrl: './catalogue-item.component.html',
-	styleUrls: ['./catalogue-item.component.css']
+	styleUrls: ['./catalogue-item.component.scss']
 })
 export class CatalogueItemComponent implements OnInit {
 

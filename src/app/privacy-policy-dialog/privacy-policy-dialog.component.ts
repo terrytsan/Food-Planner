@@ -4,7 +4,7 @@ import { Analytics, logEvent } from "@angular/fire/analytics";
 @Component({
 	selector: 'app-privacy-policy-dialog',
 	templateUrl: './privacy-policy-dialog.component.html',
-	styleUrls: ['./privacy-policy-dialog.component.css']
+	styleUrls: ['./privacy-policy-dialog.component.scss']
 })
 export class PrivacyPolicyDialogComponent implements OnInit {
 

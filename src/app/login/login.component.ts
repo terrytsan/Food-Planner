@@ -6,7 +6,7 @@ import { animate, state, style, transition, trigger } from "@angular/animations"
 @Component({
 	selector: 'app-login',
 	templateUrl: './login.component.html',
-	styleUrls: ['./login.component.css'],
+	styleUrls: ['./login.component.scss'],
 	animations: [
 		trigger('flyIn', [
 			state('in', style({transform: 'translateY(0)', opacity: 1})),

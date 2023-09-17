@@ -5,7 +5,7 @@ import { FormControl, Validators } from "@angular/forms";
 @Component({
 	selector: 'app-string-input-dialog',
 	templateUrl: './string-input-dialog.component.html',
-	styleUrls: ['./string-input-dialog.component.css']
+	styleUrls: ['./string-input-dialog.component.scss']
 })
 export class StringInputDialogComponent implements OnInit {
 	stringInput = new FormControl('', [Validators.required]);

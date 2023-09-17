@@ -13,7 +13,7 @@ import { animateChild, query, stagger, transition, trigger } from "@angular/anim
 @Component({
 	selector: 'app-week-plan',
 	templateUrl: './week-plan.component.html',
-	styleUrls: ['./week-plan.component.css'],
+	styleUrls: ['./week-plan.component.scss'],
 	animations: [
 		trigger('foodPlans', [
 			transition(":enter", [query('@fade', stagger(50, animateChild()))])

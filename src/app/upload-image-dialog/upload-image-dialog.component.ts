@@ -6,7 +6,7 @@ import { ImageService } from "../services/image.service";
 @Component({
 	selector: 'app-upload-image-dialog',
 	templateUrl: './upload-image-dialog.component.html',
-	styleUrls: ['./upload-image-dialog.component.css']
+	styleUrls: ['./upload-image-dialog.component.scss']
 })
 export class UploadImageDialogComponent implements OnInit {
 

@@ -16,7 +16,7 @@ import { CdkDragDrop, DragStartDelay, moveItemInArray } from "@angular/cdk/drag-
 @Component({
 	selector: 'app-food-details',
 	templateUrl: './food-details.component.html',
-	styleUrls: ['./food-details.component.css']
+	styleUrls: ['./food-details.component.scss']
 })
 export class FoodDetailsComponent implements OnInit {
 

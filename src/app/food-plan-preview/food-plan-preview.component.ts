@@ -10,7 +10,7 @@ import { Router } from "@angular/router";
 @Component({
 	selector: 'app-food-plan-preview',
 	templateUrl: './food-plan-preview.component.html',
-	styleUrls: ['./food-plan-preview.component.css']
+	styleUrls: ['./food-plan-preview.component.scss']
 })
 export class FoodPlanPreviewComponent implements OnInit {
 

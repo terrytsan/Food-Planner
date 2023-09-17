@@ -11,7 +11,7 @@ import { animate, style, transition, trigger } from "@angular/animations";
 @Component({
 	selector: 'app-food-card',
 	templateUrl: './food-card.component.html',
-	styleUrls: ['./food-card.component.css'],
+	styleUrls: ['./food-card.component.scss'],
 	animations: [
 		trigger('fade', [
 			transition(':enter', [
