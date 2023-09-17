@@ -14,8 +14,8 @@
 					   [food]="dish.food">{{dish.food.name}}</app-food-card>
 	</div>
 	<div *ngIf="foodPlan.dishes && foodPlan.dishes.length == 0">
-		<mat-card>
-			<mat-card-content appearance="outlined" class="empty-list-card">
+		<mat-card appearance="raised">
+			<mat-card-content class="empty-list-card">
 				Nothing here yet 😞
 			</mat-card-content>
 		</mat-card>

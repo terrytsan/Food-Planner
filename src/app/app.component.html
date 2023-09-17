@@ -19,8 +19,8 @@
 	<mat-sidenav-container class="sidenav-container">
 		<mat-sidenav #sidenav
 					 (click)="mobileDisplay && sidenav.toggle()"
-					 [ngStyle]="{'display': (loggedInUser$ | async) ? 'block': 'none'}"
-					 [opened]="!mobileDisplay">
+					 [mode]="mobileDisplay ? 'over':'side'"
+					 [opened]="!mobileDisplay && !!(loggedInUser$ | async)">
 			<mat-nav-list>
 				<a [routerLinkActiveOptions]="{ exact: true }"
 				   [routerLinkActive]="['mat-sidenav-item-is-active']"

@@ -16,7 +16,7 @@ import { animateChild, query, stagger, transition, trigger } from "@angular/anim
 	styleUrls: ['./week-plan.component.scss'],
 	animations: [
 		trigger('foodPlans', [
-			transition(":enter", [query('@fade', stagger(50, animateChild()))])
+			transition(":enter", [query('@fade', stagger(50, animateChild()), { optional: true })])
 		])
 	]
 })

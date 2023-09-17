@@ -1,4 +1,6 @@
 /* You can add global styles to this file, and also import other style files */
+@use '@angular/material' as mat;
+@use '@material/textfield' as mdc-textfield;
 
 html, body {
 	height: 100%;
@@ -12,3 +14,10 @@ body {
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+// Allow labels to be visible in small height text-fields (due to density change)
+mdc-textfield.$minimum-height-for-filled-label: 30px;
+
+// Make material inputs smaller
+@include mat.form-field-density(-3);
+@include mat.radio-density(minimum);
