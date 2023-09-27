@@ -1,0 +1,9 @@
+// Remove scroll bar
+#carouselContainer {
+	-ms-overflow-style: none; /* IE and Edge */
+	scrollbar-width: none; /* Firefox */
+}
+
+#carouselContainer::-webkit-scrollbar {
+	display: none; /* Chrome, Safari, Opera */
+}

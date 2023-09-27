@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { BehaviorSubject, combineLatest, Observable, of } from "rxjs";
 import { FoodPlan } from "../food-plan-preview/foodPlan";
 import { Timestamp } from "firebase/firestore";
-import { catchError, map, switchMap } from "rxjs/operators";
+import { catchError, switchMap } from "rxjs/operators";
 import { AuthService, SimpleUser } from "../services/auth.service";
 import { FoodPlanService } from "../services/food-plan.service";
 import { MatDialog } from "@angular/material/dialog";
@@ -54,31 +54,6 @@ export class WeekPlanComponent implements OnInit, OnDestroy {
 			let foodPlans = foodPlanService.getFoodPlansBetweenDates(selectedWeek.startDate, selectedWeek.endDate, user.selectedGroup);
 
 			return foodPlans.pipe(
-				map((foodPlans) => {
-					let existingDates = foodPlans.map(t => {
-						return t.date.toDate().setHours(0, 0, 0, 0);
-					});
-
-					// Create dummy foodPlans (don't exist in firebase) for missing days.
-					let i = selectedWeek.startDate.toDate();
-					i.setHours(0, 0, 0, 0);
-					for (; i <= selectedWeek.endDate.toDate();) {
-						if (!existingDates.includes(i.getTime())) {
-							let missingDay = Timestamp.fromDate(i);
-							let dummyFoodPlan: FoodPlan = {
-								id: '',
-								date: missingDay,
-								group: user.selectedGroup,
-								dishes: []
-							};
-							foodPlans.push(dummyFoodPlan);
-						}
-						i.setDate(i.getDate() + 1);
-					}
-
-					foodPlans.sort((a, b) => a.date.toDate().getTime() - b.date.toDate().getTime());
-					return foodPlans;
-				}),
 				catchError((err) => {
 					console.error("Error loading food plans.", err);
 					this.foodPlansLoadingError$.next("Error loading food plans. 😥");

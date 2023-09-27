@@ -16,7 +16,7 @@ import {
 } from "@angular/fire/firestore";
 import { Timestamp } from "firebase/firestore";
 import { Observable, of, pipe, zip } from "rxjs";
-import { switchMap } from "rxjs/operators";
+import { map, switchMap } from "rxjs/operators";
 import { Food } from "../food-card/food";
 import { FoodService } from "./food.service";
 
@@ -111,7 +111,7 @@ export class FoodPlanService {
 
 	getFoodPlan(id: string): Observable<FoodPlan> {
 		let ref = doc(this.afs, 'foodPlans', id) as DocumentReference<FoodPlanDocument>;
-		return docData<FoodPlanDocument>(ref, {idField: 'id'}).pipe(
+		return docData<FoodPlanDocument>(ref, { idField: 'id' }).pipe(
 			switchMap(foodPlanDoc => {
 				if (!foodPlanDoc) throw new Error("Failed to get FoodPlan document.");
 				// Map food Ids to food objects
@@ -134,16 +134,24 @@ export class FoodPlanService {
 			query<FoodPlanDocument>(
 				collection(this.afs, 'foodPlans') as CollectionReference<FoodPlanDocument>,
 				where('__name__', 'in', ids)
-			), {idField: 'id'}
+			), { idField: 'id' }
 		).pipe(
 			this.foodPlanDocsToFoodPlans()
 		);
 	}
 
+	/**
+	 * Get list of Food Plans
+	 * @param startDate start date (inclusive)
+	 * @param endDate end date (inclusive)
+	 * @param groupId groupID of Food Plans
+	 * @param addDummyFoodPlans True if empty FoodPlans should be returned if no Food Plan exists for a particular date in Firebase
+	 */
 	getFoodPlansBetweenDates(
 		startDate: Timestamp,
 		endDate: Timestamp,
-		groupId: string
+		groupId: string,
+		addDummyFoodPlans: boolean = true
 	): Observable<FoodPlan[]> {
 		return collectionData<FoodPlanDocument>(
 			query<FoodPlanDocument>(
@@ -151,9 +159,33 @@ export class FoodPlanService {
 				where('date', '>=', startDate),
 				where('date', '<=', endDate),
 				where('group', '==', groupId)
-			), {idField: 'id'}
+			), { idField: 'id' }
 		).pipe(
-			this.foodPlanDocsToFoodPlans()
+			this.foodPlanDocsToFoodPlans(),
+			map(foodPlans => {
+				if (!addDummyFoodPlans) return foodPlans;
+				let existingDates = foodPlans.map(t => t.date.toDate().setHours(0, 0, 0, 0));
+
+				// Create dummy foodPlans (don't exist in firebase) for missing days.
+				let i = startDate.toDate();
+				i.setHours(0, 0, 0, 0);
+				for (; i <= endDate.toDate();) {
+					if (!existingDates.includes(i.getTime())) {
+						let missingDay = Timestamp.fromDate(i);
+						let dummyFoodPlan: FoodPlan = {
+							id: '',
+							date: missingDay,
+							group: groupId,
+							dishes: []
+						};
+						foodPlans.push(dummyFoodPlan);
+					}
+					i.setDate(i.getDate() + 1);
+				}
+
+				foodPlans.sort((a, b) => a.date.toDate().getTime() - b.date.toDate().getTime());
+				return foodPlans;
+			})
 		);
 	}
 
@@ -190,7 +222,7 @@ export class FoodPlanService {
 				where('date', '>=', startDate),
 				where('date', '<=', endDate),
 				where('group', '==', groupId)
-			), {idField: 'id'}
+			), { idField: 'id' }
 		);
 	}
 

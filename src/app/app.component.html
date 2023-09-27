@@ -26,6 +26,12 @@
 				   [routerLinkActive]="['mat-sidenav-item-is-active']"
 				   mat-list-item
 				   routerLink="/">
+					<mat-icon>home</mat-icon>
+					Home</a>
+				<a [routerLinkActiveOptions]="{ exact: true }"
+				   [routerLinkActive]="['mat-sidenav-item-is-active']"
+				   mat-list-item
+				   routerLink="/weekPlan">
 					<mat-icon>menu_book</mat-icon>
 					Planner</a>
 				<a [routerLinkActive]="['mat-sidenav-item-is-active']" mat-list-item routerLink="/foods">

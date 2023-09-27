@@ -11,6 +11,7 @@ import { ProfileComponent } from "./profile/profile.component";
 import { SignupComponent } from "./signup/signup.component";
 import { PrivacyPolicyDialogComponent } from "./privacy-policy-dialog/privacy-policy-dialog.component";
 import { FoodPlanDetailsComponent } from "./food-plan-details/food-plan-details.component";
+import { HomeComponent } from "./home/home.component";
 
 let redirectUnauthorizedToLogin = () => redirectUnauthorizedTo(['login']);
 let redirectLoggedInToHome = () => redirectLoggedInTo(['']);
@@ -18,6 +19,12 @@ let redirectLoggedInToHome = () => redirectLoggedInTo(['']);
 const routes: Routes = [
 	{
 		path: '',
+		component: HomeComponent,
+		canActivate: [AuthGuard],
+		data: { authGuardPipe: redirectUnauthorizedToLogin }
+	},
+	{
+		path: 'weekPlan',
 		component: WeekPlanComponent,
 		canActivate: [AuthGuard],
 		data: {authGuardPipe: redirectUnauthorizedToLogin}

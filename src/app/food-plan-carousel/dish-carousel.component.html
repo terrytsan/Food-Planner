@@ -1,0 +1,41 @@
+<div class="relative group">
+	<div #carouselContainer class="flex snap-x snap-mandatory gap-6 overflow-x-auto" id="carouselContainer">
+		<div #dish
+			 *ngFor="let dish of dishes; let index = index"
+			 class="flex h-12 snap-center flex-row items-center justify-start gap-2 sm:h-16 md:h-24"
+			 id="dish-{{index}}"
+			 style="flex: 0 0 100%">
+			<img alt="Photo of {{dish.food.name}}"
+				 class="aspect-square max-h-full object-cover"
+				 src="{{dish.food.image || defaultImage}}">
+			<div class="grow text-lg sm:text-xl md:text-3xl">{{dish.food.name}}</div>
+		</div>
+	</div>
+
+	<!-- Controls -->
+	<ng-container *ngIf="dishes.length > 1">
+		<button (click)="prevItem()"
+				class="absolute top-1/2 left-0 hidden -translate-y-1/2 cursor-pointer rounded-full border-sky-600 bg-white opacity-90 p-1.5 border-1 group-hover:block">
+			<mat-icon>chevron_left</mat-icon>
+		</button>
+		<button (click)="nextItem()"
+				class="absolute top-1/2 right-0 hidden -translate-y-1/2 cursor-pointer rounded-full border-sky-600 bg-white opacity-90 p-1.5 border-1 group-hover:block">
+			<mat-icon>chevron_right</mat-icon>
+		</button>
+	</ng-container>
+
+	<!-- Indicators -->
+	<div *ngIf="dishes.length > 1" class="absolute right-0 bottom-1 left-0">
+		<div class="flex flex-row justify-center gap-2">
+			<div (click)="navigateToIndex(index)"
+				 *ngFor="let dish of dishes; let index = index"
+				 [class.bg-opacity-50]="selectedIndex() !== index"
+				 class="cursor-pointer rounded-full bg-white p-1 w-2-h-2">
+			</div>
+		</div>
+	</div>
+</div>
+
+<div *ngIf="dishes.length == 0" class="flex h-full w-full items-center justify-center text-lg md:text-2xl">
+	Nothing planned yet
+</div>
