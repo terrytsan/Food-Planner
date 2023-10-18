@@ -34,6 +34,12 @@
 				   routerLink="/weekPlan">
 					<mat-icon>menu_book</mat-icon>
 					Planner</a>
+				<a [routerLinkActiveOptions]="{ exact: true }"
+				   [routerLinkActive]="['mat-sidenav-item-is-active']"
+				   mat-list-item
+				   routerLink="/calendar">
+					<mat-icon>calendar_month</mat-icon>
+					Calendar</a>
 				<a [routerLinkActive]="['mat-sidenav-item-is-active']" mat-list-item routerLink="/foods">
 					<mat-icon>restaurant</mat-icon>
 					Foods</a>

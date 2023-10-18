@@ -68,6 +68,7 @@ import { DragDropModule } from "@angular/cdk/drag-drop";
 import { AutoFocusDirective } from './directives/auto-focus.directive';
 import { HomeComponent } from './home/home.component';
 import { DishCarouselComponent } from './food-plan-carousel/dish-carousel.component';
+import { CalendarComponent } from './calendar/calendar.component';
 
 let prodImports = [
 	provideAppCheck(() => {
@@ -107,7 +108,8 @@ if (environment.useEmulators) {
 		ShoppingListComponent,
 		AutoFocusDirective,
 		HomeComponent,
-		DishCarouselComponent
+		DishCarouselComponent,
+		CalendarComponent
 	],
 	imports: [
 		BrowserModule,

@@ -12,6 +12,7 @@ import { SignupComponent } from "./signup/signup.component";
 import { PrivacyPolicyDialogComponent } from "./privacy-policy-dialog/privacy-policy-dialog.component";
 import { FoodPlanDetailsComponent } from "./food-plan-details/food-plan-details.component";
 import { HomeComponent } from "./home/home.component";
+import { CalendarComponent } from "./calendar/calendar.component";
 
 let redirectUnauthorizedToLogin = () => redirectUnauthorizedTo(['login']);
 let redirectLoggedInToHome = () => redirectLoggedInTo(['']);
@@ -26,6 +27,12 @@ const routes: Routes = [
 	{
 		path: 'weekPlan',
 		component: WeekPlanComponent,
+		canActivate: [AuthGuard],
+		data: { authGuardPipe: redirectUnauthorizedToLogin }
+	},
+	{
+		path: 'calendar',
+		component: CalendarComponent,
 		canActivate: [AuthGuard],
 		data: { authGuardPipe: redirectUnauthorizedToLogin }
 	},

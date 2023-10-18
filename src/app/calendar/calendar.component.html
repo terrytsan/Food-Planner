@@ -1,0 +1,15 @@
+<p>calendar works!</p>
+<div class="grid grid-cols-7">
+	<div *ngFor="let name of dayNames()" class="text-center">
+		{{name}}
+	</div>
+	<div *ngFor="let a of days" class="h-10 bg-yellow-400 border-solid border border-black">
+		{{a}}
+	</div>
+</div>
+<hr class="my-5"/>
+<div class="flex flex-row flex-wrap">
+	<div *ngFor="let a of days" class="w-20 h-10 bg-yellow-400 border-solid border border-black">
+		{{a}}
+	</div>
+</div>
