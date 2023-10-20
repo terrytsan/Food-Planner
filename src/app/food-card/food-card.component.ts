@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { Food } from "./food";
 import { MatDialog } from "@angular/material/dialog";
 import { FoodEditDialogComponent } from "../food-edit-dialog/food-edit-dialog.component";
@@ -21,7 +21,7 @@ import { animate, style, transition, trigger } from "@angular/animations";
 		])
 	]
 })
-export class FoodCardComponent implements OnInit {
+export class FoodCardComponent {
 
 	@Input() food: Food | null = null;
 	@Input() foodPlan: FoodPlan | null = null;
@@ -36,15 +36,12 @@ export class FoodCardComponent implements OnInit {
 	) {
 	}
 
-	ngOnInit(): void {
-	}
-
 	editFood() {
 		// Open the modal, passing in food item
 		this.dialog.open(FoodEditDialogComponent, {
 			maxWidth: '600px',
 			width: '80%',
-			data: {FoodData: this.food}
+			data: { FoodData: this.food }
 		});
 	}
 

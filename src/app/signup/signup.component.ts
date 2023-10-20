@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { AuthService } from "../services/auth.service";
 import { Router } from "@angular/router";
 import { addDoc, collection, doc, Firestore, setDoc } from "@angular/fire/firestore";
@@ -11,7 +11,7 @@ import { Analytics, logEvent } from "@angular/fire/analytics";
 	templateUrl: './signup.component.html',
 	styleUrls: ['./signup.component.scss']
 })
-export class SignupComponent implements OnInit {
+export class SignupComponent {
 	displayName: string;
 	email: string;
 	password: string;
@@ -26,12 +26,9 @@ export class SignupComponent implements OnInit {
 	) {
 	}
 
-	ngOnInit(): void {
-	}
-
 	onSubmit() {
 		this.authService.createUserWithEmailAndPassword(this.email, this.password).then(async (userCredentials) => {
-			this.authService.updateProfile({displayName: this.displayName});
+			this.authService.updateProfile({ displayName: this.displayName });
 			// Create new group
 			const groupRef = await addDoc(collection(this.afs, 'groups'), {
 				name: this.displayName + "'s group",

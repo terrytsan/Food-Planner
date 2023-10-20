@@ -4,7 +4,7 @@
 	<div class="flex flex-col justify-start gap-3">
 		<mat-form-field>
 			<mat-label>Date</mat-label>
-			<input [(ngModel)]="date" [matDatepicker]="picker" matInput autocomplete="off">
+			<input [(ngModel)]="date" [matDatepicker]="picker" autocomplete="off" matInput>
 			<mat-datepicker-toggle [for]="picker" matSuffix></mat-datepicker-toggle>
 			<mat-datepicker #picker></mat-datepicker>
 		</mat-form-field>
@@ -15,7 +15,7 @@
 		</mat-form-field>
 		<mat-form-field>
 			<mat-label>Store</mat-label>
-			<input [(ngModel)]="store" matInput autocomplete="off">
+			<input [(ngModel)]="store" autocomplete="off" matInput>
 		</mat-form-field>
 	</div>
 </div>

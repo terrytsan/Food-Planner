@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { CatalogueItem } from "./catalogueItem";
 import { GlobalVariable } from "../global";
 import { PriceHistory } from "./priceHistory";
@@ -10,7 +10,7 @@ import { CatalogueItemService } from "../services/catalogue-item.service";
 	templateUrl: './catalogue-item.component.html',
 	styleUrls: ['./catalogue-item.component.scss']
 })
-export class CatalogueItemComponent implements OnInit {
+export class CatalogueItemComponent {
 
 	@Input() catalogueItem: CatalogueItem;
 	@Input() lowestPrice: PriceHistory;
@@ -18,9 +18,6 @@ export class CatalogueItemComponent implements OnInit {
 	defaultImage = GlobalVariable.PLACEHOLDER_IMAGE_URL;
 
 	constructor(private catalogueItemService: CatalogueItemService) {
-	}
-
-	ngOnInit(): void {
 	}
 
 	async toggleLikeCatalogueItem() {

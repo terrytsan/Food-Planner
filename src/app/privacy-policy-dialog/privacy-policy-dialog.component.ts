@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { Analytics, logEvent } from "@angular/fire/analytics";
 
 @Component({
@@ -6,13 +6,9 @@ import { Analytics, logEvent } from "@angular/fire/analytics";
 	templateUrl: './privacy-policy-dialog.component.html',
 	styleUrls: ['./privacy-policy-dialog.component.scss']
 })
-export class PrivacyPolicyDialogComponent implements OnInit {
+export class PrivacyPolicyDialogComponent {
 
 	constructor(private analytics: Analytics) {
 		logEvent(this.analytics, "view_privacy_policy");
 	}
-
-	ngOnInit(): void {
-	}
-
 }

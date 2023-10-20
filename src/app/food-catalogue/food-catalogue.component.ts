@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { Observable, of } from "rxjs";
 import { CatalogueItem } from "../catalogue-item/catalogueItem";
 import { PriceHistory } from "../catalogue-item/priceHistory";
@@ -11,7 +11,7 @@ import { CatalogueItemService } from "../services/catalogue-item.service";
 	templateUrl: './food-catalogue.component.html',
 	styleUrls: ['./food-catalogue.component.scss']
 })
-export class FoodCatalogueComponent implements OnInit {
+export class FoodCatalogueComponent {
 
 	user$: Observable<SimpleUser | null> = this.authService.getSimpleUser();
 	catalogueItems$: Observable<CatalogueItem[]>;
@@ -26,9 +26,6 @@ export class FoodCatalogueComponent implements OnInit {
 		}));
 
 		this.getPriceHistory();
-	}
-
-	ngOnInit(): void {
 	}
 
 	async getPriceHistory() {

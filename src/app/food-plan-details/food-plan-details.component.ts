@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { FoodPlanService } from "../services/food-plan.service";
 import { Dish, FoodPlan, SimpleDish } from "../food-plan-preview/foodPlan";
 import { EMPTY, Subject } from "rxjs";
@@ -13,7 +13,7 @@ import { AuthService } from "../services/auth.service";
 	templateUrl: './food-plan-details.component.html',
 	styleUrls: ['./food-plan-details.component.scss']
 })
-export class FoodPlanDetailsComponent implements OnInit {
+export class FoodPlanDetailsComponent implements OnDestroy {
 
 	id: string;
 	foodPlan: FoodPlanDetails;
@@ -60,9 +60,6 @@ export class FoodPlanDetailsComponent implements OnInit {
 		});
 	}
 
-	ngOnInit(): void {
-	}
-
 	ngOnDestroy() {
 		this.ngUnsubscribe.next();
 		this.ngUnsubscribe.complete();
@@ -86,7 +83,7 @@ export class FoodPlanDetailsComponent implements OnInit {
 			simpleDishes.push(this.foodPlanService.convertDishToSimpleDish(d));
 		});
 
-		this.foodPlanService.updateFoodPlan(this.foodPlan.id, {dishes: simpleDishes});
+		this.foodPlanService.updateFoodPlan(this.foodPlan.id, { dishes: simpleDishes });
 	}
 
 	/**

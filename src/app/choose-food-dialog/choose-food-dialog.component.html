@@ -5,14 +5,14 @@
 			<mat-icon>shuffle</mat-icon>
 		</button>
 	</div>
-	<mat-form-field class="mb-4 w-full" appearance="outline">
+	<mat-form-field appearance="outline" class="mb-4 w-full">
 		<mat-label>Search Foods...</mat-label>
-		<input id="searchInput" (keyup)="search($event)" autocomplete="off" matInput type="text">
+		<input (keyup)="search($event)" autocomplete="off" id="searchInput" matInput type="text">
 	</mat-form-field>
 </div>
 
 <mat-dialog-content>
-	<mat-card appearance="raised" *ngFor="let food of filteredFoods" class="food-card">
+	<mat-card *ngFor="let food of filteredFoods" appearance="raised" class="food-card">
 		<img alt="Photo of {{food.name}}" class="food-image" loading="lazy" src="{{food.image || defaultImage}}">
 		<div>{{food.name}}</div>
 		<button (click)="chooseFood(food)" mat-icon-button style="margin-left: auto;">

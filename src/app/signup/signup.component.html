@@ -21,7 +21,7 @@
 						   type="password">
 					<mat-error>Please provide a valid password</mat-error>
 				</mat-form-field>
-				<mat-checkbox [(ngModel)]="termsAccepted" name="termsAccepted" disableRipple="true" required>
+				<mat-checkbox [(ngModel)]="termsAccepted" disableRipple="true" name="termsAccepted" required>
 					<span (click)="$event.stopPropagation(); $event.preventDefault()" style="cursor: default;">I have read and understood the
 					<a (click)="openPrivacyPolicyDialog();"
 					   style="color:blue; cursor: pointer;">privacy policy</a>.

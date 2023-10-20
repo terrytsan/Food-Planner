@@ -30,7 +30,7 @@ export class FoodService {
 
 	getFood(id: string): Observable<Food> {
 		let ref = doc(this.afs, 'foods', id) as DocumentReference<Food>;
-		return docData<Food>(ref, {idField: 'id'});
+		return docData<Food>(ref, { idField: 'id' });
 	}
 
 	/**
@@ -53,7 +53,7 @@ export class FoodService {
 				query<Food>(
 					collection(this.afs, 'foods') as CollectionReference<Food>,
 					where('__name__', 'in', batchedFoodIds)				// __name__ is document id
-				), {idField: 'id'}
+				), { idField: 'id' }
 			);
 			foods$.push(batchedFoodsObservable);
 		}
@@ -67,7 +67,7 @@ export class FoodService {
 				collection(this.afs, 'foods') as CollectionReference<Food>,
 				where('group', '==', groupId),
 				orderBy('name')
-			), {idField: 'id'}
+			), { idField: 'id' }
 		);
 	}
 
@@ -83,7 +83,7 @@ export class FoodService {
 		let foodRef = doc(this.afs, 'foods', foodToDelete.id);
 		await deleteDoc(foodRef);
 
-		let snackBarRef = this._snackBar.open(`Deleted ${foodToDelete.name}.`, 'Undo', {duration: 3000});
+		let snackBarRef = this._snackBar.open(`Deleted ${foodToDelete.name}.`, 'Undo', { duration: 3000 });
 		snackBarRef.onAction().subscribe(async () => {
 			if (!foodToDelete) return;
 

@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from "@angular/router";
 import { CatalogueItem } from "../catalogue-item/catalogueItem";
 import { Timestamp } from "firebase/firestore";
@@ -19,7 +19,7 @@ import { CatalogueItemService } from "../services/catalogue-item.service";
 	templateUrl: './catalogue-item-details.component.html',
 	styleUrls: ['./catalogue-item-details.component.scss']
 })
-export class CatalogueItemDetailsComponent implements OnInit {
+export class CatalogueItemDetailsComponent {
 
 	user: SimpleUser | null;
 
@@ -97,9 +97,6 @@ export class CatalogueItemDetailsComponent implements OnInit {
 			})
 		);
 		this._id = newID;
-	}
-
-	ngOnInit(): void {
 	}
 
 	toggleEditing() {

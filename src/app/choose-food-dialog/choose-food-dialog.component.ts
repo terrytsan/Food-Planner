@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnDestroy } from '@angular/core';
 import { combineLatest, Observable, of, Subscription } from "rxjs";
 import { Food } from "../food-card/food";
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
@@ -16,7 +16,7 @@ import { FoodPlanService } from "../services/food-plan.service";
 	templateUrl: './choose-food-dialog.component.html',
 	styleUrls: ['./choose-food-dialog.component.scss']
 })
-export class ChooseFoodDialogComponent implements OnInit {
+export class ChooseFoodDialogComponent implements OnDestroy {
 
 	defaultImage: string = GlobalVariable.PLACEHOLDER_IMAGE_URL;
 	foods$: Observable<Food[]>;
@@ -34,9 +34,9 @@ export class ChooseFoodDialogComponent implements OnInit {
 
 	constructor(
 		private dialogRef: MatDialogRef<FoodEditDialogComponent>,
-		@Inject(MAT_DIALOG_DATA) private selectedEndDate: Date,
+		@Inject(MAT_DIALOG_DATA) selectedEndDate: Date,
 		private authService: AuthService,
-		private foodService: FoodService,
+		foodService: FoodService,
 		private foodPlanService: FoodPlanService
 	) {
 		this.foods$ = this.authService.getSimpleUser().pipe(
@@ -97,9 +97,6 @@ export class ChooseFoodDialogComponent implements OnInit {
 			this.foodWeights = weights;
 			this.filteredFoods = foods;
 		});
-	}
-
-	ngOnInit(): void {
 	}
 
 	ngOnDestroy() {

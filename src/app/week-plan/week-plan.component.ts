@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { BehaviorSubject, combineLatest, Observable, of } from "rxjs";
 import { FoodPlan } from "../food-plan-preview/foodPlan";
 import { Timestamp } from "firebase/firestore";
@@ -20,7 +20,7 @@ import { animateChild, query, stagger, transition, trigger } from "@angular/anim
 		])
 	]
 })
-export class WeekPlanComponent implements OnInit, OnDestroy {
+export class WeekPlanComponent implements OnDestroy {
 
 	user$: Observable<SimpleUser | null> = this.authService.getSimpleUser();
 	foodPlans$: Observable<FoodPlan[]>;
@@ -61,9 +61,6 @@ export class WeekPlanComponent implements OnInit, OnDestroy {
 				})
 			);
 		}));
-	}
-
-	ngOnInit(): void {
 	}
 
 	ngOnDestroy() {

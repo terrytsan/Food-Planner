@@ -5,7 +5,7 @@
 		<h1 style="text-align: center;">This food plan has no dishes yet. 😔</h1>
 	</div>
 
-	<mat-card appearance="outlined" *ngFor="let dish of foodPlan.dishes" class="dish-card">
+	<mat-card *ngFor="let dish of foodPlan.dishes" appearance="outlined" class="dish-card">
 		<mat-card-content>
 			<h2>{{dish.food.name}}</h2>
 			<div *ngIf="dish.food.allIngredients.length > 0">

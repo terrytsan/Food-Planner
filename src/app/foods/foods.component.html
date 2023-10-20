@@ -23,25 +23,25 @@
 	</div>
 </div>
 <div class="flex flex-row justify-start items-center mb-2">
-	<mat-form-field class="labels-filter-input" appearance="fill">
+	<mat-form-field appearance="fill" class="labels-filter-input">
 		<mat-label>Filter Labels</mat-label>
 		<mat-chip-grid #chipList aria-label="Label Selection">
 			<mat-chip-option
-				*ngFor="let label of selectedLabels$|async"
-				(removed)="removeLabel(label)">
+					(removed)="removeLabel(label)"
+					*ngFor="let label of selectedLabels$|async">
 				{{label}}
 				<button matChipRemove>
 					<mat-icon>cancel</mat-icon>
 				</button>
 			</mat-chip-option>
 			<input
-				placeholder="Enter label..."
-				#labelInput
-				[formControl]="labelCtrl"
-				[matAutocomplete]="auto"
-				[matChipInputFor]="chipList"
-				[matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-				(matChipInputTokenEnd)="addLabel($event)">
+					#labelInput
+					(matChipInputTokenEnd)="addLabel($event)"
+					[formControl]="labelCtrl"
+					[matAutocomplete]="auto"
+					[matChipInputFor]="chipList"
+					[matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+					placeholder="Enter label...">
 		</mat-chip-grid>
 		<mat-autocomplete #auto="matAutocomplete" (optionSelected)="autocompleteItemSelected($event)">
 			<mat-option *ngFor="let label of unusedLabels" [value]="label">
@@ -49,11 +49,11 @@
 			</mat-option>
 		</mat-autocomplete>
 	</mat-form-field>
-	<mat-radio-group class="flex flex-col mat-form-field-wrapper"
-					 style="margin-left:15px;"
-					 [(ngModel)]="lblFilterOp">
-		<mat-radio-button style="margin:2px;" [value]="0">OR</mat-radio-button>
-		<mat-radio-button style="margin:2px;" [value]="1">AND</mat-radio-button>
+	<mat-radio-group [(ngModel)]="lblFilterOp"
+					 class="flex flex-col mat-form-field-wrapper"
+					 style="margin-left:15px;">
+		<mat-radio-button [value]="0" style="margin:2px;">OR</mat-radio-button>
+		<mat-radio-button [value]="1" style="margin:2px;">AND</mat-radio-button>
 	</mat-radio-group>
 </div>
 <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2.5">

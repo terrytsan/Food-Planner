@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { Router } from "@angular/router";
 import { AuthService, FoodPlannerUser, SimpleUser } from "../services/auth.service";
 import { combineLatest, Observable, of, zip } from "rxjs";
@@ -26,17 +26,17 @@ import { animate, query as animationQuery, stagger, style, transition, trigger }
 		trigger('fadeInStagger', [
 			transition(':enter', [
 				animationQuery(':enter', [
-					style({transform: 'translateY(10px)', opacity: 0}),
+					style({ transform: 'translateY(10px)', opacity: 0 }),
 					stagger('100ms', [
 						animate('220ms cubic-bezier(0.250, 0.460, 0.450, 0.940)'),
-						style({transform: 'translateY(0)', opacity: 1})
+						style({ transform: 'translateY(0)', opacity: 1 })
 					])
 				])
 			])
 		])
 	]
 })
-export class ProfileComponent implements OnInit {
+export class ProfileComponent {
 
 	user$: Observable<FoodPlannerUser | null>;
 	groups$: Observable<Group[]> = new Observable<Group[]>();
@@ -59,9 +59,9 @@ export class ProfileComponent implements OnInit {
 				return;
 			}
 
-			let ownerGroups$ = collectionData(query(collection(afs, 'groups') as CollectionReference, where("owner", "==", user.uid)), {idField: 'id'});
-			let editorGroups$ = collectionData(query(collection(afs, 'groups') as CollectionReference, where("editors", "array-contains", user.uid)), {idField: 'id'});
-			let viewerGroups$ = collectionData(query(collection(afs, 'groups') as CollectionReference, where("viewers", "array-contains", user.uid)), {idField: 'id'});
+			let ownerGroups$ = collectionData(query(collection(afs, 'groups') as CollectionReference, where("owner", "==", user.uid)), { idField: 'id' });
+			let editorGroups$ = collectionData(query(collection(afs, 'groups') as CollectionReference, where("editors", "array-contains", user.uid)), { idField: 'id' });
+			let viewerGroups$ = collectionData(query(collection(afs, 'groups') as CollectionReference, where("viewers", "array-contains", user.uid)), { idField: 'id' });
 
 			this.loadingGroups = true;
 			this.groups$ = combineLatest([
@@ -88,7 +88,7 @@ export class ProfileComponent implements OnInit {
 					let userIds = groups.flatMap(g => [g.owner, ...g.viewers, ...g.editors]);
 					let uniqueUserIds = [...new Set(userIds)];
 					// Query currently limited to 10 users
-					let users$ = collectionData<SimpleUser>(query<SimpleUser>(collection(afs, 'users') as CollectionReference<SimpleUser>, where("__name__", "in", uniqueUserIds)), {idField: 'id'});
+					let users$ = collectionData<SimpleUser>(query<SimpleUser>(collection(afs, 'users') as CollectionReference<SimpleUser>, where("__name__", "in", uniqueUserIds)), { idField: 'id' });
 
 					return zip(
 						users$.pipe(skipWhile(users => users.length != uniqueUserIds.length)),		// 1st emit is from cache (user collection queried in auth.service)
@@ -118,9 +118,6 @@ export class ProfileComponent implements OnInit {
 					return of(mappedGroups);
 				}));
 		});
-	}
-
-	ngOnInit(): void {
 	}
 
 	signOut() {
@@ -186,9 +183,9 @@ export class ProfileComponent implements OnInit {
 
 	deleteGroup(group: Group, userId: string) {
 		this.groupService.deleteGroup(group, userId).then(() => {
-			this._snackBar.open("Successfully deleted", 'Dismiss', {duration: 3000});
+			this._snackBar.open("Successfully deleted", 'Dismiss', { duration: 3000 });
 		}, err => {
-			this._snackBar.open(err, 'Dismiss', {duration: 3000});
+			this._snackBar.open(err, 'Dismiss', { duration: 3000 });
 			console.error(err);
 		});
 	}

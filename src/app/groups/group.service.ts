@@ -63,7 +63,7 @@ export class GroupService {
 
 	getGroup(id: string): Observable<Group> {
 		let ref = doc(this.afs, 'groups', id) as DocumentReference<Group>;
-		return docData<Group>(ref, {idField: 'id'});
+		return docData<Group>(ref, { idField: 'id' });
 	}
 
 	async deleteGroup(group: Group, userId: string): Promise<any> {

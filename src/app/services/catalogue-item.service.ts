@@ -35,7 +35,7 @@ export class CatalogueItemService {
 
 	getCatalogueItem(id: string): Observable<CatalogueItem> {
 		let ref = doc(this.afs, 'catalogueItems', id) as DocumentReference<CatalogueItem>;
-		return docData<CatalogueItem>(ref, {idField: 'id'});
+		return docData<CatalogueItem>(ref, { idField: 'id' });
 	}
 
 	getCatalogueItemsByGroup(groupId: string): Observable<CatalogueItem[]> {
@@ -43,7 +43,7 @@ export class CatalogueItemService {
 			query<CatalogueItem>(
 				collection(this.afs, 'catalogueItems') as CollectionReference<CatalogueItem>,
 				where('group', '==', groupId)
-			), {idField: 'id'}
+			), { idField: 'id' }
 		);
 	}
 
@@ -94,7 +94,7 @@ export class CatalogueItemService {
 				collection(this.afs, 'catalogueItems', id, 'priceHistory') as CollectionReference<PriceHistory>,
 				where('group', '==', groupId),
 				orderBy('date', 'desc')
-			), {idField: 'id'}
+			), { idField: 'id' }
 		);
 	}
 
@@ -111,7 +111,7 @@ export class CatalogueItemService {
 		let priceHistoryRef = doc(this.afs, 'catalogueItems', catalogueItemId, 'priceHistory', history.id);
 		await deleteDoc(priceHistoryRef);
 
-		let snackBarRef = this._snackBar.open(`Deleted ${(history.date?.toDate().toLocaleDateString())}.`, 'Undo', {duration: 3000});
+		let snackBarRef = this._snackBar.open(`Deleted ${(history.date?.toDate().toLocaleDateString())}.`, 'Undo', { duration: 3000 });
 		snackBarRef.onAction().subscribe(async () => {
 			await setDoc(doc(this.afs, 'catalogueItems', catalogueItemId, 'priceHistory', history.id), {
 				date: history.date,

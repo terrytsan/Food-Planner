@@ -1,8 +1,8 @@
 <link
-	href="https://fonts.googleapis.com/css?family=Material+Icons|Material+Icons+Outlined|Material+Icons+Two+Tone|Material+Icons+Round|Material+Icons+Sharp"
-	rel="stylesheet">
+		href="https://fonts.googleapis.com/css?family=Material+Icons|Material+Icons+Outlined|Material+Icons+Two+Tone|Material+Icons+Round|Material+Icons+Sharp"
+		rel="stylesheet">
 
-<mat-card appearance="outlined" *ngIf="catalogueItem || isAdding">
+<mat-card *ngIf="catalogueItem || isAdding" appearance="outlined">
 	<mat-card-content>
 		<!-- Image -->
 		<div class="image-container">
@@ -39,36 +39,36 @@
 			<mat-divider style="margin-bottom: 10px;"></mat-divider>
 			<div class="flex flex-row items-center justify-between">
 				<h2 style="margin: 0;">Price History</h2>
-				<button *ngIf="user && user.canEdit" (click)="toggleNewPriceHistoryForm()" mat-icon-button>
+				<button (click)="toggleNewPriceHistoryForm()" *ngIf="user && user.canEdit" mat-icon-button>
 					<mat-icon *ngIf="!isAddingPriceHistory" style="color: green">add_circle</mat-icon>
 					<mat-icon *ngIf="isAddingPriceHistory" style="color: red">cancel</mat-icon>
 				</button>
 			</div>
 
-			<table mat-table [dataSource]="priceHistory$" *ngIf="(priceHistory$ | async)?.length; else noPriceHistory">
+			<table *ngIf="(priceHistory$ | async)?.length; else noPriceHistory" [dataSource]="priceHistory$" mat-table>
 				<ng-container matColumnDef="date">
-					<th mat-header-cell *matHeaderCellDef>Date</th>
-					<td mat-cell *matCellDef="let element">
+					<th *matHeaderCellDef mat-header-cell>Date</th>
+					<td *matCellDef="let element" mat-cell>
 						<ng-container *ngIf="assertItemType(element) as history">
 							{{(history.date?.toMillis() || '') | date: 'dd/MM/yyyy'}}
 						</ng-container>
 					</td>
 				</ng-container>
 				<ng-container matColumnDef="price">
-					<th mat-header-cell *matHeaderCellDef>Price</th>
-					<td mat-cell *matCellDef="let element">
+					<th *matHeaderCellDef mat-header-cell>Price</th>
+					<td *matCellDef="let element" mat-cell>
 						<ng-container *ngIf="assertItemType(element) as history">
 							{{history.price | currency: 'GBP'}}
 						</ng-container>
 					</td>
 				</ng-container>
 				<ng-container matColumnDef="store">
-					<th mat-header-cell *matHeaderCellDef>Store</th>
-					<td mat-cell *matCellDef="let element">{{element.store}}</td>
+					<th *matHeaderCellDef mat-header-cell>Store</th>
+					<td *matCellDef="let element" mat-cell>{{element.store}}</td>
 				</ng-container>
 				<ng-container *ngIf="user && user.canEdit" matColumnDef="actions">
-					<th mat-header-cell *matHeaderCellDef></th>
-					<td mat-cell *matCellDef="let element">
+					<th *matHeaderCellDef mat-header-cell></th>
+					<td *matCellDef="let element" mat-cell>
 						<div class="flex h-full w-full flex-row items-center justify-center">
 							<mat-icon (click)="openEditPriceHistoryDialog(element)">edit</mat-icon>
 							<mat-icon (click)="deletePriceHistory(element)" class="material-icons-outlined">delete
@@ -76,8 +76,8 @@
 						</div>
 					</td>
 				</ng-container>
-				<tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-				<tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+				<tr *matHeaderRowDef="displayedColumns" mat-header-row></tr>
+				<tr *matRowDef="let row; columns: displayedColumns;" mat-row></tr>
 			</table>
 			<ng-template #noPriceHistory>
 				<h3 style="text-align: center;">No Price History yet</h3>
@@ -87,18 +87,18 @@
 				 class="flex flex-row items-center justify-around gap-4 md:gap-8">
 				<mat-form-field style="flex: 10;">
 					<mat-label>Date</mat-label>
-					<input [(ngModel)]="newPriceHistoryDate" [matDatepicker]="picker" matInput autocomplete="off">
+					<input [(ngModel)]="newPriceHistoryDate" [matDatepicker]="picker" autocomplete="off" matInput>
 					<mat-datepicker-toggle [for]="picker" matSuffix></mat-datepicker-toggle>
 					<mat-datepicker #picker></mat-datepicker>
 				</mat-form-field>
 				<mat-form-field style="flex: 7;">
 					<mat-label>Price</mat-label>
-					<input [(ngModel)]="newPriceHistory.price" matInput type="number" autocomplete="off">
+					<input [(ngModel)]="newPriceHistory.price" autocomplete="off" matInput type="number">
 					<span matPrefix>£&nbsp;</span>
 				</mat-form-field>
 				<mat-form-field style="flex: 8;">
 					<mat-label>Store</mat-label>
-					<input [(ngModel)]="newPriceHistory.store" matInput autocomplete="off">
+					<input [(ngModel)]="newPriceHistory.store" autocomplete="off" matInput>
 				</mat-form-field>
 				<mat-icon (click)="createPriceHistory()">done</mat-icon>
 			</div>
@@ -130,7 +130,7 @@
 		</button>
 
 		<!-- Editing fab -->
-		<button *ngIf="user && user.canEdit" (click)="toggleEditing()" class="btn-toggle-edit" mat-fab>
+		<button (click)="toggleEditing()" *ngIf="user && user.canEdit" class="btn-toggle-edit" mat-fab>
 			<mat-icon *ngIf="!isEditing">edit</mat-icon>
 			<mat-icon *ngIf="isEditing">done</mat-icon>
 		</button>

@@ -1,4 +1,4 @@
-import { Component, Inject, Injectable, OnInit } from '@angular/core';
+import { Component, Inject, Injectable } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 import {
 	AbstractControl,
@@ -20,7 +20,7 @@ import { GroupService } from "../group.service";
 	templateUrl: './group-member-edit-dialog.component.html',
 	styleUrls: ['./group-member-edit-dialog.component.scss']
 })
-export class GroupMemberEditDialogComponent implements OnInit {
+export class GroupMemberEditDialogComponent {
 	member = new FormGroup({
 		userId: new FormControl('', {
 			validators: [Validators.required, existingMemberValidator(this.data.group)],
@@ -47,9 +47,6 @@ export class GroupMemberEditDialogComponent implements OnInit {
 		}
 	}
 
-	ngOnInit(): void {
-	}
-
 	onCancelClick() {
 		this.dialogRef.close();
 	}
@@ -71,7 +68,7 @@ export class GroupMemberEditDialogComponent implements OnInit {
 	}
 }
 
-@Injectable({providedIn: 'root'})
+@Injectable({ providedIn: 'root' })
 export class UserExistsValidator implements AsyncValidator {
 	constructor(private afs: Firestore) {
 	}
@@ -81,7 +78,7 @@ export class UserExistsValidator implements AsyncValidator {
 
 		return from(getDoc(userRef)).pipe(map(u => {
 			if (!u.exists()) {
-				return {invalidUser: true};
+				return { invalidUser: true };
 			} else {
 				return null;
 			}
@@ -94,7 +91,7 @@ export function existingMemberValidator(group: Group): ValidatorFn {
 
 	return (control: AbstractControl): ValidationErrors | null => {
 		if (existingIds.includes(control.value)) {
-			return {userExistsInGroup: true};
+			return { userExistsInGroup: true };
 		} else {
 			return null;
 		}

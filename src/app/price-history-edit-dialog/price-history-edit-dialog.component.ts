@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 import { PriceHistory } from "../catalogue-item/priceHistory";
 import { Timestamp } from "firebase/firestore";
@@ -9,7 +9,7 @@ import { CatalogueItemService } from "../services/catalogue-item.service";
 	templateUrl: './price-history-edit-dialog.component.html',
 	styleUrls: ['./price-history-edit-dialog.component.scss']
 })
-export class PriceHistoryEditDialogComponent implements OnInit {
+export class PriceHistoryEditDialogComponent {
 
 	catalogueItemId: string;
 	priceHistoryId: string;
@@ -27,9 +27,6 @@ export class PriceHistoryEditDialogComponent implements OnInit {
 		this.date = data.PriceHistory.date?.toDate() || new Date();
 		this.price = data.PriceHistory.price || 0;
 		this.store = data.PriceHistory.store || '';
-	}
-
-	ngOnInit(): void {
 	}
 
 	async updatePriceHistory() {

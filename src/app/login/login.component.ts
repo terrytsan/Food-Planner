@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { Router } from "@angular/router";
 import { AuthService } from "../services/auth.service";
 import { animate, state, style, transition, trigger } from "@angular/animations";
@@ -9,24 +9,21 @@ import { animate, state, style, transition, trigger } from "@angular/animations"
 	styleUrls: ['./login.component.scss'],
 	animations: [
 		trigger('flyIn', [
-			state('in', style({transform: 'translateY(0)', opacity: 1})),
+			state('in', style({ transform: 'translateY(0)', opacity: 1 })),
 			transition('void => *', [
-				style({transform: 'translateY(40%)', opacity: 0}),
+				style({ transform: 'translateY(40%)', opacity: 0 }),
 				animate('250ms cubic-bezier(0.250, 0.460, 0.450, 0.940)')
 			])
 		])
 	]
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent {
 
 	email: string = '';
 	password: string = '';
 	loginError: string = '';
 
 	constructor(private authService: AuthService, private router: Router) {
-	}
-
-	ngOnInit(): void {
 	}
 
 	onSubmit() {

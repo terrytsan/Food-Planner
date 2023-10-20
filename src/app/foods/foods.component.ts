@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnDestroy, ViewChild } from '@angular/core';
 import { BehaviorSubject, combineLatest, Observable, of, Subject } from "rxjs";
 import { Food } from "../food-card/food";
 import { MatDialog } from "@angular/material/dialog";
@@ -40,7 +40,7 @@ import { animate, style, transition, trigger } from "@angular/animations";
 		])
 	]
 })
-export class FoodsComponent implements OnInit {
+export class FoodsComponent implements OnDestroy {
 
 	user$: Observable<FoodPlannerUser | null>;
 	foods$: Observable<Food[]>;
@@ -178,9 +178,6 @@ export class FoodsComponent implements OnInit {
 				return filtered;
 			}),
 			takeUntil(this.ngUnsubscribe));
-	}
-
-	ngOnInit(): void {
 	}
 
 	ngOnDestroy() {

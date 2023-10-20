@@ -1,10 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from "@angular/router";
 import { Food } from "../food-card/food";
 import { GlobalVariable } from "../global";
 import { FoodEditDialogComponent } from "../food-edit-dialog/food-edit-dialog.component";
 import { MatDialog } from "@angular/material/dialog";
-import { COMMA, ENTER } from "@angular/cdk/keycodes";
 import { FoodService } from "../services/food.service";
 import { AuthService } from "../services/auth.service";
 import {
@@ -18,7 +17,7 @@ import { CdkDragDrop, DragStartDelay, moveItemInArray } from "@angular/cdk/drag-
 	templateUrl: './food-details.component.html',
 	styleUrls: ['./food-details.component.scss']
 })
-export class FoodDetailsComponent implements OnInit {
+export class FoodDetailsComponent implements OnDestroy {
 
 	id: string;
 	food: Food;
@@ -26,17 +25,13 @@ export class FoodDetailsComponent implements OnInit {
 	food$: any;
 	canEdit: boolean = false;
 
-	// Labels
-	readonly separatorKeysCodes = [ENTER, COMMA] as const;
-	addOnBlur: boolean = true;
-
-	dragStartDelay: DragStartDelay = {mouse: 0, touch: 400};
+	dragStartDelay: DragStartDelay = { mouse: 0, touch: 400 };
 
 	constructor(
 		private route: ActivatedRoute,
 		private dialog: MatDialog,
 		private foodService: FoodService,
-		private authService: AuthService
+		authService: AuthService
 	) {
 		this.id = this.route.snapshot.params['id'];
 
@@ -52,9 +47,6 @@ export class FoodDetailsComponent implements OnInit {
 		});
 	}
 
-	ngOnInit(): void {
-	}
-
 	ngOnDestroy() {
 		this.food$.unsubscribe();
 	}
@@ -63,7 +55,7 @@ export class FoodDetailsComponent implements OnInit {
 		this.dialog.open(FoodEditDialogComponent, {
 			maxWidth: '600px',
 			width: '80%',
-			data: {FoodData: this.food}
+			data: { FoodData: this.food }
 		});
 	}
 

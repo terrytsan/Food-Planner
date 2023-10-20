@@ -40,7 +40,7 @@
 			</div>
 			<div class="preview-image-container">
 				<img *ngIf="imgPreviewSrc" [src]="imgPreviewSrc" alt="Preview image" class="preview-image">
-				<mat-icon *ngIf="imgPreviewSrc" (click)="removeImage()" class="btn-delete-image">delete</mat-icon>
+				<mat-icon (click)="removeImage()" *ngIf="imgPreviewSrc" class="btn-delete-image">delete</mat-icon>
 			</div>
 			<mat-progress-bar [hidden]="!fileUploadProgress"
 							  class="progress-bar"

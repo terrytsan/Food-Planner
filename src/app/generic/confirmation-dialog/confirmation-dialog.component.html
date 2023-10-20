@@ -4,8 +4,8 @@
 </mat-dialog-content>
 <mat-dialog-actions [align]="'end'">
 	<button (click)="cancel()" mat-button>{{data.cancelBtnText}}</button>
-	<button color="{{data.confirmBtnColor}}"
-			mat-raised-button
-			(click)="confirm()">{{data.confirmBtnText}}
+	<button (click)="confirm()"
+			color="{{data.confirmBtnColor}}"
+			mat-raised-button>{{data.confirmBtnText}}
 	</button>
 </mat-dialog-actions>

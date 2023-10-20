@@ -1,4 +1,4 @@
-<mat-card appearance="outlined" *ngIf="food" style="margin-bottom: 65px;">
+<mat-card *ngIf="food" appearance="outlined" style="margin-bottom: 65px;">
 	<mat-card-content>
 		<!-- Image -->
 		<div class="image-container">
@@ -35,10 +35,10 @@
 					  class="mat-mdc-chip-set-stacked"
 					  id="coreIngredientsList">
 			<mat-chip (click)="editIngredient(ingredient, 'core', i)"
-					  class="flex justify-between core-ingredient-chip"
 					  *ngFor="let ingredient of food.coreIngredients; let i = index"
+					  [cdkDragStartDelay]="dragStartDelay"
 					  cdkDrag
-					  [cdkDragStartDelay]="dragStartDelay">
+					  class="flex justify-between core-ingredient-chip">
 				{{ingredient}}
 				<button (click)="removeCoreIngredient(ingredient)" *ngIf="canEdit" matChipRemove>
 					<mat-icon>cancel</mat-icon>
@@ -59,10 +59,10 @@
 					  class="mat-mdc-chip-set-stacked"
 					  id="optionalIngredientsList">
 			<mat-chip-option (click)="editIngredient(ingredient, 'optional', i)"
-							 class="flex justify-between optional-ingredient-chip"
 							 *ngFor="let ingredient of food.optionalIngredients; let i = index"
+							 [cdkDragStartDelay]="dragStartDelay"
 							 cdkDrag
-							 [cdkDragStartDelay]="dragStartDelay">
+							 class="flex justify-between optional-ingredient-chip">
 				{{ingredient}}
 				<button (click)="removeOptionalIngredient(ingredient)" *ngIf="canEdit" matChipRemove>
 					<mat-icon>cancel</mat-icon>

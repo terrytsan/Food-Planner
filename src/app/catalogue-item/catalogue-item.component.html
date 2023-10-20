@@ -1,12 +1,12 @@
-<mat-card appearance="raised" [ngClass]="{'liked-colour' : catalogueItem.status == 'liked',
+<mat-card [ngClass]="{'liked-colour' : catalogueItem.status == 'liked',
  'disliked-colour' : catalogueItem.status == 'disliked',
- 'neutral-colour': catalogueItem.status  == 'neutral'}"
-		  class="catalogue-item-card"
-		  [routerLink]="['/catalogueItem', catalogueItem.id]">
+ 'neutral-colour': catalogueItem.status  == 'neutral'}" [routerLink]="['/catalogueItem', catalogueItem.id]"
+		  appearance="raised"
+		  class="catalogue-item-card">
 	<img alt="Photo of {{catalogueItem.name}}"
+		 class="h-auto max-w-full"
 		 loading="lazy"
 		 mat-card-image
-		 class="h-auto max-w-full"
 		 src="{{catalogueItem.imageUrl || defaultImage}}">
 	<div>
 		<mat-card-content *ngIf="lowestPrice">
@@ -15,13 +15,13 @@
 		</mat-card-content>
 	</div>
 	<mat-card-footer class="catalogue-item-thumbs !flex flex-row justify-around">
-		<button [disabled]="!user.canEdit"
-				(click)="toggleLikeCatalogueItem(); $event.stopPropagation();"
+		<button (click)="toggleLikeCatalogueItem(); $event.stopPropagation();"
+				[disabled]="!user.canEdit"
 				mat-icon-button>
 			<mat-icon>thumb_up</mat-icon>
 		</button>
-		<button [disabled]="!user.canEdit"
-				(click)="toggleDislikeCatalogueItem(); $event.stopPropagation();"
+		<button (click)="toggleDislikeCatalogueItem(); $event.stopPropagation();"
+				[disabled]="!user.canEdit"
 				mat-icon-button>
 			<mat-icon>thumb_down</mat-icon>
 		</button>

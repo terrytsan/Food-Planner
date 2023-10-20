@@ -23,10 +23,10 @@
 </mat-card>
 
 <!-- Simple Food Details -->
-<mat-card appearance="raised"
-		  *ngIf="food && foodPlan"
+<mat-card *ngIf="food && foodPlan"
 		  @fade
 		  [routerLink]="['/foods', food.id]"
+		  appearance="raised"
 		  class="simple-food-card"
 >
 	<div class="flex flex-row items-center">

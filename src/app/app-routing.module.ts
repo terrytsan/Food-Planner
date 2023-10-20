@@ -27,7 +27,7 @@ const routes: Routes = [
 		path: 'weekPlan',
 		component: WeekPlanComponent,
 		canActivate: [AuthGuard],
-		data: {authGuardPipe: redirectUnauthorizedToLogin}
+		data: { authGuardPipe: redirectUnauthorizedToLogin }
 	},
 	{
 		path: 'privacy',
@@ -37,44 +37,44 @@ const routes: Routes = [
 		path: 'signup',
 		component: SignupComponent,
 		canActivate: [AuthGuard],
-		data: {authGuardPipe: redirectLoggedInToHome}
+		data: { authGuardPipe: redirectLoggedInToHome }
 	},
-	{path: 'login', component: LoginComponent, canActivate: [AuthGuard], data: {authGuardPipe: redirectLoggedInToHome}},
+	{ path: 'login', component: LoginComponent, canActivate: [AuthGuard], data: { authGuardPipe: redirectLoggedInToHome } },
 	{
 		path: 'profile',
 		component: ProfileComponent,
 		canActivate: [AuthGuard],
-		data: {authGuardPipe: redirectUnauthorizedToLogin}
+		data: { authGuardPipe: redirectUnauthorizedToLogin }
 	},
 	{
 		path: 'foodPlans/:id',
 		component: FoodPlanDetailsComponent,
 		canActivate: [AuthGuard],
-		data: {authGuardPipe: redirectUnauthorizedToLogin}
+		data: { authGuardPipe: redirectUnauthorizedToLogin }
 	},
 	{
 		path: 'foods',
 		component: FoodsComponent,
 		canActivate: [AuthGuard],
-		data: {authGuardPipe: redirectUnauthorizedToLogin}
+		data: { authGuardPipe: redirectUnauthorizedToLogin }
 	},
 	{
 		path: 'foods/:id',
 		component: FoodDetailsComponent,
 		canActivate: [AuthGuard],
-		data: {authGuardPipe: redirectUnauthorizedToLogin}
+		data: { authGuardPipe: redirectUnauthorizedToLogin }
 	},
 	{
 		path: 'foodCatalogue',
 		component: FoodCatalogueComponent,
 		canActivate: [AuthGuard],
-		data: {authGuardPipe: redirectUnauthorizedToLogin}
+		data: { authGuardPipe: redirectUnauthorizedToLogin }
 	},
 	{
 		path: 'catalogueItem/:id',
 		component: CatalogueItemDetailsComponent,
 		canActivate: [AuthGuard],
-		data: {authGuardPipe: redirectUnauthorizedToLogin}
+		data: { authGuardPipe: redirectUnauthorizedToLogin }
 	}
 ];
 

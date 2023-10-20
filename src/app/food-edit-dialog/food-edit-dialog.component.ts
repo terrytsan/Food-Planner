@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import {
 	deleteObject,
 	getDownloadURL,
@@ -25,7 +25,7 @@ import { FoodService } from "../services/food.service";
 	templateUrl: './food-edit-dialog.component.html',
 	styleUrls: ['./food-edit-dialog.component.scss']
 })
-export class FoodEditDialogComponent implements OnInit {
+export class FoodEditDialogComponent implements OnInit, OnDestroy {
 	foodForm = this.fb.group({
 		name: ['', Validators.required],
 		description: ['']

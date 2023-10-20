@@ -14,7 +14,7 @@ export class StateService {
 	}
 
 	setWeekPlanState(selectedWeek: Week): void {
-		this._weekPlanState.next({selectedWeek});
+		this._weekPlanState.next({ selectedWeek });
 	}
 }
 

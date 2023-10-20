@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 import { getDownloadURL, ref, Storage, uploadBytesResumable, UploadTask } from "@angular/fire/storage";
 import { ImageService } from "../services/image.service";
@@ -8,7 +8,7 @@ import { ImageService } from "../services/image.service";
 	templateUrl: './upload-image-dialog.component.html',
 	styleUrls: ['./upload-image-dialog.component.scss']
 })
-export class UploadImageDialogComponent implements OnInit {
+export class UploadImageDialogComponent {
 
 	fileName: string = '';
 	imgPreviewSrc: string;
@@ -24,9 +24,6 @@ export class UploadImageDialogComponent implements OnInit {
 		private imageService: ImageService
 	) {
 		this.firebaseStoragePath = data.FirebaseStorePath;
-	}
-
-	ngOnInit(): void {
 	}
 
 	onFileSelected($event: Event) {

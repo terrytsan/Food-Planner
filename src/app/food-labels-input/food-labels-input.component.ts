@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 import { COMMA, ENTER } from "@angular/cdk/keycodes";
 import { MatChipInputEvent } from "@angular/material/chips";
 import { MatAutocompleteSelectedEvent } from "@angular/material/autocomplete";
@@ -12,7 +12,7 @@ import { MatFormFieldAppearance } from "@angular/material/form-field";
 	templateUrl: './food-labels-input.component.html',
 	styleUrls: ['./food-labels-input.component.scss']
 })
-export class FoodLabelsInputComponent implements OnInit {
+export class FoodLabelsInputComponent {
 
 	readonly separatorKeysCodes = [ENTER, COMMA] as const;
 
@@ -35,9 +35,6 @@ export class FoodLabelsInputComponent implements OnInit {
 				return this.filter(label);
 			})
 		);
-	}
-
-	ngOnInit(): void {
 	}
 
 	add($event: MatChipInputEvent) {

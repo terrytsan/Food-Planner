@@ -17,7 +17,6 @@ import { connectStorageEmulator, getStorage, provideStorage } from "@angular/fir
 import { MatToolbarModule } from "@angular/material/toolbar";
 import { MatIconModule } from "@angular/material/icon";
 import { WeekPlanComponent } from './week-plan/week-plan.component';
-import { DayPlanComponent } from './day-plan/day-plan.component';
 import { MatCardModule } from "@angular/material/card";
 import { FoodsComponent } from './foods/foods.component';
 import { FoodCardComponent } from './food-card/food-card.component';
@@ -85,7 +84,6 @@ if (environment.useEmulators) {
 	declarations: [
 		AppComponent,
 		WeekPlanComponent,
-		DayPlanComponent,
 		FoodsComponent,
 		FoodCardComponent,
 		FoodEditDialogComponent,

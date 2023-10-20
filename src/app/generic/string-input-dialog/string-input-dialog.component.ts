@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 import { FormControl, Validators } from "@angular/forms";
 
@@ -7,7 +7,7 @@ import { FormControl, Validators } from "@angular/forms";
 	templateUrl: './string-input-dialog.component.html',
 	styleUrls: ['./string-input-dialog.component.scss']
 })
-export class StringInputDialogComponent implements OnInit {
+export class StringInputDialogComponent {
 	stringInput = new FormControl('', [Validators.required]);
 
 	constructor(
@@ -15,9 +15,6 @@ export class StringInputDialogComponent implements OnInit {
 		private dialogRef: MatDialogRef<StringInputDialogComponent>
 	) {
 		this.stringInput.setValue(data.initialValue);
-	}
-
-	ngOnInit(): void {
 	}
 
 	cancel() {

@@ -40,6 +40,6 @@ export class ImageService {
 		}
 		const mime = mimeArr[1];
 		const buff = BufferShim.from(arr[1], 'base64');
-		return new File([buff], filename, {type: mime});
+		return new File([buff], filename, { type: mime });
 	}
 }
