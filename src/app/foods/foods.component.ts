@@ -200,7 +200,9 @@ export class FoodsComponent implements OnDestroy {
 		});
 
 		dialogRef.afterClosed().subscribe(newFoodId => {
-			this.router.navigateByUrl(`/foods/${newFoodId}`);
+			if (newFoodId) {
+				this.router.navigateByUrl(`/foods/${newFoodId}`);
+			}
 		});
 	}
 
