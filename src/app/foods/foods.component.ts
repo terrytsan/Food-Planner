@@ -1,17 +1,19 @@
-import { Component, ElementRef, OnDestroy, ViewChild } from '@angular/core';
-import { BehaviorSubject, combineLatest, Observable, of, Subject } from "rxjs";
+import { Component, ElementRef, OnDestroy, Signal, ViewChild } from '@angular/core';
+import { BehaviorSubject, combineLatest, Observable, of, share, Subject } from "rxjs";
 import { Food } from "../food-card/food";
 import { MatDialog } from "@angular/material/dialog";
 import { FoodEditDialogComponent } from "../food-edit-dialog/food-edit-dialog.component";
-import { first, map, startWith, switchMap, takeUntil } from "rxjs/operators";
+import { filter, first, map, startWith, switchMap, takeUntil } from "rxjs/operators";
 import { COMMA, ENTER } from "@angular/cdk/keycodes";
 import { MatChipInputEvent } from "@angular/material/chips";
 import { FormControl } from "@angular/forms";
 import { MatAutocompleteSelectedEvent } from "@angular/material/autocomplete";
-import { AuthService, FoodPlannerUser } from "../services/auth.service";
+import { AuthService } from "../services/auth.service";
 import { FoodService } from "../services/food.service";
 import { Router } from "@angular/router";
 import { animate, style, transition, trigger } from "@angular/animations";
+import { isNonNullOrUndefined } from "../utils";
+import { toSignal } from "@angular/core/rxjs-interop";
 
 @Component({
 	selector: 'app-foods',
@@ -42,7 +44,7 @@ import { animate, style, transition, trigger } from "@angular/animations";
 })
 export class FoodsComponent implements OnDestroy {
 
-	user$: Observable<FoodPlannerUser | null>;
+	userCanEdit: Signal<boolean>;
 	foods$: Observable<Food[]>;
 	filteredFoods$: Observable<Food[]>;
 
@@ -80,17 +82,22 @@ export class FoodsComponent implements OnDestroy {
 		private foodService: FoodService,
 		private router: Router
 	) {
-		this.user$ = authService.getExtendedUser().pipe(takeUntil(this.ngUnsubscribe));
+		let user$ = authService.getExtendedUser().pipe(
+			takeUntil(this.ngUnsubscribe),
+			filter(isNonNullOrUndefined),
+			share()
+		);
+		this.userCanEdit = toSignal(user$.pipe(map(u => !!u)), { initialValue: false });
 
-		this.foods$ = this.user$.pipe(switchMap(user => {
-				if (user != null) {
-					if (user.selectedGroup) {
-						return foodService.getFoodsByGroupOrderByName(user.selectedGroup.id);
-					}
+		this.foods$ = user$.pipe(
+			switchMap(user => {
+				if (user.selectedGroup) {
+					return foodService.getFoodsByGroupOrderByName(user.selectedGroup.id);
 				}
-				return of([] as Food[]);
+				return of([]);
 			}),
-			takeUntil(this.ngUnsubscribe));
+			takeUntil(this.ngUnsubscribe)
+		);
 
 		// Get list of all possible labels
 		this.allLabels$ = this.foods$.pipe(map((foods: Food[]) => {

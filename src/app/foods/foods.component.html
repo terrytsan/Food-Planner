@@ -58,20 +58,16 @@
 </div>
 <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2.5">
 	<div *ngFor="let food of filteredFoods$ | async">
-		<div *ngIf="{user: user$ | async} as userWrapper" style="height: 100%;">
-			<app-food-card [canEdit]="(userWrapper.user) ? userWrapper.user.canEdit : false"
-						   [food]="food"></app-food-card>
-		</div>
+		<app-food-card [canEdit]="userCanEdit()"
+					   [food]="food"></app-food-card>
 	</div>
 </div>
 <div *ngIf="(filteredFoods$ | async)?.length as filteredFoodsLength"
 	 class="food-summary">{{filteredFoodsLength}} {{filteredFoodsLength > 1 ? 'Foods' : 'Food'}}</div>
-<div *ngIf="{user: user$ | async} as userWrapper">
-	<button (click)="openAddFoodDialog()"
-			*ngIf="(userWrapper.user) ? userWrapper.user.canEdit : false"
-			class="btn-add-foods"
-			mat-fab>
-		<mat-icon>add</mat-icon>
-	</button>
-</div>
+<button (click)="openAddFoodDialog()"
+		*ngIf="userCanEdit()"
+		class="btn-add-foods"
+		mat-fab>
+	<mat-icon>add</mat-icon>
+</button>
 
