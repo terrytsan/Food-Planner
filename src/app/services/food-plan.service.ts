@@ -46,26 +46,6 @@ export class FoodPlanService {
 		} as FoodPlanDocument;
 	}
 
-	private convertFoodPlanDocToFoodPlan(foodPlanDoc: FoodPlanDocument, foods: Food[]): FoodPlan {
-		let foodPlan = {
-			id: foodPlanDoc.id,
-			foods: foodPlanDoc.foods,
-			date: foodPlanDoc.date,
-			group: foodPlanDoc.group,
-			dishes: []
-		} as FoodPlan;
-
-		foodPlanDoc.dishes?.forEach((s: SimpleDish) => {
-			let dish: Dish = {
-				index: s.index,
-				ingredients: s.ingredients,
-				food: foods.find(f => f.id == s.foodId) || {} as Food
-			} as Dish;
-			foodPlan.dishes.push(dish);
-		});
-		return foodPlan;
-	}
-
 	/**
 	 * rxjs pipe to convert {@link FoodPlanDocument} to {@link FoodPlan}
 	 */
@@ -131,8 +111,8 @@ export class FoodPlanService {
 
 	getFoodPlans(ids: string[]): Observable<FoodPlan[]> {
 		return collectionData<FoodPlanDocument>(
-			query<FoodPlanDocument>(
-				collection(this.afs, 'foodPlans') as CollectionReference<FoodPlanDocument>,
+			query<FoodPlanDocument, FoodPlanDocument>(
+				collection(this.afs, 'foodPlans') as CollectionReference<FoodPlanDocument, FoodPlanDocument>,
 				where('__name__', 'in', ids)
 			), { idField: 'id' }
 		).pipe(
@@ -154,8 +134,8 @@ export class FoodPlanService {
 		addDummyFoodPlans: boolean = true
 	): Observable<FoodPlan[]> {
 		return collectionData<FoodPlanDocument>(
-			query<FoodPlanDocument>(
-				collection(this.afs, 'foodPlans') as CollectionReference<FoodPlanDocument>,
+			query<FoodPlanDocument, FoodPlanDocument>(
+				collection(this.afs, 'foodPlans') as CollectionReference<FoodPlanDocument, FoodPlanDocument>,
 				where('date', '>=', startDate),
 				where('date', '<=', endDate),
 				where('group', '==', groupId)
@@ -217,8 +197,8 @@ export class FoodPlanService {
 		groupId: string
 	): Observable<FoodPlanDocument[]> {
 		return collectionData<FoodPlanDocument>(
-			query<FoodPlanDocument>(
-				collection(this.afs, 'foodPlans') as CollectionReference<FoodPlanDocument>,
+			query<FoodPlanDocument, FoodPlanDocument>(
+				collection(this.afs, 'foodPlans') as CollectionReference<FoodPlanDocument, FoodPlanDocument>,
 				where('date', '>=', startDate),
 				where('date', '<=', endDate),
 				where('group', '==', groupId)
@@ -250,5 +230,25 @@ export class FoodPlanService {
 				dishes: updatedDishes
 			});
 		}
+	}
+
+	private convertFoodPlanDocToFoodPlan(foodPlanDoc: FoodPlanDocument, foods: Food[]): FoodPlan {
+		let foodPlan = {
+			id: foodPlanDoc.id,
+			foods: foodPlanDoc.foods,
+			date: foodPlanDoc.date,
+			group: foodPlanDoc.group,
+			dishes: []
+		} as FoodPlan;
+
+		foodPlanDoc.dishes?.forEach((s: SimpleDish) => {
+			let dish: Dish = {
+				index: s.index,
+				ingredients: s.ingredients,
+				food: foods.find(f => f.id == s.foodId) || {} as Food
+			} as Dish;
+			foodPlan.dishes.push(dish);
+		});
+		return foodPlan;
 	}
 }

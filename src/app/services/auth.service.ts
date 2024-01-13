@@ -8,11 +8,12 @@ import {
 	user
 } from "@angular/fire/auth";
 import { signOut } from 'firebase/auth';
-import { catchError, switchMap } from "rxjs/operators";
+import { catchError, filter, switchMap } from "rxjs/operators";
 import { doc, docData, DocumentReference, Firestore } from "@angular/fire/firestore";
 import firebase from "firebase/compat";
 import { Group } from "../groups/group";
 import { Observable, of, zip } from "rxjs";
+import { isNonNullOrUndefined } from "../utils";
 import User = firebase.User;
 
 @Injectable({
@@ -31,7 +32,8 @@ export class AuthService {
 				} else {
 					return docData(doc(this.afs, 'users', user.uid) as DocumentReference<SimpleUser>);
 				}
-			})
+			}),
+			filter(isNonNullOrUndefined)
 		);
 	}
 
@@ -41,7 +43,7 @@ export class AuthService {
 				if (simpleUser == null) {
 					return of(null);
 				} else {
-					let selectedGroup$ = docData<Group>(doc(this.afs, 'groups', simpleUser.selectedGroup) as DocumentReference<Group>);
+					let selectedGroup$ = docData<Group>(doc(this.afs, 'groups', simpleUser.selectedGroup) as DocumentReference<Group>).pipe(filter(isNonNullOrUndefined));
 					return zip(of(simpleUser), selectedGroup$).pipe(
 						switchMap(([simpleUser, selectedGroup]) => {
 							let currentUser = this.auth.currentUser;

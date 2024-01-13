@@ -88,7 +88,7 @@ export class ProfileComponent {
 					let userIds = groups.flatMap(g => [g.owner, ...g.viewers, ...g.editors]);
 					let uniqueUserIds = [...new Set(userIds)];
 					// Query currently limited to 10 users
-					let users$ = collectionData<SimpleUser>(query<SimpleUser>(collection(afs, 'users') as CollectionReference<SimpleUser>, where("__name__", "in", uniqueUserIds)), { idField: 'id' });
+					let users$ = collectionData<SimpleUser>(query<SimpleUser, SimpleUser>(collection(afs, 'users') as CollectionReference<SimpleUser, SimpleUser>, where("__name__", "in", uniqueUserIds)), { idField: 'id' });
 
 					return zip(
 						users$.pipe(skipWhile(users => users.length != uniqueUserIds.length)),		// 1st emit is from cache (user collection queried in auth.service)

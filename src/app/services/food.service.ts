@@ -18,7 +18,8 @@ import {
 import { Food } from "../food-card/food";
 import { combineLatest, Observable, of } from "rxjs";
 import { MatSnackBar } from "@angular/material/snack-bar";
-import { map } from "rxjs/operators";
+import { filter, map } from "rxjs/operators";
+import { isNonNullOrUndefined } from "../utils";
 
 @Injectable({
 	providedIn: 'root'
@@ -30,7 +31,7 @@ export class FoodService {
 
 	getFood(id: string): Observable<Food> {
 		let ref = doc(this.afs, 'foods', id) as DocumentReference<Food>;
-		return docData<Food>(ref, { idField: 'id' });
+		return docData<Food>(ref, { idField: 'id' }).pipe(filter(isNonNullOrUndefined));
 	}
 
 	/**
@@ -50,8 +51,8 @@ export class FoodService {
 		while (foodIds.length > 0) {
 			let batchedFoodIds: string[] = foodIds.splice(0, 10);
 			let batchedFoodsObservable = collectionData<Food>(
-				query<Food>(
-					collection(this.afs, 'foods') as CollectionReference<Food>,
+				query<Food, Food>(
+					collection(this.afs, 'foods') as CollectionReference<Food, Food>,
 					where('__name__', 'in', batchedFoodIds)				// __name__ is document id
 				), { idField: 'id' }
 			);
@@ -63,8 +64,8 @@ export class FoodService {
 
 	getFoodsByGroupOrderByName(groupId: string): Observable<Food[]> {
 		return collectionData<Food>(
-			query<Food>(
-				collection(this.afs, 'foods') as CollectionReference<Food>,
+			query<Food, Food>(
+				collection(this.afs, 'foods') as CollectionReference<Food, Food>,
 				where('group', '==', groupId),
 				orderBy('name')
 			), { idField: 'id' }

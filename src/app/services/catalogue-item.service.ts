@@ -22,6 +22,8 @@ import { CatalogueItem } from "../catalogue-item/catalogueItem";
 import { Observable } from "rxjs";
 import { PriceHistory } from "../catalogue-item/priceHistory";
 import { MatSnackBar } from "@angular/material/snack-bar";
+import { isNonNullOrUndefined } from "../utils";
+import { filter } from "rxjs/operators";
 
 @Injectable({
 	providedIn: 'root'
@@ -35,13 +37,13 @@ export class CatalogueItemService {
 
 	getCatalogueItem(id: string): Observable<CatalogueItem> {
 		let ref = doc(this.afs, 'catalogueItems', id) as DocumentReference<CatalogueItem>;
-		return docData<CatalogueItem>(ref, { idField: 'id' });
+		return docData<CatalogueItem>(ref, { idField: 'id' }).pipe(filter(isNonNullOrUndefined));
 	}
 
 	getCatalogueItemsByGroup(groupId: string): Observable<CatalogueItem[]> {
 		return collectionData<CatalogueItem>(
-			query<CatalogueItem>(
-				collection(this.afs, 'catalogueItems') as CollectionReference<CatalogueItem>,
+			query<CatalogueItem, CatalogueItem>(
+				collection(this.afs, 'catalogueItems') as CollectionReference<CatalogueItem, CatalogueItem>,
 				where('group', '==', groupId)
 			), { idField: 'id' }
 		);
@@ -90,8 +92,8 @@ export class CatalogueItemService {
 
 	getPriceHistoriesForCatalogueItem(id: string, groupId: string): Observable<PriceHistory[]> {
 		return collectionData<PriceHistory>(
-			query<PriceHistory>(
-				collection(this.afs, 'catalogueItems', id, 'priceHistory') as CollectionReference<PriceHistory>,
+			query<PriceHistory, PriceHistory>(
+				collection(this.afs, 'catalogueItems', id, 'priceHistory') as CollectionReference<PriceHistory, PriceHistory>,
 				where('group', '==', groupId),
 				orderBy('date', 'desc')
 			), { idField: 'id' }
