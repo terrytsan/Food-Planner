@@ -1,4 +1,4 @@
-import { AfterContentInit, AfterViewInit, Component, OnDestroy, ViewChild } from '@angular/core';
+import { AfterContentInit, AfterViewInit, Component, ElementRef, OnDestroy, ViewChild } from '@angular/core';
 import { MatSidenav, MatSidenavContent } from "@angular/material/sidenav";
 import { Observable, Subscription } from "rxjs";
 import { NavigationEnd, Router } from "@angular/router";
@@ -20,6 +20,9 @@ export class AppComponent implements AfterViewInit, AfterContentInit, OnDestroy 
 
 	@ViewChild(MatSidenav, { static: true })
 	sidenav!: MatSidenav;
+
+	@ViewChild('menuBtn', { static: false, read: ElementRef })
+	menuBtn: ElementRef;
 
 	@ViewChild('scrollingContainer')
 	public scrollContainer: MatSidenavContent;
@@ -83,6 +86,10 @@ export class AppComponent implements AfterViewInit, AfterContentInit, OnDestroy 
 				this.sidenav.mode = 'side';
 				this.mobileDisplay = false;
 			}
+		});
+
+		this.sidenav.closedStart.subscribe(() => {
+			this.menuBtn.nativeElement.blur();
 		});
 	}
 

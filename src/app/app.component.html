@@ -4,7 +4,7 @@
 			<button (click)="navigateBack()" *ngIf="showBackBtn" mat-icon-button>
 				<mat-icon class="nav-btn-icon">arrow_back</mat-icon>
 			</button>
-			<button (click)="sidenav.toggle()" *ngIf="!showBackBtn && (loggedInUser$ | async)" mat-icon-button>
+			<button #menuBtn (click)="sidenav.toggle()" *ngIf="!showBackBtn && (loggedInUser$ | async)" mat-icon-button>
 				<mat-icon class="nav-btn-icon">menu</mat-icon>
 			</button>
 			<mat-icon>restaurant_menu</mat-icon>
