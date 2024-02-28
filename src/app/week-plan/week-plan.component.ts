@@ -1,5 +1,5 @@
-import { Component, OnDestroy } from '@angular/core';
-import { BehaviorSubject, combineLatest, Observable, of } from "rxjs";
+import { Component, OnDestroy, signal } from '@angular/core';
+import { combineLatest, Observable, of } from "rxjs";
 import { FoodPlan } from "../food-plan-preview/foodPlan";
 import { Timestamp } from "firebase/firestore";
 import { catchError, switchMap } from "rxjs/operators";
@@ -9,6 +9,7 @@ import { MatDialog } from "@angular/material/dialog";
 import { ShoppingListComponent } from "../shopping-list/shopping-list.component";
 import { StateService } from "../services/state.service";
 import { animateChild, query, stagger, transition, trigger } from "@angular/animations";
+import { toObservable, toSignal } from "@angular/core/rxjs-interop";
 
 @Component({
 	selector: 'app-week-plan',
@@ -22,11 +23,11 @@ import { animateChild, query, stagger, transition, trigger } from "@angular/anim
 })
 export class WeekPlanComponent implements OnDestroy {
 
-	user$: Observable<SimpleUser | null> = this.authService.getSimpleUser();
+	private user$: Observable<SimpleUser | null> = this.authService.getSimpleUser();
+	user = toSignal(this.user$, { initialValue: null });
 	foodPlans$: Observable<FoodPlan[]>;
-	foodPlansLoadingError$ = new BehaviorSubject<string>("");
-	selectedWeek: Week;
-	selectedWeek$: BehaviorSubject<Week>;
+	foodPlanLoadingError = signal<string>("");
+	selectedWeek = signal(this.getCurrentWeek());
 	startOfWeek = 'Sunday';
 	earliestStartingWeek = Timestamp.fromDate(new Date("25 October 2021"));		// Prevent weeks earlier than this date from being generated
 
@@ -38,25 +39,26 @@ export class WeekPlanComponent implements OnDestroy {
 	) {
 		let savedState = stateService.getWeekPlanState();
 		if (savedState != null) {
-			this.selectedWeek = savedState.selectedWeek;
+			this.selectedWeek.set(savedState.selectedWeek);
 		} else {
-			this.selectedWeek = this.getCurrentWeek();
+			this.selectedWeek.set(this.getCurrentWeek());
 		}
-		this.selectedWeek$ = new BehaviorSubject<Week>(this.selectedWeek);
+
 		this.foodPlans$ = combineLatest([
-			this.selectedWeek$,
-			this.user$
+			toObservable(this.selectedWeek),
+			toObservable(this.user)
 		]).pipe(switchMap(([selectedWeek, user]) => {
+			console.log("emitting");
 			if (user == null) {
 				return of([] as FoodPlan[]);
 			}
 
-			let foodPlans = foodPlanService.getFoodPlansBetweenDates(selectedWeek.startDate, selectedWeek.endDate, user.selectedGroup);
+			let foodPlans = foodPlanService.getFoodPlansBetweenDates(this.selectedWeek().startDate, this.selectedWeek().endDate, user.selectedGroup);
 
 			return foodPlans.pipe(
 				catchError((err) => {
 					console.error("Error loading food plans.", err);
-					this.foodPlansLoadingError$.next("Error loading food plans. 😥");
+					this.foodPlanLoadingError.set("Error loading food plans. 😥");
 					return of([]);
 				})
 			);
@@ -64,7 +66,7 @@ export class WeekPlanComponent implements OnDestroy {
 	}
 
 	ngOnDestroy() {
-		this.stateService.setWeekPlanState(this.selectedWeek);
+		this.stateService.setWeekPlanState(this.selectedWeek());
 	}
 
 	getCurrentWeek(): Week {
@@ -102,15 +104,16 @@ export class WeekPlanComponent implements OnDestroy {
 	}
 
 	advanceWeek(advanceDays: number) {
-		let newStartDate: Date = this.selectedWeek.startDate.toDate();
+		let newStartDate: Date = this.selectedWeek().startDate.toDate();
 		newStartDate.setDate(newStartDate.getDate() + advanceDays);
 
-		let newEndDate: Date = this.selectedWeek.endDate.toDate();
+		let newEndDate: Date = this.selectedWeek().endDate.toDate();
 		newEndDate.setDate(newEndDate.getDate() + advanceDays);
 
-		this.selectedWeek.startDate = Timestamp.fromDate(newStartDate);
-		this.selectedWeek.endDate = Timestamp.fromDate(newEndDate);
-		this.selectedWeek$.next(this.selectedWeek);
+		this.selectedWeek.set({
+			startDate: Timestamp.fromDate(newStartDate),
+			endDate: Timestamp.fromDate(newEndDate)
+		});
 	}
 
 	openShoppingList(foodPlans: FoodPlan[]) {
@@ -119,8 +122,8 @@ export class WeekPlanComponent implements OnDestroy {
 			width: '80%',
 			data: {
 				FoodPlans: foodPlans,
-				startDate: this.selectedWeek.startDate,
-				endDate: this.selectedWeek.endDate
+				startDate: this.selectedWeek().startDate,
+				endDate: this.selectedWeek().endDate
 			}
 		});
 	}
