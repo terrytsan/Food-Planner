@@ -1,7 +1,6 @@
 .image-container {
 	position: relative;
 	width: 100%;
-	padding-bottom: 16px;
 }
 
 .catalogueItem-image {
@@ -41,6 +40,7 @@
 	right: 20px;
 	left: auto;
 	bottom: 20px;
+	z-index: 1;
 }
 
 .delete-btn {
@@ -51,10 +51,16 @@ mat-form-field {
 	width: 100%;
 }
 
+.table-wrapper {
+	display: block;
+	overflow-x: auto;
+}
+
 table {
 	width: 100%;
 	margin-bottom: 10px;
 }
+
 
 .mat-column-actions {
 	width: 100px;

@@ -1,39 +1,60 @@
 <link
-		href="https://fonts.googleapis.com/css?family=Material+Icons|Material+Icons+Outlined|Material+Icons+Two+Tone|Material+Icons+Round|Material+Icons+Sharp"
-		rel="stylesheet">
+	href="https://fonts.googleapis.com/css?family=Material+Icons|Material+Icons+Outlined|Material+Icons+Two+Tone|Material+Icons+Round|Material+Icons+Sharp"
+	rel="stylesheet">
 
 <mat-card *ngIf="catalogueItem || isAdding" appearance="outlined">
 	<mat-card-content>
-		<!-- Image -->
-		<div class="image-container">
-			<img alt="Photo of {{catalogueItem.name}}"
-				 class="catalogueItem-image"
-				 src="{{catalogueItem.imageUrl || defaultImage}}">
-			<button (click)="openUploadImageDialog()" *ngIf="isEditing" class="btn-edit-image" color="primary" mat-fab>
-				<mat-icon class="material-icons-outlined" color="secondary">edit</mat-icon>
+		<div class="flex flex-col gap-6">
+			<!-- Image -->
+			<div class="image-container">
+				<img alt="Photo of {{catalogueItem.name}}"
+					 class="catalogueItem-image"
+					 src="{{catalogueItem.imageUrl || defaultImage}}">
+				<button (click)="openUploadImageDialog()"
+						*ngIf="isEditing"
+						class="btn-edit-image"
+						color="primary"
+						mat-fab>
+					<mat-icon class="material-icons-outlined" color="secondary">edit</mat-icon>
+				</button>
+			</div>
+
+			<!-- Name -->
+			<div class="flex flex-row items-center justify-start">
+				<h1 *ngIf="!isEditing" style="margin: 0;">{{ catalogueItem.name }}</h1>
+				<mat-form-field *ngIf="isEditing" appearance="fill">
+					<mat-label>Name</mat-label>
+					<input [(ngModel)]="catalogueItem.name" matInput>
+				</mat-form-field>
+			</div>
+
+			<!-- Description -->
+			<p *ngIf="!isEditing && catalogueItem.description"
+			   class="catalogueItem-description">{{ catalogueItem.description }}</p>
+			<mat-form-field *ngIf="isEditing" appearance="fill">
+				<mat-label>Description</mat-label>
+				<textarea [(ngModel)]="catalogueItem.description"
+						  cdkAutosizeMaxRows="6"
+						  cdkAutosizeMinRows="3"
+						  cdkTextareaAutosize
+						  matInput></textarea>
+			</mat-form-field>
+
+			<!-- Delete btn -->
+			<button (click)="deleteCatalogueItem()"
+					*ngIf="isEditing && !isAdding"
+					class="delete-btn"
+					color="warn"
+					mat-flat-button>
+				Delete
+			</button>
+
+			<!-- Editing fab -->
+			<button (click)="toggleEditing()" *ngIf="user && user.canEdit" class="btn-toggle-edit" mat-fab>
+				<mat-icon *ngIf="!isEditing">edit</mat-icon>
+				<mat-icon *ngIf="isEditing">done</mat-icon>
 			</button>
 		</div>
-
-		<!-- Name -->
-		<div class="flex flex-row items-center justify-start" style="margin-bottom: 12px;">
-			<h1 *ngIf="!isEditing" style="margin: 0;">{{catalogueItem.name}}</h1>
-			<mat-form-field *ngIf="isEditing" appearance="fill">
-				<mat-label>Name</mat-label>
-				<input [(ngModel)]="catalogueItem.name" matInput>
-			</mat-form-field>
-		</div>
-
-		<!-- Description -->
-		<p *ngIf="!isEditing" class="catalogueItem-description">{{catalogueItem.description}}</p>
-		<mat-form-field *ngIf="isEditing" appearance="fill">
-			<mat-label>Description</mat-label>
-			<textarea [(ngModel)]="catalogueItem.description"
-					  cdkAutosizeMaxRows="6"
-					  cdkAutosizeMinRows="3"
-					  cdkTextareaAutosize
-					  matInput></textarea>
-		</mat-form-field>
-
 		<!-- Price History -->
 		<div *ngIf="!isEditing" style="margin-bottom: 20px;">
 			<mat-divider style="margin-bottom: 10px;"></mat-divider>
@@ -45,40 +66,45 @@
 				</button>
 			</div>
 
-			<table *ngIf="(priceHistory$ | async)?.length; else noPriceHistory" [dataSource]="priceHistory$" mat-table>
-				<ng-container matColumnDef="date">
-					<th *matHeaderCellDef mat-header-cell>Date</th>
-					<td *matCellDef="let element" mat-cell>
-						<ng-container *ngIf="assertItemType(element) as history">
-							{{(history.date?.toMillis() || '') | date: 'dd/MM/yyyy'}}
-						</ng-container>
-					</td>
-				</ng-container>
-				<ng-container matColumnDef="price">
-					<th *matHeaderCellDef mat-header-cell>Price</th>
-					<td *matCellDef="let element" mat-cell>
-						<ng-container *ngIf="assertItemType(element) as history">
-							{{history.price | currency: 'GBP'}}
-						</ng-container>
-					</td>
-				</ng-container>
-				<ng-container matColumnDef="store">
-					<th *matHeaderCellDef mat-header-cell>Store</th>
-					<td *matCellDef="let element" mat-cell>{{element.store}}</td>
-				</ng-container>
-				<ng-container *ngIf="user && user.canEdit" matColumnDef="actions">
-					<th *matHeaderCellDef mat-header-cell></th>
-					<td *matCellDef="let element" mat-cell>
-						<div class="flex h-full w-full flex-row items-center justify-center">
-							<mat-icon (click)="openEditPriceHistoryDialog(element)">edit</mat-icon>
-							<mat-icon (click)="deletePriceHistory(element)" class="material-icons-outlined">delete
-							</mat-icon>
-						</div>
-					</td>
-				</ng-container>
-				<tr *matHeaderRowDef="displayedColumns" mat-header-row></tr>
-				<tr *matRowDef="let row; columns: displayedColumns;" mat-row></tr>
-			</table>
+			<div class="table-wrapper">
+				<table *ngIf="(priceHistory$ | async)?.length; else noPriceHistory"
+					   [dataSource]="priceHistory$"
+					   mat-table>
+					<ng-container matColumnDef="date">
+						<th *matHeaderCellDef mat-header-cell>Date</th>
+						<td *matCellDef="let element" mat-cell>
+							<ng-container *ngIf="assertItemType(element) as history">
+								{{ (history.date?.toMillis() || '') | date: 'dd/MM/yyyy' }}
+							</ng-container>
+						</td>
+					</ng-container>
+					<ng-container matColumnDef="price">
+						<th *matHeaderCellDef mat-header-cell>Price</th>
+						<td *matCellDef="let element" mat-cell>
+							<ng-container *ngIf="assertItemType(element) as history">
+								{{ history.price | currency: 'GBP' }}
+							</ng-container>
+						</td>
+					</ng-container>
+					<ng-container matColumnDef="store">
+						<th *matHeaderCellDef mat-header-cell>Store</th>
+						<td *matCellDef="let element" mat-cell>{{ element.store }}</td>
+					</ng-container>
+					<ng-container *ngIf="user && user.canEdit" matColumnDef="actions">
+						<th *matHeaderCellDef mat-header-cell></th>
+						<td *matCellDef="let element" mat-cell>
+							<div class="flex h-full w-full flex-row items-center justify-center">
+								<mat-icon (click)="openEditPriceHistoryDialog(element)">edit</mat-icon>
+								<mat-icon (click)="deletePriceHistory(element)" class="material-icons-outlined">
+									delete
+								</mat-icon>
+							</div>
+						</td>
+					</ng-container>
+					<tr *matHeaderRowDef="displayedColumns" mat-header-row></tr>
+					<tr *matRowDef="let row; columns: displayedColumns;" mat-row></tr>
+				</table>
+			</div>
 			<ng-template #noPriceHistory>
 				<h3 style="text-align: center;">No Price History yet</h3>
 			</ng-template>
@@ -106,34 +132,20 @@
 
 		<!-- Thumbs buttons -->
 		<div *ngIf="!isEditing && (user && user.canEdit)" class="flex flex-row justify-evenly">
-			<button mat-icon-button>
-				<mat-icon (click)="toggleLikeCatalogueItem()"
-						  [ngClass]="{'liked-colour': catalogueItem.status === 'liked'}">
+			<button (click)="toggleLikeCatalogueItem()" mat-icon-button>
+				<mat-icon
+					[ngClass]="{'liked-colour': catalogueItem.status === 'liked'}">
 					thumb_up
 				</mat-icon>
 			</button>
-			<button mat-icon-button>
-				<mat-icon (click)="toggleDislikeCatalogueItem()"
-						  [ngClass]="{'disliked-colour': catalogueItem.status === 'disliked'}">
+			<button (click)="toggleDislikeCatalogueItem()" mat-icon-button>
+				<mat-icon
+					[ngClass]="{'disliked-colour': catalogueItem.status === 'disliked'}">
 					thumb_down
 				</mat-icon>
 			</button>
 		</div>
 
-		<!-- Delete btn -->
-		<button (click)="deleteCatalogueItem()"
-				*ngIf="isEditing && !isAdding"
-				class="delete-btn"
-				color="warn"
-				mat-flat-button>
-			Delete
-		</button>
-
-		<!-- Editing fab -->
-		<button (click)="toggleEditing()" *ngIf="user && user.canEdit" class="btn-toggle-edit" mat-fab>
-			<mat-icon *ngIf="!isEditing">edit</mat-icon>
-			<mat-icon *ngIf="isEditing">done</mat-icon>
-		</button>
 	</mat-card-content>
 </mat-card>
 
